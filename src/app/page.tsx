@@ -9,6 +9,7 @@ import ContactSection from '@/components/ContactSection';
 import PageAnimator from "@/components/PageAnimator";
 import ProfileCard from "@/components/ProfileCard";
 import SectionBackground from "@/components/SectionBackground";
+import BioTooltip from "@/components/BioTooltip";
 
 export default function Home() {
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -127,6 +128,12 @@ export default function Home() {
             className="animate-bounce text-[var(--accent)]"
           />
         </div>
+        
+        {/* Bio Tooltip */}
+        <BioTooltip 
+          bio="I'm Karim Massaoud, a media and design student focused on front-end development. I create clean, responsive, and visually engaging digital experiences that combine creativity with functionality."
+          maxWords={35}
+        />
       </section>
 
       {/* ABOUT SECTION */}
