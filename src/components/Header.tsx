@@ -147,7 +147,7 @@ const Header = () => {
   return (
     <header
       suppressHydrationWarning
-      className={`flex items-center justify-between p-4 sm:p-6 px-4 sm:px-70 fixed w-full z-[100] backdrop-blur-md border-b transition-colors duration-300
+      className={`flex items-center justify-between p-4 sm:p-6 px-4 sm:px-80 fixed w-full z-[100] backdrop-blur-md border-b transition-colors duration-300
       bg-gradient-to-b from-[var(--Secondary-Background)]/70 to-transparent border-black/5 dark:border-white/10
       `}
     >
@@ -156,7 +156,7 @@ const Header = () => {
           <Image src={logoSrc} alt="Logo" width={50} height={50} />
           {/* Hover-reveal full name next to logo */}
           <span
-            className={`absolute left-10 top-1/2 -translate-y-1/2 whitespace-nowrap text-sm tracking-wider opacity-0 -translate-x-1 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-[var(--accent)]`}
+            className="absolute left-10 top-1/2 -translate-y-1/2 whitespace-nowrap text-sm tracking-wider opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 text-[var(--accent)] bg-[var(--background)] px-2 py-1 rounded shadow"
           >
             KARIM MASSAOUD
           </span>
