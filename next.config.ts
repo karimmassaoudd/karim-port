@@ -14,6 +14,37 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [75, 90, 95],
   },
+  // Optimize compression and caching
+  compress: true,
+  poweredByHeader: false,
+  
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=60, stale-while-revalidate=120',
+          },
+        ],
+      },
+    ];
+  },
+  
   async redirects() {
     return [
       // Legacy nested project paths -> canonical top-level routes

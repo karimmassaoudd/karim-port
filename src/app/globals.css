@@ -1,3 +1,4 @@
+/* Optimized font loading with font-display: swap to prevent render blocking */
 @import url("https://fonts.googleapis.com/css2?family=Alice&family=Lato:wght@400;700&family=Aldrich&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -22,7 +23,8 @@ body::-webkit-scrollbar {
 
 :root {
 /* Color styles */
---text: #5c5c5c;
+--text: #8D9399;
+--headline: #2c3e50;
 --accent: #155b86;
 --accent-rgb: 21, 91, 134;
 --accent-soft: #6f8a99; /* softer, cleaner divider tint */
@@ -70,6 +72,7 @@ body::-webkit-scrollbar {
   --card-foreground: #e6e7eb;
   /* Text */
   --text: #e6e7eb;            /* main text with strong contrast */
+  --headline: #ffffff;        /* bright headline text in dark mode */
   --secondary-text: #a0a6ad;  /* muted text with enough contrast */
   --foreground: #e6e7eb;
   /* Brand */
@@ -142,6 +145,16 @@ font-family: var(--font-primary);
 
 h4 {
 font-family: var(--font-secondary);
+}
+
+/* Dashboard headline colors */
+.text-headline {
+  color: #8D9399;
+}
+
+.dark .text-headline {
+  color: white;
+}
 
 /* Fancy CTA ticket button shape */
 .ticket-button {
@@ -182,7 +195,6 @@ font-family: var(--font-secondary);
   .ticket-button::after {
     display: none; /* use mask instead */
   }
-}
 }
 
 h1 {
@@ -732,3 +744,170 @@ color: var(--accent);
     @apply bg-background text-foreground;
   }
 }
+
+/* Dashboard Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.5s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.5s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s linear infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* 3D Card Flip Perspective */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-0 {
+  transform: rotateY(0deg);
+}
+
+.rotate-y-90 {
+  transform: rotateY(90deg);
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Flip Animation Keyframes */
+@keyframes cardFlip {
+  0% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(90deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
+}
+
+.card-flip {
+  animation: cardFlip 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Animation Variants */
+.animate-pulse-slow {
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-pulse-slower {
+  animation: pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 1s;
+}
+
+.animate-pulse-slowest {
+  animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 2s;
+}
+
+.animate-spin-ultra-slow {
+  animation: spin 60s linear infinite;
+  transform-origin: center;
+}
+
+/* Frosted Glass Effect */
+@supports (backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)) {
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  .dark .glass-effect {
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
+

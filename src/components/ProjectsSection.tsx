@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { Eye, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,41 +8,44 @@ import SectionBackground from './SectionBackground';
 
 // --- Types ---
 type Project = {
-  name: string;
+  title: string;
   description: string;
-  image: string;
-  liveLink?: string;
-  detailsLink?: string;
+  imageUrl: string;
+  projectUrl?: string;
+  technologies?: string[];
+  isVisible?: boolean;
 };
 
-const projects = [
+// Fallback projects if database is empty
+const fallbackProjects = [
   {
-    name: 'Travel World',
+    title: 'Travel World',
     description: 'A simple, friendly travel website that makes exploring destinations feel fun and effortless.',
-    image: '/assets/Travel world Fourth Picture .png',
-    liveLink: 'https://travel-website-complete-w0th.onrender.com/index.html',
-    detailsLink: '/project-details',
+    imageUrl: '/assets/Travel world Fourth Picture .png',
+    projectUrl: 'https://travel-website-complete-w0th.onrender.com/index.html',
+    technologies: [],
+    isVisible: true,
   },
   {
-    name: 'Triple WAVE',
+    title: 'Triple WAVE',
     description: 'A friendly guide for international students in Eindhoven find housing, get around, manage finances, and discover local events.',
-  // file in public/assets is named with spaces and .jpg extension
-  image: '/assets/Triple Wvee.jpg',
-    liveLink: 'https://triple-wave.netlify.app/',
-  detailsLink: '/project-Triple-Wave',
+    imageUrl: '/assets/Triple Wvee.jpg',
+    projectUrl: 'https://triple-wave.netlify.app/',
+    technologies: [],
+    isVisible: true,
   },
   {
-    name: 'Owen Bryce',
-    description: ' A comprehensive promotional campaign for an emerging folk/indie artist, creating a cohesive brand identity across multiple platforms',
-  image: '/assets/owen bryce4.png',
-    liveLink: 'https://karimmassaoudd-portfolio-lastversion.netlify.app/html%20files/branding',
-    detailsLink: '/project-Owen-Bryce',
+    title: 'Owen Bryce',
+    description: 'A comprehensive promotional campaign for an emerging folk/indie artist, creating a cohesive brand identity across multiple platforms',
+    imageUrl: '/assets/owen bryce4.png',
+    projectUrl: 'https://karimmassaoudd-portfolio-lastversion.netlify.app/html%20files/branding',
+    technologies: [],
+    isVisible: true,
   },
 ];
 
 const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ project, priority = false }) => {
-  const { name, description, image, liveLink, detailsLink } = project;
-  const detailsHref = detailsLink ?? '#';
+  const { title, description, imageUrl, projectUrl } = project;
 
   return (
     <div className="relative [perspective:1000px]">
@@ -53,8 +56,8 @@ const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ proje
       {/* 1. Project Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src={image}
-          alt={name}
+          src={imageUrl}
+          alt={title}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
           quality={95}
@@ -70,28 +73,34 @@ const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ proje
       />
       
       {/* 3. Non-Hover Content - hidden on mobile, visible on desktop until hover */}
-      <Link
-        href={detailsHref}
-        className="hidden md:block absolute bottom-5 right-5 z-20 text-white font-medium text-sm transition-opacity duration-300 group-hover:opacity-0"
-      >
-        SEE MORE <ArrowRight className="inline w-4 h-4 ml-1 -translate-y-[1px]" />
-      </Link>
+      {projectUrl && (
+        <a
+          href={projectUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden md:block absolute bottom-5 right-5 z-20 text-white font-medium text-sm transition-opacity duration-300 group-hover:opacity-0"
+        >
+          SEE MORE <ArrowRight className="inline w-4 h-4 ml-1 -translate-y-[1px]" />
+        </a>
+      )}
 
       {/* 4. Hover Content - always visible on mobile, hover on desktop */}
       <div className="absolute inset-0 z-20 flex flex-col justify-between p-6 sm:p-8 text-white">
         
         {/* VIEW LIVE Link - always visible on mobile */}
-        <a
-          href={liveLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center space-x-2 border border-white px-4 py-2 rounded-full w-fit
-                     opacity-100 visible md:opacity-0 md:invisible transition-all duration-300 delay-100 ease-out 
-                     md:group-hover:opacity-100 md:group-hover:visible hover:bg-white/10"
-        >
-          <Eye className="w-4 h-4" />
-          <span className="text-xs font-semibold tracking-wider">VIEW LIVE</span>
-        </a>
+        {projectUrl && (
+          <a
+            href={projectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center space-x-2 border border-white px-4 py-2 rounded-full w-fit
+                       opacity-100 visible md:opacity-0 md:invisible transition-all duration-300 delay-100 ease-out 
+                       md:group-hover:opacity-100 md:group-hover:visible hover:bg-white/10"
+          >
+            <Eye className="w-4 h-4" />
+            <span className="text-xs font-semibold tracking-wider">VIEW LIVE</span>
+          </a>
+        )}
 
         {/* Bottom Content - always visible on mobile */}
         <div className="
@@ -102,7 +111,7 @@ const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ proje
         >
           {/* Project Name */}
           <h3 className="project-card-title text-2xl sm:text-3xl font-[var(--font-primary)] font-bold mb-2 tracking-tight text-[var(--accent)]">
-            {name.toUpperCase()}
+            {title.toUpperCase()}
           </h3>
           
           {/* Description */}
@@ -110,13 +119,17 @@ const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ proje
             {description}
           </p>
 
-          {/* More Details Button */}
-          <Link
-            href={detailsHref}
-            className="text-white font-semibold text-xs tracking-widest block w-fit font-[var(--font-secondary)]"
-          >
-            MORE DETAILS <ArrowRight className="inline w-4 h-4 ml-1 -translate-y-[1px]" />
-          </Link>
+          {/* View Project Button */}
+          {projectUrl && (
+            <a
+              href={projectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white font-semibold text-xs tracking-widest block w-fit font-[var(--font-secondary)]"
+            >
+              VIEW PROJECT <ArrowRight className="inline w-4 h-4 ml-1 -translate-y-[1px]" />
+            </a>
+          )}
         </div>
       </div>
       </div>
@@ -125,6 +138,31 @@ const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ proje
 };
 
 export const ProjectsSection = () => {
+  const [projects, setProjects] = useState<Project[]>(fallbackProjects);
+
+  // Fetch projects from database
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/homepage');
+        const result = await response.json();
+        
+        if (result.success && result.data.projects && result.data.projects.length > 0) {
+          // Filter only visible projects
+          const visibleProjects = result.data.projects.filter((p: Project) => p.isVisible);
+          if (visibleProjects.length > 0) {
+            setProjects(visibleProjects);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+        // Keep fallback projects on error
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
   // Scroll-based 3D tilt
   useLayoutEffect(() => {
     let cancelled = false;
@@ -188,7 +226,7 @@ export const ProjectsSection = () => {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
           {projects.map((project, index) => (
-            <ProjectCard key={project.name} project={project} priority={index === 0} />
+            <ProjectCard key={project.title} project={project} priority={index === 0} />
           ))}
         </div>
         

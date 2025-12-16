@@ -52,7 +52,6 @@ const FormField: React.FC<FormFieldProps> = ({ label, children, className }) => 
  * Main component to display the Contact Section.
  */
 export const ContactSection: React.FC = () => {
-const FORM_ENDPOINT = 'https://formspree.io/f/mwpwboko';
 const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 const [feedback, setFeedback] = useState<string>('');
 
@@ -64,22 +63,33 @@ const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    // Build JSON payload from form data
+    const payload = {
+        name: formData.get('name') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        message: formData.get('message') as string,
+    };
+
     try {
-        const response = await fetch(FORM_ENDPOINT, {
+        const response = await fetch('/api/contact', {
             method: 'POST',
-            headers: { Accept: 'application/json' },
-            body: formData,
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json' 
+            },
+            body: JSON.stringify(payload),
         });
 
-        const data = await response.json().catch(() => null);
+        const data = await response.json();
 
-        if (response.ok) {
+        if (response.ok && data.ok) {
             form.reset();
             setStatus('success');
             setFeedback('Thanks! Your message has been delivered.');
         } else {
             setStatus('error');
-            setFeedback(data?.error ?? 'Submission failed. Please try again.');
+            setFeedback(data?.errors?.join(', ') ?? 'Submission failed. Please try again.');
         }
     } catch (error) {
         console.error('Form submission error', error);

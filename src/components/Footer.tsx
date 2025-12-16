@@ -1,6 +1,6 @@
 'use client';
 
-import React, { type ElementType, type FC, type ReactNode } from 'react';
+import React, { type ElementType, type FC, type ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
@@ -9,8 +9,42 @@ import { MdLocalPhone } from 'react-icons/md';
 import { HiOutlineMapPin } from 'react-icons/hi2';
 import PageAnimator from '@/components/PageAnimator';
 
+interface FooterData {
+  ownerName: string;
+  ownerTitle: string;
+  email: string;
+  phone: string;
+  location: string;
+  copyrightText: string;
+  socialLinks: Array<{
+    id: number;
+    platform: string;
+    url: string;
+    icon: string;
+    isVisible: boolean;
+  }>;
+}
+
 export const Footer: FC = () => {
     const currentYear = new Date().getFullYear();
+    const [footerData, setFooterData] = useState<FooterData | null>(null);
+
+    // Fetch footer data from API
+    useEffect(() => {
+        const fetchFooterData = async () => {
+            try {
+                const response = await fetch('/api/homepage');
+                const result = await response.json();
+                if (result.success && result.data.footer) {
+                    setFooterData(result.data.footer);
+                }
+            } catch (error) {
+                console.error('Error fetching footer data:', error);
+            }
+        };
+
+        fetchFooterData();
+    }, []);
 
     const navLinks = [
         { label: 'User Experience', href: '/#user-experience' },
@@ -19,18 +53,35 @@ export const Footer: FC = () => {
         { label: 'Contact', href: '/#contact' },
     ];
 
-    const socialLinks = [
+    // Map icon names to components
+    const iconMap: Record<string, ElementType> = {
+        linkedin: FaLinkedin,
+        github: FaGithub,
+        email: IoMdMail,
+        phone: MdLocalPhone,
+    };
+
+    // Use dynamic data if available, fallback to defaults
+    const displayName = footerData?.ownerName || 'Karim Massaoud';
+    const displayEmail = footerData?.email || 'karimmassoud668@gmail.com';
+    const displayPhone = footerData?.phone || '0616537940';
+    const displayLocation = footerData?.location || 'Netherlands · Remote friendly';
+
+    // Build social links from API data
+    const socialLinks = footerData?.socialLinks?.filter(link => link.isVisible).map(link => ({
+        label: link.platform,
+        href: link.url,
+        icon: iconMap[link.icon.toLowerCase()] || FaLinkedin,
+    })) || [
         { label: 'LinkedIn', href: 'https://www.linkedin.com/in/karim-massaoud', icon: FaLinkedin },
         { label: 'GitHub', href: 'https://github.com/ic0nk', icon: FaGithub },
-        { label: 'Phone', href: 'tel:0616537940', icon: MdLocalPhone },
-        { label: 'Email', href: 'mailto:karimmassoud668@gmail.com', icon: IoMdMail },
     ];
 
-        const contactMethods = [
-            { label: 'Email', value: 'karimmassoud668@gmail.com', href: 'mailto:karimmassoud668@gmail.com', icon: IoMdMail },
-            { label: 'Phone', value: '+31 6 1653 7940', href: 'tel:0616537940', icon: MdLocalPhone },
-            { label: 'Location', value: 'Netherlands · Remote friendly', icon: HiOutlineMapPin },
-        ];
+    const contactMethods = [
+        { label: 'Email', value: displayEmail, href: `mailto:${displayEmail}`, icon: IoMdMail },
+        { label: 'Phone', value: displayPhone, href: `tel:${displayPhone}`, icon: MdLocalPhone },
+        { label: 'Location', value: displayLocation, icon: HiOutlineMapPin },
+    ];
 
     const IconLink = ({ href, icon: IconComponent, label }: { href: string; icon: ElementType; label: string }) => (
         <a
@@ -74,11 +125,11 @@ export const Footer: FC = () => {
                             <Image src="/assets/K.svg" alt="Karim Massaoud logo" width={72} height={72} className="drop-shadow-[0_10px_30px_rgba(21,91,134,0.35)] dark:drop-shadow-[0_10px_30px_rgba(31,120,172,0.5)]" />
                                             <div>
                                                 <p className="text-sm font-semibold uppercase tracking-[0.38em] text-[var(--secondary-text)]">Portfolio of</p>
-                                                <p className="text-2xl font-semibold tracking-wide text-[var(--text)]">Karim Massaoud</p>
+                                                <p className="text-2xl font-semibold tracking-wide text-[var(--text)]">{displayName}</p>
                                             </div>
                         </div>
                                     <p className="reveal-el max-w-lg text-sm leading-relaxed text-[var(--text)]">
-                            Digital product designer and front-end developer crafting immersive user experiences, thoughtful brand systems, and interactive moments that convert.
+                            {footerData?.ownerTitle || 'Digital product designer and front-end developer'} crafting immersive user experiences, thoughtful brand systems, and interactive moments that convert.
                         </p>
                                     <div className="glow-bleed glow-static flex flex-wrap gap-3">
                             {socialLinks.map((link) => (
@@ -133,7 +184,7 @@ export const Footer: FC = () => {
                     </div>
 
                             <div className="reveal-el flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-[11px] uppercase tracking-[0.28em] text-[var(--secondary-text)] md:flex-row">
-                    <p>© {currentYear} Karim Massaoud. All rights reserved.</p>
+                    <p>{footerData?.copyrightText || `© ${currentYear} ${displayName}. All rights reserved.`}</p>
                     <p>Crafted with Next.js · Deployed globally</p>
                 </div>
                 </section>
