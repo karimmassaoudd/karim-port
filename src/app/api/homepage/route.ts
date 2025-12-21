@@ -1,13 +1,25 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import HomePage from '@/models/HomePage';
+import Project from '@/models/Project';
 
 // GET - Fetch homepage content
 export async function GET() {
   try {
     await dbConnect();
     
-    let homePage = await HomePage.findOne();
+    // Ensure Project model is registered
+    if (!Project) {
+      throw new Error('Project model not loaded');
+    }
+    
+    let homePage = await HomePage.findOne()
+      .populate({
+        path: 'featuredProjects.projectId',
+        select: 'title slug status sections technologies',
+        match: { status: 'published' }
+      })
+      .lean();
     
     // Default footer data
     const defaultFooter = {
@@ -123,6 +135,13 @@ export async function PUT(request: Request) {
         { new: true, runValidators: true }
       );
     }
+    
+    // Populate project references before returning
+    await homePage.populate({
+      path: 'featuredProjects.projectId',
+      select: 'title slug status heroSection.thumbnail technologies',
+      match: { status: 'published' }
+    });
     
     return NextResponse.json({ success: true, data: homePage });
   } catch (error) {

@@ -7,13 +7,10 @@ export interface IExperienceItem {
   fullDescription: string;
 }
 
-export interface IProjectItem {
-  id: number;
-  title: string;
-  description: string;
-  imageUrl: string;
-  projectUrl: string;
-  technologies: string[];
+// Reference to Project model instead of embedding full data
+export interface IProjectReference {
+  projectId: string; // MongoDB ObjectId as string
+  order: number;     // Display order on homepage
   isVisible: boolean;
 }
 
@@ -75,7 +72,7 @@ export interface IHomePage {
   bio: IBioSection;
   about: IAboutSection;
   userExperience: IUserExperienceSection;
-  projects?: IProjectItem[];
+  featuredProjects: IProjectReference[]; // Changed from projects array
   footer: IFooterSection;
   createdAt: Date;
   updatedAt: Date;
@@ -88,13 +85,9 @@ const ExperienceItemSchema = new Schema<IExperienceItem>({
   fullDescription: { type: String, required: true },
 });
 
-const ProjectItemSchema = new Schema<IProjectItem>({
-  id: { type: Number, required: true },
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  imageUrl: { type: String, required: true },
-  projectUrl: { type: String, required: true },
-  technologies: { type: [String], default: [] },
+const ProjectReferenceSchema = new Schema<IProjectReference>({
+  projectId: { type: Schema.Types.ObjectId, required: true, ref: 'Project' },
+  order: { type: Number, default: 0 },
   isVisible: { type: Boolean, default: true },
 });
 
@@ -171,7 +164,7 @@ const HomePageSchema = new Schema<IHomePage>(
     bio: { type: BioSectionSchema, required: true },
     about: { type: AboutSectionSchema, required: true },
     userExperience: { type: UserExperienceSectionSchema, required: true },
-    projects: { type: [ProjectItemSchema], default: [] },
+    featuredProjects: { type: [ProjectReferenceSchema], default: [] },
     footer: { type: FooterSectionSchema, required: true },
   },
   {

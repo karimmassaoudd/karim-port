@@ -13,6 +13,13 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: path.resolve(__dirname),
   images: {
     qualities: [75, 90, 95],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**',
+      },
+    ],
   },
   // Optimize compression and caching
   compress: true,

@@ -8,47 +8,87 @@ import SectionBackground from './SectionBackground';
 
 // --- Types ---
 type Project = {
+  _id: string;
   title: string;
-  description: string;
-  imageUrl: string;
-  projectUrl?: string;
+  slug: string;
+  sections?: {
+    hero?: {
+      heroImage?: {
+        url?: string;
+      };
+    };
+    overview?: {
+      tagline?: string;
+    };
+  };
   technologies?: string[];
-  isVisible?: boolean;
+};
+
+type ProjectReference = {
+  projectId: Project;
+  order: number;
+  isVisible: boolean;
 };
 
 // Fallback projects if database is empty
-const fallbackProjects = [
+const fallbackProjects: Project[] = [
   {
+    _id: 'fallback-1',
     title: 'Travel World',
-    description: 'A simple, friendly travel website that makes exploring destinations feel fun and effortless.',
-    imageUrl: '/assets/Travel world Fourth Picture .png',
-    projectUrl: 'https://travel-website-complete-w0th.onrender.com/index.html',
+    slug: 'travel-world',
+    sections: {
+      hero: {
+        heroImage: {
+          url: '/assets/Travel world Fourth Picture .png',
+        },
+      },
+      overview: {
+        tagline: 'A simple, friendly travel website that makes exploring destinations feel fun and effortless.',
+      },
+    },
     technologies: [],
-    isVisible: true,
   },
   {
+    _id: 'fallback-2',
     title: 'Triple WAVE',
-    description: 'A friendly guide for international students in Eindhoven find housing, get around, manage finances, and discover local events.',
-    imageUrl: '/assets/Triple Wvee.jpg',
-    projectUrl: 'https://triple-wave.netlify.app/',
+    slug: 'project-Triple-Wave',
+    sections: {
+      hero: {
+        heroImage: {
+          url: '/assets/Triple Wvee.jpg',
+        },
+      },
+      overview: {
+        tagline: 'A friendly guide for international students in Eindhoven find housing, get around, manage finances, and discover local events.',
+      },
+    },
     technologies: [],
-    isVisible: true,
   },
   {
+    _id: 'fallback-3',
     title: 'Owen Bryce',
-    description: 'A comprehensive promotional campaign for an emerging folk/indie artist, creating a cohesive brand identity across multiple platforms',
-    imageUrl: '/assets/owen bryce4.png',
-    projectUrl: 'https://karimmassaoudd-portfolio-lastversion.netlify.app/html%20files/branding',
+    slug: 'project-Owen-Bryce',
+    sections: {
+      hero: {
+        heroImage: {
+          url: '/assets/owen bryce4.png',
+        },
+      },
+      overview: {
+        tagline: 'A comprehensive promotional campaign for an emerging folk/indie artist, creating a cohesive brand identity across multiple platforms',
+      },
+    },
     technologies: [],
-    isVisible: true,
   },
 ];
 
 const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ project, priority = false }) => {
-  const { title, description, imageUrl, projectUrl } = project;
+  const { title, slug, sections, technologies } = project;
+  const imageUrl = sections?.hero?.heroImage?.url || '/assets/Room2.avif';
+  const description = sections?.overview?.tagline || '';
 
   return (
-    <div className="relative [perspective:1000px]">
+    <Link href={`/projects/${slug}`} className="relative [perspective:1000px] block">
       <div
         className="tilt-card tilt-card-transform pop-on-scroll w-full max-w-[500px] h-[420px] sm:h-[480px] md:h-[520px] lg:h-[560px] xl:h-[600px] bg-[var(--Secondary-Background)] shadow-xl rounded-xl overflow-hidden relative group cursor-pointer mx-auto"
       >
@@ -69,45 +109,16 @@ const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ proje
 
       {/* 2. Dark Overlay - always visible on mobile, hover on desktop */}
       <div
-        className="absolute inset-0 z-10 transition-colors duration-500 ease-in-out bg-black/50 md:bg-black/0 md:group-hover:bg-black/60"
+        className="absolute inset-0 z-10 transition-colors duration-500 ease-in-out bg-black/60 group-hover:bg-black/70"
       />
-      
-      {/* 3. Non-Hover Content - hidden on mobile, visible on desktop until hover */}
-      {projectUrl && (
-        <a
-          href={projectUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden md:block absolute bottom-5 right-5 z-20 text-white font-medium text-sm transition-opacity duration-300 group-hover:opacity-0"
-        >
-          SEE MORE <ArrowRight className="inline w-4 h-4 ml-1 -translate-y-[1px]" />
-        </a>
-      )}
 
-      {/* 4. Hover Content - always visible on mobile, hover on desktop */}
-      <div className="absolute inset-0 z-20 flex flex-col justify-between p-6 sm:p-8 text-white">
+      {/* 3. Content - Always visible with gradient at bottom */}
+      <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8 text-white">
         
-        {/* VIEW LIVE Link - always visible on mobile */}
-        {projectUrl && (
-          <a
-            href={projectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center space-x-2 border border-white px-4 py-2 rounded-full w-fit
-                       opacity-100 visible md:opacity-0 md:invisible transition-all duration-300 delay-100 ease-out 
-                       md:group-hover:opacity-100 md:group-hover:visible hover:bg-white/10"
-          >
-            <Eye className="w-4 h-4" />
-            <span className="text-xs font-semibold tracking-wider">VIEW LIVE</span>
-          </a>
-        )}
-
-        {/* Bottom Content - always visible on mobile */}
+        {/* Bottom Content - Always visible */}
         <div className="
           opacity-100 visible translate-y-0
-          md:opacity-0 md:invisible md:translate-y-4
-          transition-all duration-300 delay-150 ease-out 
-          md:group-hover:opacity-100 md:group-hover:visible md:group-hover:translate-y-0"
+          transition-all duration-300 ease-out"
         >
           {/* Project Name */}
           <h3 className="project-card-title text-2xl sm:text-3xl font-[var(--font-primary)] font-bold mb-2 tracking-tight text-[var(--accent)]">
@@ -115,25 +126,34 @@ const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({ proje
           </h3>
           
           {/* Description */}
-          <p className="text-xs sm:text-sm font-[var(--font-secondary)] font-light leading-relaxed mb-4">
+          <p className="text-xs sm:text-sm font-[var(--font-secondary)] font-light leading-relaxed mb-4 line-clamp-3">
             {description}
           </p>
 
-          {/* View Project Button */}
-          {projectUrl && (
-            <a
-              href={projectUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white font-semibold text-xs tracking-widest block w-fit font-[var(--font-secondary)]"
-            >
-              VIEW PROJECT <ArrowRight className="inline w-4 h-4 ml-1 -translate-y-[1px]" />
-            </a>
+          {/* Technologies */}
+          {technologies && technologies.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {technologies.slice(0, 4).map((tech, index) => (
+                <span 
+                  key={index}
+                  className="text-xs px-2 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
           )}
+
+          {/* View Project Button */}
+          <span
+            className="text-white font-semibold text-xs tracking-widest inline-flex items-center font-[var(--font-secondary)] group-hover:text-[var(--accent)] transition-colors"
+          >
+            VIEW PROJECT <ArrowRight className="inline w-4 h-4 ml-1 -translate-y-[1px]" />
+          </span>
         </div>
       </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -147,9 +167,13 @@ export const ProjectsSection = () => {
         const response = await fetch('/api/homepage');
         const result = await response.json();
         
-        if (result.success && result.data.projects && result.data.projects.length > 0) {
-          // Filter only visible projects
-          const visibleProjects = result.data.projects.filter((p: Project) => p.isVisible);
+        if (result.success && result.data.featuredProjects && result.data.featuredProjects.length > 0) {
+          // Filter and sort visible projects, ensure projectId is populated
+          const visibleProjects = result.data.featuredProjects
+            .filter((ref: ProjectReference) => ref.isVisible && ref.projectId)
+            .sort((a: ProjectReference, b: ProjectReference) => a.order - b.order)
+            .map((ref: ProjectReference) => ref.projectId);
+          
           if (visibleProjects.length > 0) {
             setProjects(visibleProjects);
           }
@@ -226,7 +250,7 @@ export const ProjectsSection = () => {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
           {projects.map((project, index) => (
-            <ProjectCard key={project.title} project={project} priority={index === 0} />
+            <ProjectCard key={project._id} project={project} priority={index === 0} />
           ))}
         </div>
         

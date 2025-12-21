@@ -100,6 +100,11 @@ export default function AdminLayout({
       icon: MdDashboard,
     },
     {
+      name: 'Projects',
+      path: '/admin/projects',
+      icon: MdHome,
+    },
+    {
       name: 'Messages',
       path: '/admin/messages',
       icon: MdMessage,

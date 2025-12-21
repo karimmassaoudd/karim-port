@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { MdHome, MdPerson, MdInfo, MdWork, MdSave, MdFolder } from 'react-icons/md';
+import ProjectSelector from '@/components/admin/ProjectSelector';
 
 // Lazy load Toast component
 const Toast = dynamic(() => import('@/components/Toast'), { ssr: false });
@@ -13,13 +14,9 @@ interface ExperienceItem {
   fullDescription: string;
 }
 
-interface ProjectItem {
-  id: number;
-  title: string;
-  description: string;
-  imageUrl: string;
-  projectUrl: string;
-  technologies: string[];
+interface ProjectReference {
+  projectId: string;
+  order: number;
   isVisible: boolean;
 }
 
@@ -61,7 +58,7 @@ interface HomePageData {
     heading: string;
     items: ExperienceItem[];
   };
-  projects: ProjectItem[];
+  featuredProjects: ProjectReference[];
   footer: {
     ownerName: string;
     ownerTitle: string;
@@ -115,7 +112,7 @@ export default function DashboardPage() {
       heading: '',
       items: [],
     },
-    projects: [],
+    featuredProjects: [],
     footer: {
       ownerName: '',
       ownerTitle: '',
@@ -141,7 +138,7 @@ export default function DashboardPage() {
       if (result.success) {
         setFormData({
           ...result.data,
-          projects: result.data.projects || [],
+          featuredProjects: result.data.featuredProjects || [],
           footer: result.data.footer || {
             ownerName: '',
             ownerTitle: '',
@@ -239,57 +236,6 @@ export default function DashboardPage() {
       if (prev === index) return itemsLength > 0 ? 0 : null;
       if (prev !== null && prev > index) return prev - 1;
       return prev;
-    });
-  }, []);
-
-  // Project management functions
-  const addProject = useCallback(() => {
-    setFormData(prev => {
-      const newId = prev.projects.length + 1;
-      return {
-        ...prev,
-        projects: [
-          ...prev.projects,
-          {
-            id: newId,
-            title: '',
-            description: '',
-            imageUrl: '',
-            projectUrl: '',
-            technologies: [],
-            isVisible: true,
-          },
-        ],
-      };
-    });
-    setSelectedProjectIndex(prev => prev === null ? 0 : prev + 1);
-  }, []);
-
-  const updateProject = useCallback((index: number, field: keyof ProjectItem, value: any) => {
-    setFormData(prev => {
-      const newProjects = [...prev.projects];
-      newProjects[index] = { ...newProjects[index], [field]: value };
-      return { ...prev, projects: newProjects };
-    });
-  }, []);
-
-  const removeProject = useCallback((index: number) => {
-    setFormData(prev => {
-      const newProjects = prev.projects.filter((_, i) => i !== index);
-      return { ...prev, projects: newProjects };
-    });
-    setSelectedProjectIndex(prev => {
-      if (prev === index) return 0;
-      if (prev !== null && prev > index) return prev - 1;
-      return prev;
-    });
-  }, []);
-
-  const toggleProjectVisibility = useCallback((index: number) => {
-    setFormData(prev => {
-      const newProjects = [...prev.projects];
-      newProjects[index].isVisible = !newProjects[index].isVisible;
-      return { ...prev, projects: newProjects };
     });
   }, []);
 
@@ -739,160 +685,12 @@ export default function DashboardPage() {
           {/* Projects Section */}
           {activeSection === 'projects' && (
             <div className="space-y-5">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xs font-secondary font-bold text-[var(--text)]">Projects Section</h3>
-                <button
-                  type="button"
-                  onClick={addProject}
-                  className="px-4 py-2 rounded-lg font-secondary font-semibold backdrop-blur-md bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all shadow-md"
-                >
-                  + Add Project
-                </button>
+              <div className="backdrop-blur-xl bg-white/70 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
+                <ProjectSelector
+                  selectedProjects={formData.featuredProjects}
+                  onChange={(projects) => setFormData(prev => ({ ...prev, featuredProjects: projects }))}
+                />
               </div>
-
-              {formData.projects.length === 0 ? (
-                <div className="text-center py-12 backdrop-blur-xl bg-white/60 dark:bg-[var(--card)]/60 rounded-xl border border-white/30 dark:border-white/20 shadow-md">
-                  <p className="text-xs font-secondary text-gray-600 dark:text-gray-300">No projects yet. Click "+ Add Project" to create one.</p>
-                </div>
-              ) : (
-                <div className="flex gap-4">
-                  {/* Left Sidebar - Projects List */}
-                  <div className="w-64 backdrop-blur-xl bg-white/60 dark:bg-[var(--card)]/60 rounded-xl border border-white/30 dark:border-white/20 shadow-lg p-4">
-                    <h4 className="text-xs font-secondary font-bold text-[var(--text)] mb-3">All Projects</h4>
-                    <div className="space-y-2">
-                      {formData.projects.map((project, index) => (
-                        <button
-                          key={project.id}
-                          type="button"
-                          onClick={() => setSelectedProjectIndex(index)}
-                          className={`w-full text-left px-3 py-2 rounded-lg font-secondary text-xs transition-all backdrop-blur-sm ${
-                            selectedProjectIndex === index
-                              ? 'bg-[var(--accent)]/30 text-[var(--accent)] border border-[var(--accent)]/40 shadow-md'
-                              : 'backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/20 hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]/30'
-                          }`}
-                        >
-                          <div className="font-semibold truncate">{project.title || `Project #${index + 1}`}</div>
-                          <div className="text-[10px] text-gray-600 dark:text-gray-300 mt-1">
-                            {project.isVisible ? '👁️ Visible' : '🔒 Hidden'}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right Side - Project Details */}
-                  {selectedProjectIndex !== null && formData.projects[selectedProjectIndex] && (
-                    <div className="flex-1 backdrop-blur-xl bg-white/70 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
-                      <div className="flex justify-between items-start mb-4">
-                        <h4 className="text-xs font-secondary font-bold text-[var(--text)]">
-                          {formData.projects[selectedProjectIndex].title || `Project #${selectedProjectIndex + 1}`}
-                        </h4>
-                        <div className="flex gap-2">
-                          <button
-                            type="button"
-                            onClick={() => toggleProjectVisibility(selectedProjectIndex)}
-                            className={`px-3 py-1 rounded-lg font-secondary text-xs font-semibold transition-all ${
-                              formData.projects[selectedProjectIndex].isVisible
-                                ? 'bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30'
-                                : 'bg-gray-500/20 text-gray-600 dark:text-gray-300 border border-gray-500/30'
-                            }`}
-                          >
-                            {formData.projects[selectedProjectIndex].isVisible ? 'Visible' : 'Hidden'}
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => removeProject(selectedProjectIndex)}
-                            className="px-3 py-1 rounded-lg font-secondary text-xs font-semibold bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30 hover:bg-red-500/30 transition-all"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="md:col-span-2">
-                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">Project Title</label>
-                          <input
-                            type="text"
-                            value={formData.projects[selectedProjectIndex].title}
-                            onChange={(e) => updateProject(selectedProjectIndex, 'title', e.target.value)}
-                            className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] dark:focus:border-[var(--accent)] focus:outline-none transition-all focus:shadow-md"
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">Description</label>
-                          <textarea
-                            value={formData.projects[selectedProjectIndex].description}
-                            onChange={(e) => updateProject(selectedProjectIndex, 'description', e.target.value)}
-                            rows={3}
-                            className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] dark:focus:border-[var(--accent)] focus:outline-none transition-all focus:shadow-md"
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">Project Image</label>
-                          <div className="space-y-2">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={async (e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  const formDataUpload = new FormData();
-                                  formDataUpload.append('file', file);
-                                  try {
-                                    const res = await fetch('/api/upload', {
-                                      method: 'POST',
-                                      body: formDataUpload,
-                                    });
-                                    const data = await res.json();
-                                    if (data.success) {
-                                      updateProject(selectedProjectIndex, 'imageUrl', data.url);
-                                    }
-                                  } catch (error) {
-                                    console.error('Upload failed:', error);
-                                  }
-                                }
-                              }}
-                              className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] dark:focus:border-[var(--accent)] focus:outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-secondary file:font-semibold file:bg-[var(--accent)]/10 file:text-[var(--accent)] hover:file:bg-[var(--accent)]/20"
-                            />
-                            {formData.projects[selectedProjectIndex].imageUrl && (
-                              <div className="flex items-center gap-2">
-                                <img src={formData.projects[selectedProjectIndex].imageUrl} alt="Project preview" className="w-20 h-20 rounded-lg object-cover border-2 border-[var(--accent)]/20" />
-                                <input
-                                  type="url"
-                                  value={formData.projects[selectedProjectIndex].imageUrl}
-                                  onChange={(e) => updateProject(selectedProjectIndex, 'imageUrl', e.target.value)}
-                                  placeholder="Or enter URL manually"
-                                  className="flex-1 px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] dark:focus:border-[var(--accent)] focus:outline-none transition-all text-xs placeholder-gray-500 dark:placeholder-gray-400"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <div className="md:col-span-2">
-                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">Project URL</label>
-                          <input
-                            type="url"
-                            value={formData.projects[selectedProjectIndex].projectUrl}
-                            onChange={(e) => updateProject(selectedProjectIndex, 'projectUrl', e.target.value)}
-                            placeholder="https://project-url.com"
-                            className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] dark:focus:border-[var(--accent)] focus:outline-none transition-all focus:shadow-md"
-                          />
-                        </div>
-                        <div className="md:col-span-2">
-                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">Technologies (comma-separated)</label>
-                          <input
-                            type="text"
-                            value={formData.projects[selectedProjectIndex].technologies.join(', ')}
-                            onChange={(e) => updateProject(selectedProjectIndex, 'technologies', e.target.value.split(',').map(t => t.trim()))}
-                            placeholder="React, Next.js, TypeScript"
-                            className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] dark:focus:border-[var(--accent)] focus:outline-none transition-all focus:shadow-md"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
           )}
 
