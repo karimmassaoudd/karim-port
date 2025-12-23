@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
-import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
-import dbConnect from '@/lib/mongodb';
-import User from '@/models/User';
+import crypto from "node:crypto";
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
+import dbConnect from "@/lib/mongodb";
+import User from "@/models/User";
 
 export async function POST(request: Request) {
   try {
@@ -10,22 +10,22 @@ export async function POST(request: Request) {
 
     if (!token || !password) {
       return NextResponse.json(
-        { success: false, error: 'Token and password are required' },
-        { status: 400 }
+        { success: false, error: "Token and password are required" },
+        { status: 400 },
       );
     }
 
     if (password.length < 6) {
       return NextResponse.json(
-        { success: false, error: 'Password must be at least 6 characters' },
-        { status: 400 }
+        { success: false, error: "Password must be at least 6 characters" },
+        { status: 400 },
       );
     }
 
     await dbConnect();
 
     // Hash the token to compare with stored hash
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
     const user = await User.findOne({
       resetToken: hashedToken,
@@ -34,8 +34,8 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: 'Invalid or expired reset token' },
-        { status: 400 }
+        { success: false, error: "Invalid or expired reset token" },
+        { status: 400 },
       );
     }
 
@@ -50,13 +50,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Password reset successfully',
+      message: "Password reset successfully",
     });
   } catch (error) {
-    console.error('Reset password error:', error);
+    console.error("Reset password error:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to reset password' },
-      { status: 500 }
+      { success: false, error: "Failed to reset password" },
+      { status: 500 },
     );
   }
 }

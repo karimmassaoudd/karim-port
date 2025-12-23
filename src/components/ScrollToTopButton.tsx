@@ -1,7 +1,7 @@
 "use client";
-import { FaArrowUp } from "react-icons/fa";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FaArrowUp } from "react-icons/fa";
 
 const ScrollToTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -29,7 +29,7 @@ const ScrollToTopButton = () => {
     return () => {
       window.removeEventListener("scroll", toggleVisibility);
     };
-  }, []);
+  }, [toggleVisibility]);
 
   return (
     <>
@@ -40,7 +40,7 @@ const ScrollToTopButton = () => {
           aria-label="Scroll to top"
           title="Scroll to top"
         >
-            <FaArrowUp />
+          <FaArrowUp />
         </button>
       )}
     </>

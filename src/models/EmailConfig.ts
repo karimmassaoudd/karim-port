@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 export interface IEmailConfig {
   gmailUser: string;
@@ -21,4 +21,5 @@ const EmailConfigSchema = new mongoose.Schema<IEmailConfig>({
   },
 });
 
-export default mongoose.models.EmailConfig || mongoose.model<IEmailConfig>('EmailConfig', EmailConfigSchema);
+export default mongoose.models.EmailConfig ||
+  mongoose.model<IEmailConfig>("EmailConfig", EmailConfigSchema);

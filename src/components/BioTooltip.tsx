@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import { Info } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface BioTooltipProps {
   bio?: string;
@@ -16,7 +16,7 @@ export default function BioTooltip({ bio, maxWords = 30 }: BioTooltipProps) {
   const truncateBio = (text: string, max: number) => {
     const words = text.trim().split(/\s+/);
     if (words.length <= max) return text;
-    return words.slice(0, max).join(" ") + "...";
+    return `${words.slice(0, max).join(" ")}...`;
   };
 
   // Auto-hide after 4 seconds on first load
@@ -45,7 +45,9 @@ export default function BioTooltip({ bio, maxWords = 30 }: BioTooltipProps) {
     }, 500);
   };
 
-  const bioText = bio || "Crafting beautiful, responsive web experiences with modern technologies and creative design";
+  const bioText =
+    bio ||
+    "Crafting beautiful, responsive web experiences with modern technologies and creative design";
   const displayText = truncateBio(bioText, maxWords);
 
   return (
@@ -57,14 +59,14 @@ export default function BioTooltip({ bio, maxWords = 30 }: BioTooltipProps) {
         className={`
           w-56 sm:w-64 md:w-72 lg:max-w-sm
           transition-all duration-500 ease-in-out ${
-          isVisible
-            ? "opacity-100 translate-y-0 visible"
-            : "opacity-0 translate-y-12 invisible"
-        }`}
+            isVisible
+              ? "opacity-100 translate-y-0 visible"
+              : "opacity-0 translate-y-12 invisible"
+          }`}
       >
         <div className="px-4 py-3 sm:px-6 sm:py-4 rounded-lg bg-white/15 border border-white/25 backdrop-blur-md text-xs sm:text-sm md:text-base text-foreground shadow-lg">
           <p className="leading-relaxed break-words">{displayText}</p>
-          
+
           {/* Arrow pointing down-left */}
           <div className="absolute bottom-0 left-4 sm:left-6 w-2 h-2 sm:w-3 sm:h-3 bg-white/15 border-b border-r border-white/25 rotate-45 transform translate-y-1 sm:translate-y-1.5" />
         </div>

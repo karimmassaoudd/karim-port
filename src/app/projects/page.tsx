@@ -1,9 +1,9 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import PageAnimator from '@/components/PageAnimator';
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import PageAnimator from "@/components/PageAnimator";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -11,17 +11,17 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch('/api/projects?status=published');
+      const response = await fetch("/api/projects?status=published");
       const result = await response.json();
       if (result.success) {
         setProjects(result.data);
       }
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error("Error fetching projects:", error);
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,8 @@ export default function ProjectsPage() {
                 Projects
               </h1>
               <p className="text-xl text-[var(--text-secondary)] max-w-2xl mx-auto">
-                Explore my portfolio of web development projects, case studies, and creative work
+                Explore my portfolio of web development projects, case studies,
+                and creative work
               </p>
             </div>
 
@@ -103,14 +104,16 @@ export default function ProjectsPage() {
                       {/* Technologies */}
                       {project.technologies?.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-4">
-                          {project.technologies.slice(0, 4).map((tech: string, idx: number) => (
-                            <span
-                              key={idx}
-                              className="px-2 py-1 bg-[var(--accent)]/10 text-[var(--accent)] rounded text-xs font-medium"
-                            >
-                              {tech}
-                            </span>
-                          ))}
+                          {project.technologies
+                            .slice(0, 4)
+                            .map((tech: string, idx: number) => (
+                              <span
+                                key={idx}
+                                className="px-2 py-1 bg-[var(--accent)]/10 text-[var(--accent)] rounded text-xs font-medium"
+                              >
+                                {tech}
+                              </span>
+                            ))}
                           {project.technologies.length > 4 && (
                             <span className="px-2 py-1 text-[var(--text-secondary)] text-xs">
                               +{project.technologies.length - 4} more

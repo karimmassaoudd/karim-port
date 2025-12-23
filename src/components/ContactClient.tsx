@@ -1,7 +1,6 @@
 "use client";
 
-import React from 'react';
-import ContactSection from './ContactSection';
+import ContactSection from "./ContactSection";
 
 export default function ContactClient() {
   // Simple client-only wrapper so server components can include a client component

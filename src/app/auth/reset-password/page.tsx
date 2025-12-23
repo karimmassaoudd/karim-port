@@ -1,19 +1,19 @@
-'use client';
-import { useState, useRef, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import { gsap } from 'gsap';
-import { MdLock, MdVisibility, MdVisibilityOff } from 'react-icons/md';
+"use client";
+import { gsap } from "gsap";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md";
 
 function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+  const token = searchParams.get("token");
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +22,7 @@ function ResetPasswordForm() {
 
   useEffect(() => {
     if (!token) {
-      setError('Invalid reset link');
+      setError("Invalid reset link");
       return;
     }
 
@@ -31,15 +31,15 @@ function ResetPasswordForm() {
         opacity: 0,
         scale: 0.9,
         duration: 0.5,
-        ease: 'power3.out',
+        ease: "power3.out",
       });
 
-      gsap.from('.form-field', {
+      gsap.from(".form-field", {
         opacity: 0,
         y: 30,
         stagger: 0.1,
         duration: 0.6,
-        ease: 'power3.out',
+        ease: "power3.out",
         delay: 0.2,
       });
     });
@@ -49,10 +49,10 @@ function ResetPasswordForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       gsap.to(formRef.current, {
         x: -10,
         yoyo: true,
@@ -65,9 +65,9 @@ function ResetPasswordForm() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/reset-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, password }),
       });
 
@@ -83,16 +83,17 @@ function ResetPasswordForm() {
         });
       } else {
         setSuccess(true);
-        gsap.fromTo('.success-message',
+        gsap.fromTo(
+          ".success-message",
           { scale: 0.8, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.5 }
+          { scale: 1, opacity: 1, duration: 0.5 },
         );
         setTimeout(() => {
-          router.push('/auth/signin');
+          router.push("/auth/signin");
         }, 2000);
       }
-    } catch (error) {
-      setError('An error occurred. Please try again.');
+    } catch (_error) {
+      setError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -125,8 +126,18 @@ function ResetPasswordForm() {
         {success ? (
           <div className="success-message text-center space-y-4">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-              <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-8 h-8 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
@@ -145,7 +156,7 @@ function ResetPasswordForm() {
               <div className="relative">
                 <MdLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-12 pr-12 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-500 focus:outline-none transition-all"
@@ -174,7 +185,7 @@ function ResetPasswordForm() {
               <div className="relative">
                 <MdLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-white border-2 border-gray-200 dark:border-gray-700 focus:border-purple-500 dark:focus:border-purple-500 focus:outline-none transition-all"
@@ -189,7 +200,7 @@ function ResetPasswordForm() {
               disabled={loading || !token}
               className="form-field w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Resetting...' : 'Reset Password'}
+              {loading ? "Resetting..." : "Reset Password"}
             </button>
 
             <div className="form-field text-center">
@@ -209,14 +220,16 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <ResetPasswordForm />
     </Suspense>
   );

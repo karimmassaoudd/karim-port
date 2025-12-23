@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import { model, models, Schema } from "mongoose";
 
 export interface IExperienceItem {
   id: number;
@@ -10,7 +10,7 @@ export interface IExperienceItem {
 // Reference to Project model instead of embedding full data
 export interface IProjectReference {
   projectId: string; // MongoDB ObjectId as string
-  order: number;     // Display order on homepage
+  order: number; // Display order on homepage
   isVisible: boolean;
 }
 
@@ -86,49 +86,71 @@ const ExperienceItemSchema = new Schema<IExperienceItem>({
 });
 
 const ProjectReferenceSchema = new Schema<IProjectReference>({
-  projectId: { type: Schema.Types.ObjectId, required: true, ref: 'Project' },
+  projectId: { type: Schema.Types.ObjectId, required: true, ref: "Project" },
   order: { type: Number, default: 0 },
   isVisible: { type: Boolean, default: true },
 });
 
 const HeroSectionSchema = new Schema<IHeroSection>({
-  mainTitle: { type: String, required: true, default: 'PORTFOLIO' },
-  subtitle: { type: String, required: true, default: 'KARIM MASSAOUD' },
-  primaryButtonText: { type: String, required: true, default: 'VIEW PROJECTS' },
-  primaryButtonLink: { type: String, required: true, default: '#projects' },
-  secondaryButtonText: { type: String, required: true, default: 'GET IN TOUCH' },
-  secondaryButtonLink: { type: String, required: true, default: '#contact' },
+  mainTitle: { type: String, required: true, default: "PORTFOLIO" },
+  subtitle: { type: String, required: true, default: "KARIM MASSAOUD" },
+  primaryButtonText: { type: String, required: true, default: "VIEW PROJECTS" },
+  primaryButtonLink: { type: String, required: true, default: "#projects" },
+  secondaryButtonText: {
+    type: String,
+    required: true,
+    default: "GET IN TOUCH",
+  },
+  secondaryButtonLink: { type: String, required: true, default: "#contact" },
 });
 
 const BioSectionSchema = new Schema<IBioSection>({
-  bioText: { 
-    type: String, 
+  bioText: {
+    type: String,
     required: true,
-    default: "I'm Karim Massaoud, a media and design student focused on front-end development. I create clean, responsive, and visually engaging digital experiences that combine creativity with functionality."
+    default:
+      "I'm Karim Massaoud, a media and design student focused on front-end development. I create clean, responsive, and visually engaging digital experiences that combine creativity with functionality.",
   },
   maxWords: { type: Number, required: true, default: 35 },
 });
 
 const AboutSectionSchema = new Schema<IAboutSection>({
-  sectionLabel: { type: String, required: true, default: 'About' },
-  heading: { type: String, required: true, default: 'CREATIVE DEVELOPMENT' },
-  mainText: { 
-    type: String, 
+  sectionLabel: { type: String, required: true, default: "About" },
+  heading: { type: String, required: true, default: "CREATIVE DEVELOPMENT" },
+  mainText: {
+    type: String,
     required: true,
-    default: "I'm Karim Massaoud, a media and design student with a strong focus on front-end development. I enjoy creating clean, responsive, and visually engaging digital experiences that combine creativity with functionality. <br />My goal is to grow into a professional front-end developer, turning ideas into impactful designs that connect with people. <br />"
+    default:
+      "I'm Karim Massaoud, a media and design student with a strong focus on front-end development. I enjoy creating clean, responsive, and visually engaging digital experiences that combine creativity with functionality. <br />My goal is to grow into a professional front-end developer, turning ideas into impactful designs that connect with people. <br />",
   },
-  phoneNumber: { type: String, required: true, default: '0616537940' },
-  email: { type: String, required: true, default: 'karimmassoud668@gmail.com' },
-  linkedinUrl: { type: String, required: true, default: 'https://linkedin.com/in/your-profile' },
-  profileCardName: { type: String, required: true, default: 'Karim Massoud' },
-  profileCardTitle: { type: String, required: true, default: 'Creative Developer' },
-  profileCardHandle: { type: String, required: true, default: 'karimmassaoud' },
-  profileCardAvatarUrl: { type: String, required: true, default: '/assets/image 4.png' },
+  phoneNumber: { type: String, required: true, default: "0616537940" },
+  email: { type: String, required: true, default: "karimmassoud668@gmail.com" },
+  linkedinUrl: {
+    type: String,
+    required: true,
+    default: "https://linkedin.com/in/your-profile",
+  },
+  profileCardName: { type: String, required: true, default: "Karim Massoud" },
+  profileCardTitle: {
+    type: String,
+    required: true,
+    default: "Creative Developer",
+  },
+  profileCardHandle: { type: String, required: true, default: "karimmassaoud" },
+  profileCardAvatarUrl: {
+    type: String,
+    required: true,
+    default: "/assets/image 4.png",
+  },
 });
 
 const UserExperienceSectionSchema = new Schema<IUserExperienceSection>({
-  sectionLabel: { type: String, required: true, default: 'User Experience' },
-  heading: { type: String, required: true, default: 'THE HUMAN SIDE OF DIGITAL DESIGN' },
+  sectionLabel: { type: String, required: true, default: "User Experience" },
+  heading: {
+    type: String,
+    required: true,
+    default: "THE HUMAN SIDE OF DIGITAL DESIGN",
+  },
   items: { type: [ExperienceItemSchema], required: true },
 });
 
@@ -141,20 +163,36 @@ const SocialLinkSchema = new Schema<ISocialLink>({
 });
 
 const FooterSectionSchema = new Schema<IFooterSection>({
-  ownerName: { type: String, required: true, default: 'Karim Massaoud' },
-  ownerTitle: { type: String, required: true, default: 'Web Developer' },
-  ownerInitial: { type: String, required: true, default: 'K' },
-  ownerAvatarUrl: { type: String, default: '' },
-  email: { type: String, required: true, default: 'contact@example.com' },
-  phone: { type: String, required: true, default: '+1234567890' },
-  location: { type: String, default: '' },
-  copyrightText: { type: String, required: true, default: '© 2024 Portfolio Admin' },
-  socialLinks: { 
-    type: [SocialLinkSchema], 
+  ownerName: { type: String, required: true, default: "Karim Massaoud" },
+  ownerTitle: { type: String, required: true, default: "Web Developer" },
+  ownerInitial: { type: String, required: true, default: "K" },
+  ownerAvatarUrl: { type: String, default: "" },
+  email: { type: String, required: true, default: "contact@example.com" },
+  phone: { type: String, required: true, default: "+1234567890" },
+  location: { type: String, default: "" },
+  copyrightText: {
+    type: String,
+    required: true,
+    default: "© 2024 Portfolio Admin",
+  },
+  socialLinks: {
+    type: [SocialLinkSchema],
     default: [
-      { id: 1, platform: 'LinkedIn', url: 'https://linkedin.com', icon: 'linkedin', isVisible: true },
-      { id: 2, platform: 'GitHub', url: 'https://github.com', icon: 'github', isVisible: true },
-    ]
+      {
+        id: 1,
+        platform: "LinkedIn",
+        url: "https://linkedin.com",
+        icon: "linkedin",
+        isVisible: true,
+      },
+      {
+        id: 2,
+        platform: "GitHub",
+        url: "https://github.com",
+        icon: "github",
+        isVisible: true,
+      },
+    ],
   },
 });
 
@@ -169,9 +207,10 @@ const HomePageSchema = new Schema<IHomePage>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const HomePage = models.HomePage || model<IHomePage>('HomePage', HomePageSchema);
+const HomePage =
+  models.HomePage || model<IHomePage>("HomePage", HomePageSchema);
 
 export default HomePage;

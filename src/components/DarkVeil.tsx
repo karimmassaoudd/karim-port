@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from 'react';
-import { Renderer, Program, Mesh, Triangle, Vec2 } from 'ogl';
+import { Mesh, Program, Renderer, Triangle, Vec2 } from "ogl";
+import { useEffect, useRef } from "react";
 
 const vertex = `
 attribute vec2 position;
@@ -97,7 +97,7 @@ export default function DarkVeil({
   scanlineFrequency = 0,
   warpAmount = 0,
   resolutionScale = 1,
-  backgroundColor = [0, 0, 0]
+  backgroundColor = [0, 0, 0],
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -108,7 +108,7 @@ export default function DarkVeil({
     const maxDPR = 1.5; // compromise between crispness and performance
     const renderer = new Renderer({
       dpr: Math.min(window.devicePixelRatio || 1, maxDPR),
-      canvas
+      canvas,
     });
 
     const gl = renderer.gl;
@@ -125,8 +125,8 @@ export default function DarkVeil({
         uScan: { value: scanlineIntensity },
         uScanFreq: { value: scanlineFrequency },
         uWarp: { value: warpAmount },
-        uBackgroundColor: { value: backgroundColor }
-      }
+        uBackgroundColor: { value: backgroundColor },
+      },
     });
 
     const mesh = new Mesh(gl, { geometry, program });
@@ -138,7 +138,7 @@ export default function DarkVeil({
       program.uniforms.uResolution.value.set(w, h);
     };
 
-    window.addEventListener('resize', resize);
+    window.addEventListener("resize", resize);
     resize();
 
     const start = performance.now();
@@ -160,7 +160,8 @@ export default function DarkVeil({
     io.observe(parent);
 
     const tick = () => {
-      program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed;
+      program.uniforms.uTime.value =
+        ((performance.now() - start) / 1000) * speed;
       program.uniforms.uHueShift.value = hueShift;
       program.uniforms.uNoise.value = noiseIntensity;
       program.uniforms.uScan.value = scanlineIntensity;
@@ -176,11 +177,20 @@ export default function DarkVeil({
 
     return () => {
       if (frameId) cancelAnimationFrame(frameId);
-      window.removeEventListener('resize', resize);
+      window.removeEventListener("resize", resize);
       try {
         io.disconnect();
-      } catch (e) {}
+      } catch (_e) {}
     };
-  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale, backgroundColor]);
+  }, [
+    hueShift,
+    noiseIntensity,
+    scanlineIntensity,
+    speed,
+    scanlineFrequency,
+    warpAmount,
+    resolutionScale,
+    backgroundColor,
+  ]);
   return <canvas ref={ref} className="w-full h-full block" />;
 }

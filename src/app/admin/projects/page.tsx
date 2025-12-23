@@ -1,11 +1,17 @@
-'use client';
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { MdAdd, MdEdit, MdDelete, MdVisibility, MdVisibilityOff } from 'react-icons/md';
-import { Button } from '@/components/ui/button';
-import dynamic from 'next/dynamic';
+"use client";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import {
+  MdAdd,
+  MdDelete,
+  MdEdit,
+  MdVisibility,
+  MdVisibilityOff,
+} from "react-icons/md";
+import { Button } from "@/components/ui/button";
 
-const Toast = dynamic(() => import('@/components/Toast'), { ssr: false });
+const Toast = dynamic(() => import("@/components/Toast"), { ssr: false });
 
 interface Project {
   _id: string;
@@ -17,7 +23,7 @@ interface Project {
     alt: string;
   };
   technologies: string[];
-  status: 'draft' | 'published';
+  status: "draft" | "published";
   featured: boolean;
   createdAt: string;
   updatedAt: string;
@@ -26,12 +32,15 @@ interface Project {
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [filter, setFilter] = useState<"all" | "published" | "draft">("all");
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   useEffect(() => {
     fetchProjects();
-  }, [filter]);
+  }, [fetchProjects]);
 
   const fetchProjects = async () => {
     try {
@@ -42,8 +51,8 @@ export default function AdminProjectsPage() {
         setProjects(result.data);
       }
     } catch (error) {
-      console.error('Error fetching projects:', error);
-      showMessage('error', 'Failed to load projects');
+      console.error("Error fetching projects:", error);
+      showMessage("error", "Failed to load projects");
     } finally {
       setLoading(false);
     }
@@ -56,27 +65,27 @@ export default function AdminProjectsPage() {
 
     try {
       const response = await fetch(`/api/projects?id=${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
       const result = await response.json();
 
       if (result.success) {
-        showMessage('success', 'Project deleted successfully');
+        showMessage("success", "Project deleted successfully");
         fetchProjects();
       } else {
-        showMessage('error', result.error || 'Failed to delete project');
+        showMessage("error", result.error || "Failed to delete project");
       }
-    } catch (error) {
-      showMessage('error', 'Failed to delete project');
+    } catch (_error) {
+      showMessage("error", "Failed to delete project");
     }
   };
 
   const toggleStatus = async (project: Project) => {
     try {
-      const newStatus = project.status === 'published' ? 'draft' : 'published';
-      const response = await fetch('/api/projects', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      const newStatus = project.status === "published" ? "draft" : "published";
+      const response = await fetch("/api/projects", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: project._id,
           status: newStatus,
@@ -85,31 +94,44 @@ export default function AdminProjectsPage() {
 
       const result = await response.json();
       if (result.success) {
-        showMessage('success', `Project ${newStatus === 'published' ? 'published' : 'unpublished'}`);
+        showMessage(
+          "success",
+          `Project ${newStatus === "published" ? "published" : "unpublished"}`,
+        );
         fetchProjects();
       } else {
-        showMessage('error', result.error || 'Failed to update status');
+        showMessage("error", result.error || "Failed to update status");
       }
-    } catch (error) {
-      showMessage('error', 'Failed to update status');
+    } catch (_error) {
+      showMessage("error", "Failed to update status");
     }
   };
 
-  const showMessage = (type: 'success' | 'error', text: string) => {
+  const showMessage = (type: "success" | "error", text: string) => {
     setMessage({ type, text });
     setTimeout(() => setMessage(null), 3000);
   };
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      {message && <Toast message={message.text} type={message.type} onClose={() => setMessage(null)} />}
-      
+      {message && (
+        <Toast
+          message={message.text}
+          type={message.type}
+          onClose={() => setMessage(null)}
+        />
+      )}
+
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[var(--text)] mb-2">Projects</h1>
-            <p className="text-[var(--text-secondary)]">Manage your portfolio projects and case studies</p>
+            <h1 className="text-3xl font-bold text-[var(--text)] mb-2">
+              Projects
+            </h1>
+            <p className="text-[var(--text-secondary)]">
+              Manage your portfolio projects and case studies
+            </p>
           </div>
           <Link href="/admin/projects/new">
             <Button className="flex items-center gap-2">
@@ -121,14 +143,14 @@ export default function AdminProjectsPage() {
 
         {/* Filters */}
         <div className="flex gap-2 mb-6">
-          {(['all', 'published', 'draft'] as const).map((status) => (
+          {(["all", "published", "draft"] as const).map((status) => (
             <button
               key={status}
               onClick={() => setFilter(status)}
               className={`px-4 py-2 rounded-lg font-medium transition-all ${
                 filter === status
-                  ? 'bg-[var(--accent)] text-white'
-                  : 'bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]'
+                  ? "bg-[var(--accent)] text-white"
+                  : "bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]"
               }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -146,7 +168,9 @@ export default function AdminProjectsPage() {
         {/* Empty State */}
         {!loading && projects.length === 0 && (
           <div className="text-center py-12 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
-            <p className="text-[var(--text-secondary)] text-lg mb-4">No projects found</p>
+            <p className="text-[var(--text-secondary)] text-lg mb-4">
+              No projects found
+            </p>
             <Link href="/admin/projects/new">
               <Button>Create Your First Project</Button>
             </Link>
@@ -178,9 +202,9 @@ export default function AdminProjectsPage() {
                   <div className="absolute top-2 right-2">
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        project.status === 'published'
-                          ? 'bg-green-500/20 text-green-400 border border-green-400/30'
-                          : 'bg-yellow-500/20 text-yellow-400 border border-yellow-400/30'
+                        project.status === "published"
+                          ? "bg-green-500/20 text-green-400 border border-green-400/30"
+                          : "bg-yellow-500/20 text-yellow-400 border border-yellow-400/30"
                       }`}
                     >
                       {project.status}
@@ -222,7 +246,11 @@ export default function AdminProjectsPage() {
                       href={`/admin/projects/${project._id}`}
                       className="flex-1"
                     >
-                      <Button variant="default" size="sm" className="w-full flex items-center justify-center gap-1">
+                      <Button
+                        variant="default"
+                        size="sm"
+                        className="w-full flex items-center justify-center gap-1"
+                      >
                         <MdEdit size={16} />
                         Edit
                       </Button>
@@ -231,9 +259,11 @@ export default function AdminProjectsPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => toggleStatus(project)}
-                      title={project.status === 'published' ? 'Unpublish' : 'Publish'}
+                      title={
+                        project.status === "published" ? "Unpublish" : "Publish"
+                      }
                     >
-                      {project.status === 'published' ? (
+                      {project.status === "published" ? (
                         <MdVisibilityOff size={18} />
                       ) : (
                         <MdVisibility size={18} />

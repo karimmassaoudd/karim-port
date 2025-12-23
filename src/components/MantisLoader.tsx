@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from "react";
 import gsap from "gsap";
+import { useEffect, useState } from "react";
 
 const LOADER_TEXT = process.env.NEXT_PUBLIC_LOADER_TEXT ?? "KARIM MASSAOUD";
-const LOADER_TEXT_COLOR = process.env.NEXT_PUBLIC_LOADER_TEXT_COLOR ?? "#155B86";
+const LOADER_TEXT_COLOR =
+  process.env.NEXT_PUBLIC_LOADER_TEXT_COLOR ?? "#155B86";
 
 /**
  * Animated splash loader that reveals the portfolio brand before the main UI mounts.
@@ -18,7 +19,8 @@ export default function MantisLoader() {
     const originalOverflow = document.body.style.overflow;
     const originalPaddingRight = document.body.style.paddingRight;
     const originalPointerEvents = document.body.style.pointerEvents;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
     document.body.style.overflow = "hidden";
     document.body.style.paddingRight = `${scrollbarWidth}px`;
@@ -59,9 +61,12 @@ export default function MantisLoader() {
         duration: 0.8,
         ease: "power2.inOut",
         onUpdate() {
-          const currentValue = Math.round((this.targets()[0] as { value: number }).value);
+          const currentValue = Math.round(
+            (this.targets()[0] as { value: number }).value,
+          );
           setPercentage(currentValue);
-          const percentageElement = document.querySelector<HTMLElement>(".loader-percentage");
+          const percentageElement =
+            document.querySelector<HTMLElement>(".loader-percentage");
           if (percentageElement) {
             percentageElement.style.left = `${currentValue}%`;
             percentageElement.style.transform = "translateX(-100%)";
@@ -102,11 +107,13 @@ export default function MantisLoader() {
 
   return (
     <div
-  id="mantis-loader"
+      id="mantis-loader"
       className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#1a1a1a]/40 backdrop-blur-xl font-['Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif] transition-opacity duration-300"
     >
       <div className="loader-progress fixed bottom-[30%] left-0 z-50 h-[3px] w-0 bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
-      <div className="loader-percentage fixed bottom-[27%] z-50 text-xs font-medium text-white">{percentage}%</div>
+      <div className="loader-percentage fixed bottom-[27%] z-50 text-xs font-medium text-white">
+        {percentage}%
+      </div>
       <div
         className="loader-text fixed left-10 top-[58%] z-50 flex items-center justify-start whitespace-nowrap font-bold leading-none text-white"
         style={{ color: LOADER_TEXT_COLOR }}

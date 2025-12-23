@@ -1,19 +1,37 @@
-import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "nodejs"; // ensure Node APIs (fs) are available
 
 // Location of the JSON "database"
 const dataFile = path.join(process.cwd(), "src", "data", "contacts.json");
 
+interface ContactBody {
+  name?: string;
+  email?: string;
+  message?: string;
+  phone?: string;
+}
+
+interface ContactItem {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  phone?: string;
+  createdAt: string;
+}
+
 // Basic validation helper
-function validate(body: any) {
+function validate(body: ContactBody) {
   const errors: string[] = [];
   if (!body) errors.push("Missing body");
   if (!body.name || typeof body.name !== "string") errors.push("Invalid name");
-  if (!body.email || typeof body.email !== "string") errors.push("Invalid email");
-  if (!body.message || typeof body.message !== "string") errors.push("Invalid message");
+  if (!body.email || typeof body.email !== "string")
+    errors.push("Invalid email");
+  if (!body.message || typeof body.message !== "string")
+    errors.push("Invalid message");
   // phone optional
   return errors;
 }
@@ -35,7 +53,7 @@ export async function POST(req: NextRequest) {
     }
 
     const raw = await fs.readFile(dataFile, "utf8");
-    const list = JSON.parse(raw || "[]") as any[];
+    const list = JSON.parse(raw || "[]") as ContactItem[];
 
     const item = {
       id: crypto.randomUUID(),
@@ -54,7 +72,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, item }, { status: 201 });
   } catch (err) {
     console.error("/api/contact POST error", err);
-    return NextResponse.json({ ok: false, error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: "Server error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -65,6 +86,9 @@ export async function GET() {
     return NextResponse.json({ ok: true, list });
   } catch (err) {
     console.error("/api/contact GET error", err);
-    return NextResponse.json({ ok: false, error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: "Server error" },
+      { status: 500 },
+    );
   }
 }

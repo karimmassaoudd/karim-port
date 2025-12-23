@@ -23,7 +23,9 @@ export default function TravelWorldHoverSection() {
     },
   ];
   // Match the Home hero DarkVeil background color so look is identical
-  const [backgroundColor, setBackgroundColor] = useState<[number, number, number]>([0.88, 0.87, 0.86]);
+  const [backgroundColor, setBackgroundColor] = useState<
+    [number, number, number]
+  >([0.88, 0.87, 0.86]);
 
   useEffect(() => {
     const colorToRGBArray = (colorStr: string): [number, number, number] => {
@@ -50,21 +52,26 @@ export default function TravelWorldHoverSection() {
 
     const updateBackground = () => {
       const root = document.documentElement;
-      const bgValue = getComputedStyle(root).getPropertyValue('--background').trim();
+      const bgValue = getComputedStyle(root)
+        .getPropertyValue("--background")
+        .trim();
       setBackgroundColor(colorToRGBArray(bgValue));
     };
     updateBackground();
 
     // Respond to OS theme changes
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    media.addEventListener('change', updateBackground);
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    media.addEventListener("change", updateBackground);
 
     // Respond to manual theme toggle (class changes on <html>)
     const mo = new MutationObserver(updateBackground);
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class", "data-theme"],
+    });
 
     return () => {
-      media.removeEventListener('change', updateBackground);
+      media.removeEventListener("change", updateBackground);
       mo.disconnect();
     };
   }, []);
@@ -85,7 +92,7 @@ export default function TravelWorldHoverSection() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-  <div className="w-24 h-1 rounded-full bg-[var(--accent)] mb-6" />
+        <div className="w-24 h-1 rounded-full bg-[var(--accent)] mb-6" />
         <h2 className="text-[var(--text)] font-primary text-3xl md:text-4xl mb-8">
           Explore by hovering
         </h2>
@@ -113,7 +120,9 @@ export default function TravelWorldHoverSection() {
               <div className="absolute inset-x-0 bottom-0 p-4 flex items-end justify-between opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
                 <div>
                   <p className="text-white/90 text-xs">{t.subtitle}</p>
-                  <h3 className="text-white font-semibold text-lg leading-tight">{t.title}</h3>
+                  <h3 className="text-white font-semibold text-lg leading-tight">
+                    {t.title}
+                  </h3>
                 </div>
                 <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 text-[var(--accent)] font-bold shadow">
                   ↗
@@ -122,7 +131,9 @@ export default function TravelWorldHoverSection() {
             </div>
           ))}
         </div>
-        <p className="text-[var(--secondary-text)] text-sm mt-4">Hover the cards to reveal details.</p>
+        <p className="text-[var(--secondary-text)] text-sm mt-4">
+          Hover the cards to reveal details.
+        </p>
       </div>
     </section>
   );

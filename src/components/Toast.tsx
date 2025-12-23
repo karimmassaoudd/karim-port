@@ -1,15 +1,20 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { MdCheckCircle, MdError, MdClose } from 'react-icons/md';
+"use client";
+import { useEffect, useState } from "react";
+import { MdCheckCircle, MdClose, MdError } from "react-icons/md";
 
 interface ToastProps {
   message: string;
-  type: 'success' | 'error';
+  type: "success" | "error";
   onClose: () => void;
   duration?: number;
 }
 
-export default function Toast({ message, type, onClose, duration = 3000 }: ToastProps) {
+export default function Toast({
+  message,
+  type,
+  onClose,
+  duration = 3000,
+}: ToastProps) {
   const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
@@ -18,7 +23,7 @@ export default function Toast({ message, type, onClose, duration = 3000 }: Toast
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [duration]);
+  }, [duration, handleClose]);
 
   const handleClose = () => {
     setIsClosing(true);
@@ -30,15 +35,17 @@ export default function Toast({ message, type, onClose, duration = 3000 }: Toast
   return (
     <div
       className={`fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-6 py-4 rounded-lg shadow-2xl backdrop-blur-xl border font-secondary ${
-        type === 'success'
-          ? 'bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/30'
-          : 'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/30'
+        type === "success"
+          ? "bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/30"
+          : "bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/30"
       }`}
       style={{
-        animation: isClosing ? 'slideOutRight 0.3s ease-in forwards' : 'slideInBottom 0.4s ease-out',
+        animation: isClosing
+          ? "slideOutRight 0.3s ease-in forwards"
+          : "slideInBottom 0.4s ease-out",
       }}
     >
-      {type === 'success' ? (
+      {type === "success" ? (
         <MdCheckCircle className="text-2xl flex-shrink-0" />
       ) : (
         <MdError className="text-2xl flex-shrink-0" />

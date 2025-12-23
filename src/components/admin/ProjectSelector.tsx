@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { MdClose, MdDragIndicator, MdVisibility, MdVisibilityOff, MdAdd } from 'react-icons/md';
-import Link from 'next/link';
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import {
+  MdAdd,
+  MdClose,
+  MdDragIndicator,
+  MdVisibility,
+  MdVisibilityOff,
+} from "react-icons/md";
+import { Button } from "@/components/ui/button";
 
 interface Project {
   _id: string;
@@ -28,26 +34,29 @@ interface ProjectSelectorProps {
   onChange: (projects: SelectedProject[]) => void;
 }
 
-export default function ProjectSelector({ selectedProjects, onChange }: ProjectSelectorProps) {
+export default function ProjectSelector({
+  selectedProjects,
+  onChange,
+}: ProjectSelectorProps) {
   const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [isSelecting, setIsSelecting] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [fetchProjects]);
 
   const fetchProjects = async () => {
     setLoading(true);
     try {
       // Fetch all projects (draft and published) for admin to choose from
-      const response = await fetch('/api/projects?status=all');
+      const response = await fetch("/api/projects?status=all");
       const data = await response.json();
       if (data.success) {
         setAllProjects(data.data);
       }
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error("Error fetching projects:", error);
     }
     setLoading(false);
   };
@@ -75,7 +84,7 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
 
   const handleToggleVisibility = (projectId: string) => {
     const updated = selectedProjects.map((p) =>
-      p.projectId === projectId ? { ...p, isVisible: !p.isVisible } : p
+      p.projectId === projectId ? { ...p, isVisible: !p.isVisible } : p,
     );
     onChange(updated);
   };
@@ -97,15 +106,19 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
   };
 
   const availableProjects = allProjects.filter(
-    (p) => !selectedProjects.some((sp) => sp.projectId === p._id)
+    (p) => !selectedProjects.some((sp) => sp.projectId === p._id),
   );
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Featured Projects</h3>
-        <Button onClick={() => setIsSelecting(!isSelecting)} variant="outline" size="sm">
-          {isSelecting ? 'Cancel' : 'Add Project'}
+        <Button
+          onClick={() => setIsSelecting(!isSelecting)}
+          variant="outline"
+          size="sm"
+        >
+          {isSelecting ? "Cancel" : "Add Project"}
         </Button>
       </div>
 
@@ -116,16 +129,23 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
             <p className="text-sm text-gray-500">Loading projects...</p>
           ) : allProjects.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-sm text-gray-500 mb-4">No projects found. Create a project first!</p>
+              <p className="text-sm text-gray-500 mb-4">
+                No projects found. Create a project first!
+              </p>
               <Button variant="default" size="sm" asChild>
-                <Link href="/admin/projects/new" className="inline-flex items-center">
+                <Link
+                  href="/admin/projects/new"
+                  className="inline-flex items-center"
+                >
                   <MdAdd className="mr-2" size={18} />
                   Create Your First Project
                 </Link>
               </Button>
             </div>
           ) : availableProjects.length === 0 ? (
-            <p className="text-sm text-gray-500">All projects are already featured!</p>
+            <p className="text-sm text-gray-500">
+              All projects are already featured!
+            </p>
           ) : (
             <div className="grid gap-2">
               {availableProjects.map((project) => (
@@ -134,9 +154,13 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
                   onClick={() => handleAddProject(project._id)}
                   className="flex items-center gap-3 p-3 border rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-colors text-left"
                 >
-                  {(project.sections?.hero?.heroImage?.url || project.thumbnail?.url) && (
+                  {(project.sections?.hero?.heroImage?.url ||
+                    project.thumbnail?.url) && (
                     <img
-                      src={project.sections?.hero?.heroImage?.url || project.thumbnail?.url}
+                      src={
+                        project.sections?.hero?.heroImage?.url ||
+                        project.thumbnail?.url
+                      }
                       alt={project.title}
                       className="w-16 h-16 object-cover rounded"
                     />
@@ -144,12 +168,14 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h5 className="font-medium">{project.title}</h5>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        project.status === 'published' 
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
-                          : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                      }`}>
-                        {project.status === 'published' ? 'Published' : 'Draft'}
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full ${
+                          project.status === "published"
+                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                            : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                        }`}
+                      >
+                        {project.status === "published" ? "Published" : "Draft"}
                       </span>
                     </div>
                     <p className="text-sm text-gray-500">/{project.slug}</p>
@@ -169,16 +195,24 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
             </p>
             {allProjects.length === 0 ? (
               <div>
-                <p className="text-xs text-gray-500 mb-3">Create a case study project first, then feature it here!</p>
+                <p className="text-xs text-gray-500 mb-3">
+                  Create a case study project first, then feature it here!
+                </p>
                 <Button variant="default" size="sm" asChild>
-                  <Link href="/admin/projects/new" className="inline-flex items-center">
+                  <Link
+                    href="/admin/projects/new"
+                    className="inline-flex items-center"
+                  >
                     <MdAdd className="mr-2" size={18} />
                     Create Project
                   </Link>
                 </Button>
               </div>
             ) : (
-              <p className="text-xs text-gray-500">Click "Add Project" above to feature published projects on your homepage.</p>
+              <p className="text-xs text-gray-500">
+                Click "Add Project" above to feature published projects on your
+                homepage.
+              </p>
             )}
           </div>
         ) : (
@@ -210,9 +244,13 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
 
                 <MdDragIndicator className="text-gray-400" size={20} />
 
-                {(project.sections?.hero?.heroImage?.url || project.thumbnail?.url) && (
+                {(project.sections?.hero?.heroImage?.url ||
+                  project.thumbnail?.url) && (
                   <img
-                    src={project.sections?.hero?.heroImage?.url || project.thumbnail?.url}
+                    src={
+                      project.sections?.hero?.heroImage?.url ||
+                      project.thumbnail?.url
+                    }
                     alt={project.title}
                     className="w-12 h-12 object-cover rounded"
                   />
@@ -221,12 +259,14 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h5 className="font-medium">{project.title}</h5>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
-                      project.status === 'published' 
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
-                        : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
-                    }`}>
-                      {project.status === 'published' ? 'Published' : 'Draft'}
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded-full ${
+                        project.status === "published"
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                          : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
+                      }`}
+                    >
+                      {project.status === "published" ? "Published" : "Draft"}
                     </span>
                   </div>
                   <p className="text-sm text-gray-500">Order: {index + 1}</p>
@@ -234,7 +274,9 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
 
                 <div className="flex items-center gap-2">
                   <Button
-                    onClick={() => handleToggleVisibility(selectedProject.projectId)}
+                    onClick={() =>
+                      handleToggleVisibility(selectedProject.projectId)
+                    }
                     variant="outline"
                     size="sm"
                   >
@@ -245,7 +287,9 @@ export default function ProjectSelector({ selectedProjects, onChange }: ProjectS
                     )}
                   </Button>
                   <Button
-                    onClick={() => handleRemoveProject(selectedProject.projectId)}
+                    onClick={() =>
+                      handleRemoveProject(selectedProject.projectId)
+                    }
                     variant="destructive"
                     size="sm"
                   >

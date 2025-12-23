@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -12,46 +12,60 @@ const nextConfig: NextConfig = {
   // `outputFileTracingRoot` is a top-level option, not under `output`.
   outputFileTracingRoot: path.resolve(__dirname),
   images: {
-    qualities: [75, 90, 95],
+    formats: ["image/avif", "image/webp"],
+    qualities: [65, 80, 90],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
       },
     ],
   },
   // Optimize compression and caching
   compress: true,
   poweredByHeader: false,
-  
+
+  // Compiler optimizations
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production"
+        ? {
+            exclude: ["error", "warn"],
+          }
+        : false,
+  },
+
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         headers: [
           {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
+            key: "X-DNS-Prefetch-Control",
+            value: "on",
           },
           {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
           },
         ],
       },
       {
-        source: '/api/:path*',
+        source: "/api/:path*",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, s-maxage=60, stale-while-revalidate=120',
+            key: "Cache-Control",
+            value: "public, s-maxage=60, stale-while-revalidate=120",
           },
         ],
       },
     ];
   },
-  
+
   async redirects() {
     return [
       // Legacy nested project paths -> canonical top-level routes

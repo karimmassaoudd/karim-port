@@ -1,24 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { uploadToCloudinary, deleteFromCloudinary } from '@/lib/cloudinary';
+import { type NextRequest, NextResponse } from "next/server";
+import { deleteFromCloudinary, uploadToCloudinary } from "@/lib/cloudinary";
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const file = formData.get('file') as File;
-    
+    const file = formData.get("file") as File;
+
     if (!file) {
       return NextResponse.json(
-        { success: false, error: 'No file provided' },
-        { status: 400 }
+        { success: false, error: "No file provided" },
+        { status: 400 },
       );
     }
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/avif'];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/avif",
+    ];
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid file type. Only JPEG, PNG, WebP, and AVIF are allowed.' },
-        { status: 400 }
+        {
+          success: false,
+          error:
+            "Invalid file type. Only JPEG, PNG, WebP, and AVIF are allowed.",
+        },
+        { status: 400 },
       );
     }
 
@@ -26,8 +36,8 @@ export async function POST(request: NextRequest) {
     const maxSize = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSize) {
       return NextResponse.json(
-        { success: false, error: 'File size exceeds 10MB limit' },
-        { status: 400 }
+        { success: false, error: "File size exceeds 10MB limit" },
+        { status: 400 },
       );
     }
 
@@ -35,7 +45,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // Upload to Cloudinary
-    const result = await uploadToCloudinary(buffer, 'portfolio/projects');
+    const result = await uploadToCloudinary(buffer, "portfolio/projects");
 
     return NextResponse.json({
       success: true,
@@ -43,12 +53,11 @@ export async function POST(request: NextRequest) {
       publicId: result.publicId,
       filename: file.name,
     });
-
   } catch (error) {
-    console.error('Upload error:', error);
+    console.error("Upload error:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to upload file' },
-      { status: 500 }
+      { success: false, error: "Failed to upload file" },
+      { status: 500 },
     );
   }
 }
@@ -56,24 +65,23 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const publicId = searchParams.get('publicId');
+    const publicId = searchParams.get("publicId");
 
     if (!publicId) {
       return NextResponse.json(
-        { success: false, error: 'No publicId provided' },
-        { status: 400 }
+        { success: false, error: "No publicId provided" },
+        { status: 400 },
       );
     }
 
     await deleteFromCloudinary(publicId);
 
     return NextResponse.json({ success: true });
-
   } catch (error) {
-    console.error('Delete error:', error);
+    console.error("Delete error:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to delete file' },
-      { status: 500 }
+      { success: false, error: "Failed to delete file" },
+      { status: 500 },
     );
   }
 }

@@ -1,8 +1,9 @@
 "use client";
 
-import { ReactNode, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { type ReactNode, useLayoutEffect, useRef } from "react";
+
 gsap.registerPlugin(ScrollTrigger);
 
 type PageAnimatorProps = {
@@ -14,7 +15,10 @@ type PageAnimatorProps = {
   enable?: boolean;
 };
 
-export default function PageAnimator({ children, enable = true }: PageAnimatorProps) {
+export default function PageAnimator({
+  children,
+  enable = true,
+}: PageAnimatorProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
@@ -25,15 +29,19 @@ export default function PageAnimator({ children, enable = true }: PageAnimatorPr
     if ((root as any).dataset && (root as any).dataset.gsapInit === "1") {
       return;
     }
-    try { (root as any).dataset.gsapInit = "1"; } catch {}
+    try {
+      (root as any).dataset.gsapInit = "1";
+    } catch {}
 
     const ctx = gsap.context((self) => {
-      const select = self.selector?.bind(self) ?? ((q: string) => Array.from(root.querySelectorAll(q)));
+      const select =
+        self.selector?.bind(self) ??
+        ((q: string) => Array.from(root.querySelectorAll(q)));
 
       // Hero title scroll animations
-      const heroTitle = root.querySelector('section#hero h1');
-      const heroSubtitle = root.querySelector('section#hero h4');
-      
+      const heroTitle = root.querySelector("section#hero h1");
+      const heroSubtitle = root.querySelector("section#hero h4");
+
       if (heroTitle) {
         gsap.set(heroTitle, { x: 0, opacity: 1 });
         gsap.to(heroTitle, {
@@ -41,12 +49,12 @@ export default function PageAnimator({ children, enable = true }: PageAnimatorPr
           opacity: 0,
           ease: "power3.in",
           scrollTrigger: {
-            trigger: root.querySelector('section#hero'),
+            trigger: root.querySelector("section#hero"),
             start: "top top",
             end: "60% top",
             scrub: 1,
             markers: false,
-          }
+          },
         });
         console.log("Hero title animation created");
       } else {
@@ -60,12 +68,12 @@ export default function PageAnimator({ children, enable = true }: PageAnimatorPr
           opacity: 0,
           ease: "power3.in",
           scrollTrigger: {
-            trigger: root.querySelector('section#hero'),
+            trigger: root.querySelector("section#hero"),
             start: "top top",
             end: "60% top",
             scrub: 1,
             markers: false,
-          }
+          },
         });
         console.log("Hero subtitle animation created");
       } else {
@@ -73,7 +81,9 @@ export default function PageAnimator({ children, enable = true }: PageAnimatorPr
       }
 
       // Section reveals (fade+slide) with symmetric up/down behavior
-      (gsap.utils.toArray<HTMLElement>(select("section.reveal-section")) || []).forEach((sec) => {
+      (
+        gsap.utils.toArray<HTMLElement>(select("section.reveal-section")) || []
+      ).forEach((sec) => {
         const children = sec.querySelectorAll<HTMLElement>(".reveal-el");
         gsap.set(sec, { autoAlpha: 0, y: 28 });
         if (children.length) gsap.set(children, { autoAlpha: 0, y: 20 });
@@ -94,7 +104,7 @@ export default function PageAnimator({ children, enable = true }: PageAnimatorPr
               end: "bottom 25%",
               toggleActions: "play reverse play reverse",
             },
-          }
+          },
         );
 
         // Child reveals
@@ -115,36 +125,63 @@ export default function PageAnimator({ children, enable = true }: PageAnimatorPr
                 end: "bottom 25%",
                 toggleActions: "play reverse play reverse",
               },
-            }
+            },
           );
         }
       });
 
       // Pop-on-scroll elements: small scale-in
-      gsap.set(select(".pop-on-scroll") as HTMLElement[], { scale: 0.9, autoAlpha: 0 });
+      gsap.set(select(".pop-on-scroll") as HTMLElement[], {
+        scale: 0.9,
+        autoAlpha: 0,
+      });
       ScrollTrigger.batch(select(".pop-on-scroll"), {
         start: "top 85%",
         onEnter: (batch: Element[]) =>
-          gsap.to(batch, { scale: 1, autoAlpha: 1, duration: 0.5, ease: "back.out(1.6)", stagger: 0.06 }),
+          gsap.to(batch, {
+            scale: 1,
+            autoAlpha: 1,
+            duration: 0.5,
+            ease: "back.out(1.6)",
+            stagger: 0.06,
+          }),
         onLeave: (batch: Element[]) =>
-          gsap.to(batch, { scale: 0.9, autoAlpha: 0, duration: 0.3, ease: "power1.inOut", stagger: 0.05 }),
+          gsap.to(batch, {
+            scale: 0.9,
+            autoAlpha: 0,
+            duration: 0.3,
+            ease: "power1.inOut",
+            stagger: 0.05,
+          }),
         onEnterBack: (batch: Element[]) =>
-          gsap.to(batch, { scale: 1, autoAlpha: 1, duration: 0.45, ease: "back.out(1.4)", stagger: 0.06 }),
+          gsap.to(batch, {
+            scale: 1,
+            autoAlpha: 1,
+            duration: 0.45,
+            ease: "back.out(1.4)",
+            stagger: 0.06,
+          }),
         onLeaveBack: (batch: Element[]) =>
-          gsap.to(batch, { scale: 0.9, autoAlpha: 0, duration: 0.25, ease: "power1.inOut", stagger: 0.05 }),
+          gsap.to(batch, {
+            scale: 0.9,
+            autoAlpha: 0,
+            duration: 0.25,
+            ease: "power1.inOut",
+            stagger: 0.05,
+          }),
       });
     }, root);
 
     return () => {
-      try { ctx.revert(); } finally {
-        try { delete (root as any).dataset.gsapInit; } catch {}
+      try {
+        ctx.revert();
+      } finally {
+        try {
+          delete (root as any).dataset.gsapInit;
+        } catch {}
       }
     };
   }, [enable]);
 
-  return (
-    <div ref={rootRef}>
-      {children}
-    </div>
-  );
+  return <div ref={rootRef}>{children}</div>;
 }

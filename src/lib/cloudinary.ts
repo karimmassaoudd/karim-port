@@ -1,4 +1,4 @@
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary } from "cloudinary";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -12,18 +12,18 @@ export default cloudinary;
 // Upload buffer to Cloudinary
 export async function uploadToCloudinary(
   buffer: Buffer,
-  folder: string = 'portfolio'
+  folder: string = "portfolio",
 ): Promise<{ url: string; publicId: string }> {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         folder: folder,
-        resource_type: 'auto',
+        resource_type: "auto",
         transformation: [
-          { width: 2000, height: 2000, crop: 'limit' },
-          { quality: 'auto:good' },
-          { fetch_format: 'auto' }
-        ]
+          { width: 2000, height: 2000, crop: "limit" },
+          { quality: "auto:good" },
+          { fetch_format: "auto" },
+        ],
       },
       (error, result) => {
         if (error) {
@@ -34,7 +34,7 @@ export async function uploadToCloudinary(
             publicId: result.public_id,
           });
         }
-      }
+      },
     );
     uploadStream.end(buffer);
   });

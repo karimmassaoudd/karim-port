@@ -1,12 +1,12 @@
-'use client';
-import { useState, useEffect, use } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import PageAnimator from '@/components/PageAnimator';
-import { MdArrowBack, MdArrowForward, MdOpenInNew } from 'react-icons/md';
-import { FaGithub } from 'react-icons/fa';
+"use client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { use, useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
+import { MdArrowBack, MdOpenInNew } from "react-icons/md";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import PageAnimator from "@/components/PageAnimator";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -18,32 +18,32 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProject();
-  }, [resolvedParams.slug]);
-
   const fetchProject = async () => {
     try {
       const response = await fetch(`/api/projects?slug=${resolvedParams.slug}`);
       const result = await response.json();
-      
+
       if (result.success) {
         // Only show if published
-        if (result.data.status === 'published') {
+        if (result.data.status === "published") {
           setProject(result.data);
         } else {
-          router.push('/projects');
+          router.push("/projects");
         }
       } else {
-        router.push('/projects');
+        router.push("/projects");
       }
     } catch (error) {
-      console.error('Error fetching project:', error);
-      router.push('/projects');
+      console.error("Error fetching project:", error);
+      router.push("/projects");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProject();
+  }, [fetchProject]);
 
   if (loading) {
     return (
@@ -132,12 +132,19 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                           Key Features
                         </h3>
                         <ul className="space-y-3">
-                          {sections.overview.keyFeatures.map((feature: string, idx: number) => (
-                            <li key={idx} className="flex items-start gap-3 text-[var(--text)] font-secondary">
-                              <span className="text-[var(--accent)] mt-1 flex-shrink-0">→</span>
-                              <span>{feature}</span>
-                            </li>
-                          ))}
+                          {sections.overview.keyFeatures.map(
+                            (feature: string, idx: number) => (
+                              <li
+                                key={idx}
+                                className="flex items-start gap-3 text-[var(--text)] font-secondary"
+                              >
+                                <span className="text-[var(--accent)] mt-1 flex-shrink-0">
+                                  →
+                                </span>
+                                <span>{feature}</span>
+                              </li>
+                            ),
+                          )}
                         </ul>
                       </div>
                     )}
@@ -145,59 +152,69 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                   <div className="space-y-6 pop-on-scroll">
                     <div className="bg-[var(--card)] rounded-xl p-8 shadow-lg space-y-6">
                       {sections.overview.client && (
-                      <div className="group">
-                        <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                          Client
-                        </h4>
-                        <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">{sections.overview.client}</p>
-                      </div>
-                    )}
-                    {sections.overview.timeline && (
-                      <div className="group">
-                        <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                          Timeline
-                        </h4>
-                        <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">{sections.overview.timeline}</p>
-                      </div>
-                    )}
-                    {sections.overview.role && (
-                      <div className="group">
-                        <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                          Role
-                        </h4>
-                        <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">{sections.overview.role}</p>
-                      </div>
-                    )}
-                    {sections.overview.team && (
-                      <div className="group">
-                        <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                          Team
-                        </h4>
-                        <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">{sections.overview.team}</p>
-                      </div>
-                    )}
-                    {project.technologies?.length > 0 && (
-                      <div>
-                        <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-4 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                          Technologies
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {project.technologies.map((tech: string, idx: number) => (
-                            <span
-                              key={idx}
-                              className="px-4 py-2 bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5 text-[var(--accent)] rounded-xl text-sm font-semibold border border-[var(--accent)]/20 hover:border-[var(--accent)]/40 hover:shadow-lg hover:shadow-[var(--accent)]/10 transition-all duration-200"
-                            >
-                              {tech}
-                            </span>
-                          ))}
+                        <div className="group">
+                          <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
+                            Client
+                          </h4>
+                          <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                            {sections.overview.client}
+                          </p>
                         </div>
-                      </div>
-                    )}
+                      )}
+                      {sections.overview.timeline && (
+                        <div className="group">
+                          <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
+                            Timeline
+                          </h4>
+                          <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                            {sections.overview.timeline}
+                          </p>
+                        </div>
+                      )}
+                      {sections.overview.role && (
+                        <div className="group">
+                          <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
+                            Role
+                          </h4>
+                          <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                            {sections.overview.role}
+                          </p>
+                        </div>
+                      )}
+                      {sections.overview.team && (
+                        <div className="group">
+                          <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
+                            Team
+                          </h4>
+                          <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                            {sections.overview.team}
+                          </p>
+                        </div>
+                      )}
+                      {project.technologies?.length > 0 && (
+                        <div>
+                          <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-4 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
+                            Technologies
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {project.technologies.map(
+                              (tech: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="px-4 py-2 bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5 text-[var(--accent)] rounded-xl text-sm font-semibold border border-[var(--accent)]/20 hover:border-[var(--accent)]/40 hover:shadow-lg hover:shadow-[var(--accent)]/10 transition-all duration-200"
+                                >
+                                  {tech}
+                                </span>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -232,12 +249,21 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                   </p>
                   {sections.solutions.solutions?.length > 0 && (
                     <div className="grid md:grid-cols-2 gap-6 mt-8">
-                      {sections.solutions.solutions.map((solution: any, idx: number) => (
-                        <div key={idx} className="bg-[var(--Secondary-Background)] p-6 rounded-lg">
-                          <h4 className="text-lg font-semibold text-[var(--headline)] mb-3 font-primary">{solution.title}</h4>
-                          <p className="text-[var(--text)] font-secondary">{solution.description}</p>
-                        </div>
-                      ))}
+                      {sections.solutions.solutions.map(
+                        (solution: any, idx: number) => (
+                          <div
+                            key={idx}
+                            className="bg-[var(--Secondary-Background)] p-6 rounded-lg"
+                          >
+                            <h4 className="text-lg font-semibold text-[var(--headline)] mb-3 font-primary">
+                              {solution.title}
+                            </h4>
+                            <p className="text-[var(--text)] font-secondary">
+                              {solution.description}
+                            </p>
+                          </div>
+                        ),
+                      )}
                     </div>
                   )}
                 </div>
@@ -257,7 +283,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                     {sections.branding.description}
                   </p>
                 </div>
-                
+
                 <div className="grid md:grid-cols-2 gap-8">
                   {/* Logo */}
                   {sections.branding.logo?.url && (
@@ -269,18 +295,23 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                       />
                     </div>
                   )}
-                  
+
                   <div className="space-y-6 pop-on-scroll">
                     {/* Color Palette */}
                     {sections.branding.colorPalette && (
                       <div className="bg-[var(--card)] rounded-xl shadow-xl p-6">
-                        <h3 className="text-xl font-semibold text-[var(--headline)] mb-4 font-primary">Color Palette</h3>
+                        <h3 className="text-xl font-semibold text-[var(--headline)] mb-4 font-primary">
+                          Color Palette
+                        </h3>
                         <div className="flex gap-4">
                           {sections.branding.colorPalette.primary && (
                             <div className="flex-1">
                               <div
                                 className="w-full h-24 rounded-lg shadow-lg mb-2"
-                                style={{ backgroundColor: sections.branding.colorPalette.primary }}
+                                style={{
+                                  backgroundColor:
+                                    sections.branding.colorPalette.primary,
+                                }}
                               />
                               <p className="text-sm text-[var(--secondary-text)] text-center font-secondary">
                                 {sections.branding.colorPalette.primary}
@@ -291,7 +322,10 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                             <div className="flex-1">
                               <div
                                 className="w-full h-24 rounded-lg shadow-lg mb-2"
-                                style={{ backgroundColor: sections.branding.colorPalette.secondary }}
+                                style={{
+                                  backgroundColor:
+                                    sections.branding.colorPalette.secondary,
+                                }}
                               />
                               <p className="text-sm text-[var(--text-secondary)] text-center">
                                 {sections.branding.colorPalette.secondary}
@@ -301,20 +335,28 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                         </div>
                       </div>
                     )}
-                    
+
                     {/* Typography */}
                     {sections.branding.typography && (
                       <div>
-                        <h3 className="text-xl font-semibold text-[var(--text)] mb-4">Typography</h3>
+                        <h3 className="text-xl font-semibold text-[var(--text)] mb-4">
+                          Typography
+                        </h3>
                         <div className="space-y-2">
                           {sections.branding.typography.primary && (
                             <p className="text-[var(--text-secondary)]">
-                              <span className="font-medium text-[var(--text)]">Primary:</span> {sections.branding.typography.primary}
+                              <span className="font-medium text-[var(--text)]">
+                                Primary:
+                              </span>{" "}
+                              {sections.branding.typography.primary}
                             </p>
                           )}
                           {sections.branding.typography.secondary && (
                             <p className="text-[var(--text-secondary)]">
-                              <span className="font-medium text-[var(--text)]">Secondary:</span> {sections.branding.typography.secondary}
+                              <span className="font-medium text-[var(--text)]">
+                                Secondary:
+                              </span>{" "}
+                              {sections.branding.typography.secondary}
                             </p>
                           )}
                         </div>
@@ -340,18 +382,25 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 </div>
                 {sections.wireframes.wireframes?.length > 0 && (
                   <div className="grid md:grid-cols-2 gap-8">
-                    {sections.wireframes.wireframes.map((image: any, idx: number) => (
-                      <div key={idx} className="pop-on-scroll rounded-xl overflow-hidden shadow-xl bg-[var(--card)]">
-                        <img
-                          src={image.url}
-                          alt={image.alt}
-                          className="w-full h-auto"
-                        />
-                        {image.alt && (
-                          <p className="text-sm text-[var(--secondary-text)] mt-3 text-center px-4 pb-4 font-secondary">{image.alt}</p>
-                        )}
-                      </div>
-                    ))}
+                    {sections.wireframes.wireframes.map(
+                      (image: any, idx: number) => (
+                        <div
+                          key={idx}
+                          className="pop-on-scroll rounded-xl overflow-hidden shadow-xl bg-[var(--card)]"
+                        >
+                          <img
+                            src={image.url}
+                            alt={image.alt}
+                            className="w-full h-auto"
+                          />
+                          {image.alt && (
+                            <p className="text-sm text-[var(--secondary-text)] mt-3 text-center px-4 pb-4 font-secondary">
+                              {image.alt}
+                            </p>
+                          )}
+                        </div>
+                      ),
+                    )}
                   </div>
                 )}
               </div>
@@ -372,15 +421,20 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 </div>
                 {sections.uiuxDesign.mockups?.length > 0 && (
                   <div className="space-y-8">
-                    {sections.uiuxDesign.mockups.map((mockup: any, idx: number) => (
-                      <div key={idx} className="pop-on-scroll rounded-xl overflow-hidden shadow-2xl bg-[var(--card)]">
-                        <img
-                          src={mockup.url}
-                          alt={mockup.alt}
-                          className="w-full h-auto"
-                        />
-                      </div>
-                    ))}
+                    {sections.uiuxDesign.mockups.map(
+                      (mockup: any, idx: number) => (
+                        <div
+                          key={idx}
+                          className="pop-on-scroll rounded-xl overflow-hidden shadow-2xl bg-[var(--card)]"
+                        >
+                          <img
+                            src={mockup.url}
+                            alt={mockup.alt}
+                            className="w-full h-auto"
+                          />
+                        </div>
+                      ),
+                    )}
                   </div>
                 )}
               </div>
@@ -400,16 +454,20 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                   </p>
                   {sections.developmentProcess.techStack?.length > 0 && (
                     <div>
-                      <h3 className="text-xl font-semibold text-[var(--headline)] mb-6 text-center font-primary">Tech Stack</h3>
+                      <h3 className="text-xl font-semibold text-[var(--headline)] mb-6 text-center font-primary">
+                        Tech Stack
+                      </h3>
                       <div className="flex flex-wrap justify-center gap-3">
-                        {sections.developmentProcess.techStack.map((tech: string, idx: number) => (
-                          <span
-                            key={idx}
-                            className="px-4 py-2 bg-[var(--Secondary-Background)] text-[var(--accent)] rounded-lg text-sm font-semibold font-secondary"
-                          >
-                            {tech}
-                          </span>
-                        ))}
+                        {sections.developmentProcess.techStack.map(
+                          (tech: string, idx: number) => (
+                            <span
+                              key={idx}
+                              className="px-4 py-2 bg-[var(--Secondary-Background)] text-[var(--accent)] rounded-lg text-sm font-semibold font-secondary"
+                            >
+                              {tech}
+                            </span>
+                          ),
+                        )}
                       </div>
                     </div>
                   )}
@@ -453,15 +511,17 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                       </a>
                     )}
                   </div>
-                  {sections.websitePreview.screenshots?.map((screenshot: any, idx: number) => (
-                    <div key={idx} className="mb-6">
-                      <img
-                        src={screenshot.url}
-                        alt={screenshot.alt}
-                        className="w-full rounded-lg shadow-lg"
-                      />
-                    </div>
-                  ))}
+                  {sections.websitePreview.screenshots?.map(
+                    (screenshot: any, idx: number) => (
+                      <div key={idx} className="mb-6">
+                        <img
+                          src={screenshot.url}
+                          alt={screenshot.alt}
+                          className="w-full rounded-lg shadow-lg"
+                        />
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             </section>
@@ -481,14 +541,21 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 </div>
                 {sections.resultsImpact.metrics?.length > 0 && (
                   <div className="grid md:grid-cols-3 gap-6">
-                    {sections.resultsImpact.metrics.map((metric: any, idx: number) => (
-                      <div key={idx} className="bg-[var(--card)] text-center p-8 rounded-xl shadow-xl pop-on-scroll">
-                        <div className="text-5xl font-bold text-[var(--accent)] mb-3 font-primary">
-                          {metric.value}
+                    {sections.resultsImpact.metrics.map(
+                      (metric: any, idx: number) => (
+                        <div
+                          key={idx}
+                          className="bg-[var(--card)] text-center p-8 rounded-xl shadow-xl pop-on-scroll"
+                        >
+                          <div className="text-5xl font-bold text-[var(--accent)] mb-3 font-primary">
+                            {metric.value}
+                          </div>
+                          <p className="text-[var(--text)] font-semibold font-secondary">
+                            {metric.label}
+                          </p>
                         </div>
-                        <p className="text-[var(--text)] font-semibold font-secondary">{metric.label}</p>
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 )}
               </div>
@@ -506,32 +573,50 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                   <p className="text-lg text-[var(--text)] leading-relaxed mb-8 font-secondary">
                     {sections.conclusion.description}
                   </p>
-                {sections.conclusion.lessonsLearned?.length > 0 && (
-                  <div>
-                    <h3 className="text-xl font-semibold text-[var(--text)] mb-4">Key Takeaways</h3>
-                    <ul className="space-y-3">
-                      {sections.conclusion.lessonsLearned.map((lesson: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-3 text-[var(--text-secondary)]">
-                          <span className="text-[var(--accent)] text-2xl leading-none">•</span>
-                          <span className="flex-1">{lesson}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {sections.conclusion.futureImprovements?.length > 0 && (
-                  <div className="mt-8">
-                    <h3 className="text-xl font-semibold text-[var(--text)] mb-4">Future Improvements</h3>
-                    <ul className="space-y-3">
-                      {sections.conclusion.futureImprovements.map((improvement: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-3 text-[var(--text-secondary)]">
-                          <span className="text-[var(--accent)] text-2xl leading-none">→</span>
-                          <span className="flex-1">{improvement}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                  {sections.conclusion.lessonsLearned?.length > 0 && (
+                    <div>
+                      <h3 className="text-xl font-semibold text-[var(--text)] mb-4">
+                        Key Takeaways
+                      </h3>
+                      <ul className="space-y-3">
+                        {sections.conclusion.lessonsLearned.map(
+                          (lesson: string, idx: number) => (
+                            <li
+                              key={idx}
+                              className="flex items-start gap-3 text-[var(--text-secondary)]"
+                            >
+                              <span className="text-[var(--accent)] text-2xl leading-none">
+                                •
+                              </span>
+                              <span className="flex-1">{lesson}</span>
+                            </li>
+                          ),
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                  {sections.conclusion.futureImprovements?.length > 0 && (
+                    <div className="mt-8">
+                      <h3 className="text-xl font-semibold text-[var(--text)] mb-4">
+                        Future Improvements
+                      </h3>
+                      <ul className="space-y-3">
+                        {sections.conclusion.futureImprovements.map(
+                          (improvement: string, idx: number) => (
+                            <li
+                              key={idx}
+                              className="flex items-start gap-3 text-[var(--text-secondary)]"
+                            >
+                              <span className="text-[var(--accent)] text-2xl leading-none">
+                                →
+                              </span>
+                              <span className="flex-1">{improvement}</span>
+                            </li>
+                          ),
+                        )}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -555,14 +640,14 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                     >
                       {sections.callToAction.primaryButtonText}
                     </Link>
-                  {sections.callToAction.secondaryButtonText && (
-                    <Link
-                      href={sections.callToAction.secondaryButtonLink || '#'}
-                      className="btn btn-secondary"
-                    >
-                      {sections.callToAction.secondaryButtonText}
-                    </Link>
-                  )}
+                    {sections.callToAction.secondaryButtonText && (
+                      <Link
+                        href={sections.callToAction.secondaryButtonLink || "#"}
+                        className="btn btn-secondary"
+                      >
+                        {sections.callToAction.secondaryButtonText}
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>

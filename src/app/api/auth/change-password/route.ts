@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import bcrypt from 'bcryptjs';
-import dbConnect from '@/lib/mongodb';
-import User from '@/models/User';
-import { authOptions } from '@/lib/auth';
+import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import dbConnect from "@/lib/mongodb";
+import User from "@/models/User";
 
 export async function POST(request: Request) {
   try {
@@ -11,8 +11,8 @@ export async function POST(request: Request) {
 
     if (!session || !session.user) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
       );
     }
 
@@ -20,15 +20,15 @@ export async function POST(request: Request) {
 
     if (!currentPassword || !newPassword) {
       return NextResponse.json(
-        { success: false, error: 'Current and new password are required' },
-        { status: 400 }
+        { success: false, error: "Current and new password are required" },
+        { status: 400 },
       );
     }
 
     if (newPassword.length < 6) {
       return NextResponse.json(
-        { success: false, error: 'New password must be at least 6 characters' },
-        { status: 400 }
+        { success: false, error: "New password must be at least 6 characters" },
+        { status: 400 },
       );
     }
 
@@ -38,18 +38,21 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
+        { success: false, error: "User not found" },
+        { status: 404 },
       );
     }
 
     // Verify current password
-    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      currentPassword,
+      user.password,
+    );
 
     if (!isPasswordValid) {
       return NextResponse.json(
-        { success: false, error: 'Current password is incorrect' },
-        { status: 400 }
+        { success: false, error: "Current password is incorrect" },
+        { status: 400 },
       );
     }
 
@@ -62,13 +65,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Password changed successfully',
+      message: "Password changed successfully",
     });
   } catch (error) {
-    console.error('Change password error:', error);
+    console.error("Change password error:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to change password' },
-      { status: 500 }
+      { success: false, error: "Failed to change password" },
+      { status: 500 },
     );
   }
 }

@@ -1,10 +1,10 @@
 declare module "ogl" {
-  const value: any;
+  const value: unknown;
   export default value;
-  export const Renderer: any;
-  export const Geometry: any;
-  export const Program: any;
-  export const Mesh: any;
-  export const Triangle: any;
-  export const Vec2: any;
+  export const Renderer: unknown;
+  export const Geometry: unknown;
+  export const Program: unknown;
+  export const Mesh: unknown;
+  export const Triangle: unknown;
+  export const Vec2: unknown;
 }

@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import { model, models, Schema } from "mongoose";
 
 // Image interface for sections that support multiple images
 export interface IProjectImage {
@@ -158,10 +158,10 @@ export interface IProject {
   shortDescription: string;
   thumbnail: IProjectImage;
   technologies: string[];
-  status: 'draft' | 'published';
+  status: "draft" | "published";
   featured: boolean;
   order: number;
-  
+
   // Case Study Sections
   sections: {
     hero: IHeroSection;
@@ -177,7 +177,7 @@ export interface IProject {
     conclusion: IConclusionSection;
     callToAction: ICallToActionSection;
   };
-  
+
   // Metadata
   createdAt: Date;
   updatedAt: Date;
@@ -210,7 +210,7 @@ const ProjectOverviewSectionSchema = new Schema<IProjectOverviewSection>({
 
 const ProblemStatementSectionSchema = new Schema<IProblemStatementSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'The Challenge' },
+  heading: { type: String, default: "The Challenge" },
   description: { type: String },
   challenges: { type: [String], default: [] },
   targetAudience: { type: String },
@@ -219,19 +219,21 @@ const ProblemStatementSectionSchema = new Schema<IProblemStatementSection>({
 
 const SolutionsSectionSchema = new Schema<ISolutionsSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'The Solutions' },
+  heading: { type: String, default: "The Solutions" },
   description: { type: String },
-  solutions: [{
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    icon: { type: String },
-  }],
+  solutions: [
+    {
+      title: { type: String, required: true },
+      description: { type: String, required: true },
+      icon: { type: String },
+    },
+  ],
   images: { type: [ProjectImageSchema], default: [] },
 });
 
 const BrandingSectionSchema = new Schema<IBrandingSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'Branding & Visual Direction' },
+  heading: { type: String, default: "Branding & Visual Direction" },
   description: { type: String },
   colorPalette: {
     primary: { type: String },
@@ -247,14 +249,14 @@ const BrandingSectionSchema = new Schema<IBrandingSection>({
 
 const WireframesSectionSchema = new Schema<IWireframesSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'Wireframes' },
+  heading: { type: String, default: "Wireframes" },
   description: { type: String },
   wireframes: { type: [ProjectImageSchema], default: [] },
 });
 
 const UIUXDesignSectionSchema = new Schema<IUIUXDesignSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'UI/UX Design' },
+  heading: { type: String, default: "UI/UX Design" },
   description: { type: String },
   designPrinciples: { type: [String], default: [] },
   mockups: { type: [ProjectImageSchema], default: [] },
@@ -263,21 +265,23 @@ const UIUXDesignSectionSchema = new Schema<IUIUXDesignSection>({
 
 const DevelopmentProcessSectionSchema = new Schema<IDevelopmentProcessSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'Development Process' },
+  heading: { type: String, default: "Development Process" },
   description: { type: String },
   methodology: { type: String },
   technicalChallenges: { type: [String], default: [] },
-  codeSnippets: [{
-    language: { type: String },
-    code: { type: String },
-    description: { type: String },
-  }],
+  codeSnippets: [
+    {
+      language: { type: String },
+      code: { type: String },
+      description: { type: String },
+    },
+  ],
   images: { type: [ProjectImageSchema], default: [] },
 });
 
 const WebsitePreviewSectionSchema = new Schema<IWebsitePreviewSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'Final Website' },
+  heading: { type: String, default: "Final Website" },
   description: { type: String },
   liveUrl: { type: String },
   githubUrl: { type: String },
@@ -287,25 +291,29 @@ const WebsitePreviewSectionSchema = new Schema<IWebsitePreviewSection>({
 
 const ResultsImpactSectionSchema = new Schema<IResultsImpactSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'Results & Impact' },
+  heading: { type: String, default: "Results & Impact" },
   description: { type: String },
-  metrics: [{
-    label: { type: String, required: true },
-    value: { type: String, required: true },
-    description: { type: String },
-  }],
-  testimonials: [{
-    quote: { type: String, required: true },
-    author: { type: String, required: true },
-    role: { type: String, required: true },
-    avatar: { type: String },
-  }],
+  metrics: [
+    {
+      label: { type: String, required: true },
+      value: { type: String, required: true },
+      description: { type: String },
+    },
+  ],
+  testimonials: [
+    {
+      quote: { type: String, required: true },
+      author: { type: String, required: true },
+      role: { type: String, required: true },
+      avatar: { type: String },
+    },
+  ],
   images: { type: [ProjectImageSchema], default: [] },
 });
 
 const ConclusionSectionSchema = new Schema<IConclusionSection>({
   enabled: { type: Boolean, default: false },
-  heading: { type: String, default: 'Conclusion' },
+  heading: { type: String, default: "Conclusion" },
   description: { type: String },
   lessonsLearned: { type: [String], default: [] },
   futureImprovements: { type: [String], default: [] },
@@ -315,8 +323,8 @@ const CallToActionSectionSchema = new Schema<ICallToActionSection>({
   enabled: { type: Boolean, default: false },
   heading: { type: String, default: "Let's Work Together" },
   description: { type: String },
-  primaryButtonText: { type: String, default: 'Contact Me' },
-  primaryButtonLink: { type: String, default: '/contact' },
+  primaryButtonText: { type: String, default: "Contact Me" },
+  primaryButtonLink: { type: String, default: "/contact" },
   secondaryButtonText: { type: String },
   secondaryButtonLink: { type: String },
 });
@@ -329,10 +337,10 @@ const ProjectSchema = new Schema<IProject>(
     shortDescription: { type: String, required: true },
     thumbnail: { type: ProjectImageSchema, required: false },
     technologies: { type: [String], default: [] },
-    status: { type: String, enum: ['draft', 'published'], default: 'draft' },
+    status: { type: String, enum: ["draft", "published"], default: "draft" },
     featured: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
-    
+
     sections: {
       hero: { type: HeroSectionSchema, required: true },
       overview: { type: ProjectOverviewSectionSchema, required: true },
@@ -350,29 +358,34 @@ const ProjectSchema = new Schema<IProject>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Pre-save hook to clean up empty image objects
-ProjectSchema.pre('save', function() {
+ProjectSchema.pre("save", function () {
   // Clean up logo if it's empty
-  if (this.sections?.branding?.logo && 
-      (!this.sections.branding.logo.url || this.sections.branding.logo.url === '')) {
+  if (
+    this.sections?.branding?.logo &&
+    (!this.sections.branding.logo.url || this.sections.branding.logo.url === "")
+  ) {
     this.sections.branding.logo = undefined as any;
   }
-  
+
   // Clean up heroImage if it's empty
-  if (this.sections?.hero?.heroImage && 
-      (!this.sections.hero.heroImage.url || this.sections.hero.heroImage.url === '')) {
+  if (
+    this.sections?.hero?.heroImage &&
+    (!this.sections.hero.heroImage.url ||
+      this.sections.hero.heroImage.url === "")
+  ) {
     this.sections.hero.heroImage = undefined as any;
   }
-  
+
   // Clean up thumbnail if it's empty
-  if (this.thumbnail && (!this.thumbnail.url || this.thumbnail.url === '')) {
+  if (this.thumbnail && (!this.thumbnail.url || this.thumbnail.url === "")) {
     this.thumbnail = undefined as any;
   }
 });
 
-const Project = models.Project || model<IProject>('Project', ProjectSchema);
+const Project = models.Project || model<IProject>("Project", ProjectSchema);
 
 export default Project;

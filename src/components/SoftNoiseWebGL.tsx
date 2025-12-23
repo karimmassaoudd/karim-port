@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type Props = {
   className?: string;
@@ -94,7 +94,8 @@ export default function SoftNoiseWebGL({ className }: Props) {
         }
 
         const ro = new ResizeObserver(resize);
-        if (canvasRef.current?.parentElement) ro.observe(canvasRef.current.parentElement);
+        if (canvasRef.current?.parentElement)
+          ro.observe(canvasRef.current.parentElement);
         resize();
 
         const start = performance.now();
@@ -111,7 +112,7 @@ export default function SoftNoiseWebGL({ className }: Props) {
           cancelAnimationFrame(raf);
           ro.disconnect();
         };
-      } catch (e) {
+      } catch (_e) {
         // Fail silently if WebGL not available
       }
     })();
