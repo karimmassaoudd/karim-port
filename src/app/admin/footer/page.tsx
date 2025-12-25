@@ -47,10 +47,6 @@ export default function FooterPage() {
     socialLinks: [],
   });
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
   const fetchData = async () => {
     console.log("Footer: Starting fetchData...");
     try {
@@ -74,6 +70,10 @@ export default function FooterPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

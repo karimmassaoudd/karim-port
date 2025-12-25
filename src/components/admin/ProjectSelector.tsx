@@ -42,10 +42,6 @@ export default function ProjectSelector({
   const [isSelecting, setIsSelecting] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
-
   const fetchProjects = async () => {
     setLoading(true);
     try {
@@ -60,6 +56,10 @@ export default function ProjectSelector({
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
 
   const getProjectDetails = (projectId: string) => {
     return allProjects.find((p) => p._id === projectId);

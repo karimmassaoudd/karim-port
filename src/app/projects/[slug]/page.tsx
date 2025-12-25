@@ -43,7 +43,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
   useEffect(() => {
     fetchProject();
-  }, [fetchProject]);
+  }, [resolvedParams.slug]);
 
   if (loading) {
     return (

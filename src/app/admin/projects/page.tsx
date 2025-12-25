@@ -38,10 +38,6 @@ export default function AdminProjectsPage() {
     text: string;
   } | null>(null);
 
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
-
   const fetchProjects = async () => {
     try {
       setLoading(true);
@@ -57,6 +53,10 @@ export default function AdminProjectsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProjects();
+  }, [filter]);
 
   const handleDelete = async (id: string, title: string) => {
     if (!confirm(`Are you sure you want to delete "${title}"?`)) {
