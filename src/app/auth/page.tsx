@@ -33,10 +33,6 @@ function AuthContent() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    checkSetupStatus();
-  }, [checkSetupStatus]);
-
   const checkSetupStatus = async () => {
     try {
       const response = await fetch("/api/setup/status");
@@ -52,6 +48,10 @@ function AuthContent() {
       setCheckingSetup(false);
     }
   };
+
+  useEffect(() => {
+    checkSetupStatus();
+  }, []);
 
   const flipCard = (newMode: "signin" | "signup" | "forgot") => {
     setIsFlipping(true);

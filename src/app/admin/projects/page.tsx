@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   MdAdd,
   MdDelete,
@@ -38,7 +38,7 @@ export default function AdminProjectsPage() {
     text: string;
   } | null>(null);
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/projects?status=${filter}`);
@@ -52,11 +52,11 @@ export default function AdminProjectsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
 
   useEffect(() => {
     fetchProjects();
-  }, [filter]);
+  }, [fetchProjects]);
 
   const handleDelete = async (id: string, title: string) => {
     if (!confirm(`Are you sure you want to delete "${title}"?`)) {

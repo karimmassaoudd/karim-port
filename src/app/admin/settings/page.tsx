@@ -41,6 +41,28 @@ export default function SettingsPage() {
   const formRef = useRef<HTMLFormElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
 
+  const fetchEmailConfig = async () => {
+    try {
+      const response = await fetch("/api/email-config");
+      const data = await response.json();
+
+      if (data.success) {
+        setGmailUser(data.data.gmailUser);
+        setEmailConfigured(data.data.configured);
+        // Show success toast if email is configured
+        if (data.data.configured) {
+          setEmailMessage({
+            type: "success",
+            text: "✓ Email service is configured and active",
+          });
+        }
+        // Don't set the password since it's masked
+      }
+    } catch (error) {
+      console.error("Error fetching email config:", error);
+    }
+  };
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from(containerRef.current, {
@@ -64,32 +86,7 @@ export default function SettingsPage() {
     fetchEmailConfig();
 
     return () => ctx.revert();
-  }, [
-    // Fetch email configuration
-    fetchEmailConfig,
-  ]);
-
-  const fetchEmailConfig = async () => {
-    try {
-      const response = await fetch("/api/email-config");
-      const data = await response.json();
-
-      if (data.success) {
-        setGmailUser(data.data.gmailUser);
-        setEmailConfigured(data.data.configured);
-        // Show success toast if email is configured
-        if (data.data.configured) {
-          setEmailMessage({
-            type: "success",
-            text: "✓ Email service is configured and active",
-          });
-        }
-        // Don't set the password since it's masked
-      }
-    } catch (error) {
-      console.error("Error fetching email config:", error);
-    }
-  };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

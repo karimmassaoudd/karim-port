@@ -202,12 +202,6 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
     },
   });
 
-  useEffect(() => {
-    if (!isNew) {
-      fetchProject();
-    }
-  }, [fetchProject, isNew]);
-
   const fetchProject = async () => {
     try {
       const response = await fetch(`/api/projects?id=${resolvedParams.id}`);
@@ -251,6 +245,12 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!isNew) {
+      fetchProject();
+    }
+  }, [fetchProject, isNew]);
 
   const handleSave = async () => {
     if (!formData.title || !formData.shortDescription) {
