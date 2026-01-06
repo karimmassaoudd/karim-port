@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PageAnimator from "@/components/PageAnimator";
@@ -9,11 +9,7 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await fetch("/api/projects?status=published");
       const result = await response.json();
@@ -25,7 +21,11 @@ export default function ProjectsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   return (
     <>

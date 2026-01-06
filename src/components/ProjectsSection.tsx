@@ -184,7 +184,12 @@ export const ProjectsSection = () => {
             .map((ref: ProjectReference) => ref.projectId);
 
           if (visibleProjects.length > 0) {
-            setProjects(visibleProjects);
+            // Remove duplicates by _id
+            const uniqueProjects = visibleProjects.filter(
+              (project, index, self) =>
+                index === self.findIndex((p) => p._id === project._id),
+            );
+            setProjects(uniqueProjects);
           }
         }
       } catch (error) {

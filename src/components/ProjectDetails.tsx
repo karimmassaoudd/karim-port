@@ -244,7 +244,6 @@ export default function ProjectDetails({
                     src="/assets/Travel World22.jpg"
                     alt="Travel World experience preview"
                     fill
-                    quality={95}
                     sizes="(min-width: 1024px) 40vw, (min-width: 768px) 60vw, 90vw"
                     className="object-cover"
                     priority

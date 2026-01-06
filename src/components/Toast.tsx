@@ -17,20 +17,20 @@ export default function Toast({
 }: ToastProps) {
   const [isClosing, setIsClosing] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleClose();
-    }, duration);
-
-    return () => clearTimeout(timer);
-  }, [duration, handleClose]);
-
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
       onClose();
     }, 300); // Wait for animation to complete
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleClose();
+    }, duration);
+
+    return () => clearTimeout(timer);
+  }, [duration]);
 
   return (
     <div
