@@ -557,10 +557,11 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
       });
 
       const result = await safeJsonParse(response);
-      if (result.success) {
-        // Update the appropriate field
-        updateNestedField(field, { url: result.url, alt: file.name });
-        showMessage("success", "Image uploaded!");
+      if (result.success && result.uploads && result.uploads.length > 0) {
+        // Update the appropriate field with the first uploaded image
+        const upload = result.uploads[0];
+        updateNestedField(field, { url: upload.url, alt: upload.alt || file.name });
+        showMessage("success", "Image uploaded! Remember to click 'Save Project' to persist changes.");
       } else {
         showMessage("error", result.error || "Upload failed");
       }
