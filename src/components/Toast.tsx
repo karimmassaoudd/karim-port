@@ -17,13 +17,6 @@ export default function Toast({
 }: ToastProps) {
   const [isClosing, setIsClosing] = useState(false);
 
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      onClose();
-    }, 300); // Wait for animation to complete
-  };
-
   useEffect(() => {
     const timer = setTimeout(() => {
       handleClose();
@@ -31,6 +24,13 @@ export default function Toast({
 
     return () => clearTimeout(timer);
   }, [duration, handleClose]);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose();
+    }, 300); // Wait for animation to complete
+  };
 
   return (
     <div

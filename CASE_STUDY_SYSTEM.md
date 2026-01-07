@@ -17,6 +17,7 @@ A comprehensive CMS for creating detailed project case studies with 12 customiza
 ## 🏗️ Architecture Overview
 
 ### Database Layer
+
 - **Model:** `src/models/Project.ts`
 - **Collections:** MongoDB `projects` collection
 - **Schema Features:**
@@ -29,26 +30,33 @@ A comprehensive CMS for creating detailed project case studies with 12 customiza
   - Automatic timestamps
 
 ### API Layer
+
 **Location:** `src/app/api/projects/`
 
 #### Endpoints:
+
 1. **GET `/api/projects`** - List all projects
+
    - Query params: `?status=published|draft|all`
    - Query params: `?id={projectId}` - Get single project
    - Query params: `?slug={slug}` - Get project by slug
 
 2. **POST `/api/projects`** - Create new project
+
    - Auto-generates slug from title
    - Creates default section structure
 
 3. **PUT `/api/projects`** - Update project
+
    - Body: `{ id, ...updateData }`
    - Validates unique slug
 
 4. **DELETE `/api/projects`** - Delete project
+
    - Query param: `?id={projectId}`
 
 5. **POST `/api/projects/upload-image`** - Upload project images
+
    - Accepts: JPEG, PNG, WebP, AVIF
    - Max size: 5MB
    - Storage: `/public/uploads/projects/`
@@ -57,10 +65,13 @@ A comprehensive CMS for creating detailed project case studies with 12 customiza
    - Query param: `?filename={filename}`
 
 ### Admin Interface
+
 **Location:** `src/app/admin/projects/`
 
 #### Pages:
+
 1. **`/admin/projects`** - Projects List
+
    - Grid view of all projects
    - Filter by status (all/published/draft)
    - Quick actions: Edit, Delete, Publish/Unpublish
@@ -77,10 +88,13 @@ A comprehensive CMS for creating detailed project case studies with 12 customiza
    - Enable/disable section toggles
 
 ### Public Frontend
+
 **Location:** `src/app/projects/`
 
 #### Pages:
+
 1. **`/projects`** - Projects Listing
+
    - Grid of published projects only
    - Card-based layout with hover effects
    - Technology tags
@@ -100,16 +114,28 @@ A comprehensive CMS for creating detailed project case studies with 12 customiza
 
 ## 📋 Case Study Sections
 
-All 12 sections are implemented and ready to use:
+All 16 sections are implemented and ready to use:
 
 ### 1. **Hero Section** ⭐
+
 - Project title
 - Tagline/subtitle
 - Category badge
 - Large hero image
 - **Always Enabled** by default
 
-### 2. **Project Overview** 📊
+### 2. **Hover Exploration** 🎯
+
+_(Travel World inspired)_
+
+- Interactive hover tiles
+- Tile title and subtitle
+- Tile images
+- Grid layout for exploration
+- **Toggle On/Off**
+
+### 3. **Project Overview** 📊
+
 - Client name
 - Timeline
 - Your role
@@ -119,7 +145,18 @@ All 12 sections are implemented and ready to use:
 - Technologies display
 - **Always Enabled** by default
 
-### 3. **Problem Statement** ⚠️
+### 4. **Quote/Process** 💭
+
+_(Travel World inspired)_
+
+- Inspirational quote
+- Process cards with icons
+- Card items/bullet points
+- Supporting images
+- **Toggle On/Off**
+
+### 5. **Problem Statement** ⚠️
+
 - Custom heading
 - Challenge description
 - Target audience
@@ -127,14 +164,26 @@ All 12 sections are implemented and ready to use:
 - Optional images
 - **Toggle On/Off**
 
-### 4. **Solutions** 💡
+### 6. **Solutions** 💡
+
 - Custom heading
 - Solutions description
 - Individual solution items
 - Optional images
 - **Toggle On/Off**
 
-### 5. **Branding & Visual Direction** 🎨
+### 7. **Trip Themes** 🧳
+
+_(Travel World inspired)_
+
+- Carousel/slider section
+- Multiple themes with titles
+- Multiple images per theme
+- Navigation controls
+- **Toggle On/Off**
+
+### 8. **Branding & Visual Direction** 🎨
+
 - Custom heading
 - Brand description
 - Color palette (name + hex)
@@ -143,13 +192,131 @@ All 12 sections are implemented and ready to use:
 - Brand images gallery
 - **Toggle On/Off**
 
-### 6. **Wireframes** 📐
+### 9. **Wireframes** 📐
+
 - Custom heading
 - Wireframes description
 - Multiple wireframe images
 - **Toggle On/Off**
 
+### 10. **UI/UX Design** 🖌️
+
+- Custom heading
+- Design description
+- Design principles list
+- Mockup images
+- Design notes
+- **Toggle On/Off**
+
+### 11. **Special Offers** 🏷️
+
+_(Travel World inspired)_
+
+- Pricing/offer cards
+- Original and discounted prices
+- Discount badges
+- Card descriptions
+- Call-to-action buttons
+- **Toggle On/Off**
+
+### 12. **Development Process** 💻
+
+- Custom heading
+- Process description
+- Methodology
+- Technical challenges list
+- Code snippets with syntax highlighting
+- Process images
+- **Toggle On/Off**
+
+### 13. **Final Website Preview** 🌐
+
+- Custom heading
+- Preview description
+- Live site URL button
+- GitHub repo URL button
+- Screenshot gallery
+- Video URL embed
+- **Toggle On/Off**
+
+### 14. **Results & Impact** 📈
+
+- Custom heading
+- Impact description
+- Metrics (label, value, description)
+- Client testimonials
+- Result images
+- **Toggle On/Off**
+
+### 15. **Conclusion** 🎯
+
+- Custom heading
+- Summary description
+- Lessons learned list
+- Future improvements list
+- **Toggle On/Off**
+
+### 16. **Call to Action** 📞
+
+- Custom heading
+- CTA description
+- Primary button (text + link)
+- Secondary button (text + link)
+- **Toggle On/Off**
+
+---
+
+## 🆕 New Travel World Sections (2026 Update)
+
+Four new sections inspired by the Travel World project have been added to support more diverse case study layouts:
+
+### Hover Exploration
+
+Perfect for showcasing categories, features, or product types with interactive hover effects. Each tile includes:
+
+- Title
+- Subtitle
+- Featured image
+- Hover animations
+
+**Use Case:** Travel destinations, product categories, service types
+
+### Quote/Process
+
+Combine an inspirational quote with process breakdown cards. Great for showing methodology or approach:
+
+- Large quote text
+- Multiple process cards
+- Icon support per card
+- Bullet point lists
+- Supporting imagery
+
+**Use Case:** Project philosophy, team approach, methodology
+
+### Trip Themes
+
+Carousel-based section for showcasing variations, themes, or iterations:
+
+- Multiple themes/variations
+- Multiple images per theme
+- Auto-rotating carousel
+- Manual navigation
+
+**Use Case:** Design iterations, product variants, theme collections
+
+### Special Offers
+
+Pricing and promotional card layout:
+
+- Offer cards with badges
+- Original/discounted pricing
+- Card descriptions
+- CTA buttons per offer
+
+**Use Case:** Pricing tiers, package options, promotional content
+
 ### 7. **UI/UX Design** 🖌️
+
 - Custom heading
 - Design description
 - Design principles list
@@ -158,6 +325,7 @@ All 12 sections are implemented and ready to use:
 - **Toggle On/Off**
 
 ### 8. **Development Process** 💻
+
 - Custom heading
 - Process description
 - Methodology
@@ -167,6 +335,7 @@ All 12 sections are implemented and ready to use:
 - **Toggle On/Off**
 
 ### 9. **Final Website Preview** 🌐
+
 - Custom heading
 - Preview description
 - Live site URL button
@@ -176,6 +345,7 @@ All 12 sections are implemented and ready to use:
 - **Toggle On/Off**
 
 ### 10. **Results & Impact** 📈
+
 - Custom heading
 - Impact description
 - Metrics (label, value, description)
@@ -184,6 +354,7 @@ All 12 sections are implemented and ready to use:
 - **Toggle On/Off**
 
 ### 11. **Conclusion** 🎯
+
 - Custom heading
 - Summary description
 - Lessons learned list
@@ -191,6 +362,7 @@ All 12 sections are implemented and ready to use:
 - **Toggle On/Off**
 
 ### 12. **Call to Action** 📞
+
 - Custom heading
 - CTA description
 - Primary button (text + link)
@@ -202,6 +374,7 @@ All 12 sections are implemented and ready to use:
 ## 🖼️ Image Management
 
 ### Upload System
+
 - **Location:** `/public/uploads/projects/`
 - **API:** `/api/projects/upload-image`
 - **Accepted Formats:** JPEG, PNG, WebP, AVIF
@@ -210,7 +383,9 @@ All 12 sections are implemented and ready to use:
 - **Validation:** File type and size checked server-side
 
 ### Image Fields
+
 Each image object contains:
+
 ```typescript
 {
   url: string;      // Relative path: /uploads/projects/...
@@ -220,6 +395,7 @@ Each image object contains:
 ```
 
 ### Sections with Image Support:
+
 - Hero (single hero image)
 - Branding (logo + multiple brand images)
 - Problem Statement (multiple images)
@@ -235,6 +411,7 @@ Each image object contains:
 ## 🔐 Admin Features
 
 ### Project Management
+
 - ✅ Create new projects
 - ✅ Edit existing projects
 - ✅ Delete projects
@@ -243,6 +420,7 @@ Each image object contains:
 - ✅ Custom ordering
 
 ### Content Editor Features
+
 - ✅ Tab-based section navigation
 - ✅ Real-time form updates
 - ✅ Enable/disable sections
@@ -253,6 +431,7 @@ Each image object contains:
 - ✅ Auto-save on submit
 
 ### User Experience
+
 - ✅ Loading states
 - ✅ Success/error messages
 - ✅ Confirmation dialogs
@@ -266,14 +445,17 @@ Each image object contains:
 ### Creating Your First Project
 
 1. **Navigate to Admin Projects**
+
    ```
    http://localhost:3000/admin/projects
    ```
 
 2. **Click "New Project"**
+
    - You'll see the project editor
 
 3. **Fill Basic Info Tab**
+
    - Enter project title (slug auto-generates)
    - Write short description
    - Upload thumbnail image
@@ -281,24 +463,28 @@ Each image object contains:
    - Toggle "Featured" if desired
 
 4. **Configure Hero Section**
+
    - Switch to "Hero" tab
    - Fill title and tagline
    - Set category
    - Upload hero image
 
 5. **Fill Project Overview**
+
    - Switch to "Overview" tab
    - Add client, timeline, role, team
    - Write detailed description
    - Add key features
 
 6. **Enable & Edit Other Sections**
+
    - Go to each section tab
    - Click "Enable" toggle
    - Fill in content
    - Upload images as needed
 
 7. **Save & Publish**
+
    - Click "Save Project"
    - Toggle status to "Published"
    - Save again
@@ -342,6 +528,7 @@ src/
 ## 🧪 Testing Checklist
 
 ### Backend Testing
+
 - [ ] Create project via API
 - [ ] Update project via API
 - [ ] Delete project via API
@@ -351,6 +538,7 @@ src/
 - [ ] Validate slug uniqueness
 
 ### Admin Dashboard Testing
+
 - [ ] Create new project
 - [ ] Edit project title/description
 - [ ] Upload thumbnail
@@ -364,6 +552,7 @@ src/
 - [ ] Filter projects by status
 
 ### Frontend Testing
+
 - [ ] View projects listing
 - [ ] Click to view case study
 - [ ] Verify only published projects show
@@ -374,6 +563,7 @@ src/
 - [ ] Verify section ordering
 
 ### Mobile Testing
+
 - [ ] Projects grid responsive
 - [ ] Case study page mobile layout
 - [ ] Admin editor mobile friendly
@@ -384,6 +574,7 @@ src/
 ## ⚡ Performance Considerations
 
 ### Optimizations Implemented
+
 - ✅ Lazy loading Toast component
 - ✅ Image file size limits (5MB)
 - ✅ MongoDB indexing on slug field
@@ -391,6 +582,7 @@ src/
 - ✅ Optimized queries (only fetch published on frontend)
 
 ### Recommended Next Steps
+
 - [ ] Add image compression on upload
 - [ ] Implement CDN for images
 - [ ] Add pagination to projects list
@@ -403,15 +595,19 @@ src/
 ## 🐛 Known Limitations
 
 1. **Image Storage:** Currently uses local filesystem
+
    - **Recommended:** Integrate Cloudinary or S3 for production
 
 2. **Rich Text:** No WYSIWYG editor yet
+
    - **Recommended:** Add TipTap or similar for rich content
 
 3. **Section Reordering:** No drag-and-drop yet
+
    - Sections render in fixed order
 
 4. **Preview Mode:** No live preview in editor
+
    - Must save and view on frontend
 
 5. **Image Optimization:** No automatic resizing/compression
@@ -422,12 +618,14 @@ src/
 ## 🔮 Future Enhancements
 
 ### Priority 1
+
 - [ ] Add rich text editor (TipTap/Slate)
 - [ ] Cloud image storage (Cloudinary/S3)
 - [ ] Image optimization pipeline
 - [ ] Drag-and-drop section ordering
 
 ### Priority 2
+
 - [ ] Live preview in editor
 - [ ] Duplicate project feature
 - [ ] Export/import projects
@@ -435,6 +633,7 @@ src/
 - [ ] Bulk actions (publish multiple)
 
 ### Priority 3
+
 - [ ] Related projects suggestion
 - [ ] Project search/filtering on frontend
 - [ ] Project categories/tags
@@ -454,7 +653,7 @@ interface IProject {
   shortDescription: string;
   thumbnail: IProjectImage;
   technologies: string[];
-  status: 'draft' | 'published';
+  status: "draft" | "published";
   featured: boolean;
   order: number;
   sections: {
@@ -488,6 +687,7 @@ interface IProject {
 ## 🎓 Learning Resources
 
 ### For Content Creators
+
 - Write compelling problem statements
 - Document your design process
 - Capture work-in-progress screenshots
@@ -495,6 +695,7 @@ interface IProject {
 - Measure project impact
 
 ### For Developers
+
 - Mongoose schema design
 - Next.js App Router dynamic routes
 - File upload handling
@@ -506,17 +707,20 @@ interface IProject {
 ## 🤝 Next Steps
 
 1. **Test the System**
+
    - Create a test project
    - Fill in all sections
    - Upload images
    - Publish and view
 
 2. **Migrate Existing Projects**
+
    - Triple Wave
    - Owen Bryce
    - Travel World
 
 3. **Populate Real Content**
+
    - Write proper case studies
    - Take new screenshots
    - Gather testimonials
@@ -533,6 +737,7 @@ interface IProject {
 ## 📞 Support & Questions
 
 If you encounter issues:
+
 1. Check MongoDB connection
 2. Verify file permissions for uploads
 3. Check browser console for errors
@@ -543,4 +748,4 @@ If you encounter issues:
 
 **Built with ❤️ using Next.js 15, React 19, MongoDB, and TypeScript**
 
-*Last Updated: December 19, 2025*
+_Last Updated: December 19, 2025_

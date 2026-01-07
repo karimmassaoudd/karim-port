@@ -25,6 +25,12 @@ export interface IProjectOverviewSection {
   team?: string;
   description: string;
   keyFeatures: string[];
+  overviewImage?: IProjectImage; // Main overview image like in Travel World
+  subsections?: {
+    title: string;
+    content: string;
+    image?: IProjectImage;
+  }[];
 }
 
 // Problem Statement Section
@@ -150,6 +156,58 @@ export interface ICallToActionSection {
   secondaryButtonLink?: string;
 }
 
+// Hover Exploration Section (Travel World style)
+export interface IHoverExplorationSection {
+  enabled: boolean;
+  heading: string;
+  description?: string;
+  tiles: {
+    title: string;
+    subtitle: string;
+    image: IProjectImage;
+  }[];
+}
+
+// Quote/Process Section (Travel World "Supporting band with quote + cards")
+export interface IQuoteProcessSection {
+  enabled: boolean;
+  quote: string;
+  processCards: {
+    title: string;
+    icon?: string;
+    items: string[];
+  }[];
+  images?: IProjectImage[];
+}
+
+// Themes Section (Carousel/Slider)
+export interface IThemesSection {
+  enabled: boolean;
+  heading: string;
+  description?: string;
+  themes: {
+    title: string;
+    images: IProjectImage[]; // Array of images with full metadata
+  }[];
+}
+
+// Special Offers Section (Pricing/Offers)
+export interface ISpecialOffersSection {
+  enabled: boolean;
+  heading: string;
+  description?: string;
+  offers: {
+    title: string;
+    subtitle: string;
+    description: string;
+    originalPrice?: string;
+    discountedPrice: string;
+    discountBadge?: string;
+    buttonText: string;
+    buttonLink?: string;
+  }[];
+}
+
 // Main Project Interface
 export interface IProject {
   // Basic Info
@@ -166,17 +224,24 @@ export interface IProject {
   sections: {
     hero: IHeroSection;
     overview: IProjectOverviewSection;
+    hoverExploration: IHoverExplorationSection;
     problemStatement: IProblemStatementSection;
     solutions: ISolutionsSection;
+    quoteProcess: IQuoteProcessSection;
     branding: IBrandingSection;
     wireframes: IWireframesSection;
     uiuxDesign: IUIUXDesignSection;
+    themes: IThemesSection;
     developmentProcess: IDevelopmentProcessSection;
+    specialOffers: ISpecialOffersSection;
     websitePreview: IWebsitePreviewSection;
     resultsImpact: IResultsImpactSection;
     conclusion: IConclusionSection;
     callToAction: ICallToActionSection;
   };
+
+  // Section Order (custom ordering of sections)
+  sectionOrder?: string[];
 
   // Metadata
   createdAt: Date;
@@ -206,6 +271,14 @@ const ProjectOverviewSectionSchema = new Schema<IProjectOverviewSection>({
   team: { type: String },
   description: { type: String, required: false },
   keyFeatures: { type: [String], default: [] },
+  overviewImage: { type: ProjectImageSchema },
+  subsections: [
+    {
+      title: { type: String },
+      content: { type: String },
+      image: { type: ProjectImageSchema },
+    },
+  ],
 });
 
 const ProblemStatementSectionSchema = new Schema<IProblemStatementSection>({
@@ -329,6 +402,62 @@ const CallToActionSectionSchema = new Schema<ICallToActionSection>({
   secondaryButtonLink: { type: String },
 });
 
+const HoverExplorationSectionSchema = new Schema<IHoverExplorationSection>({
+  enabled: { type: Boolean, default: false },
+  heading: { type: String, default: "Explore by hovering" },
+  description: { type: String },
+  tiles: [
+    {
+      title: { type: String, required: true },
+      subtitle: { type: String, required: true },
+      image: { type: ProjectImageSchema, required: true },
+    },
+  ],
+});
+
+const QuoteProcessSectionSchema = new Schema<IQuoteProcessSection>({
+  enabled: { type: Boolean, default: false },
+  quote: { type: String },
+  processCards: [
+    {
+      title: { type: String, required: true },
+      icon: { type: String },
+      items: { type: [String], default: [] },
+    },
+  ],
+  images: { type: [ProjectImageSchema], default: [] },
+});
+
+const ThemesSectionSchema = new Schema<IThemesSection>({
+  enabled: { type: Boolean, default: false },
+  heading: { type: String, default: "Themes" },
+  description: { type: String },
+  themes: [
+    {
+      title: { type: String, required: true },
+      images: { type: [ProjectImageSchema], default: [] },
+    },
+  ],
+});
+
+const SpecialOffersSectionSchema = new Schema<ISpecialOffersSection>({
+  enabled: { type: Boolean, default: false },
+  heading: { type: String, default: "Special Offers" },
+  description: { type: String },
+  offers: [
+    {
+      title: { type: String, required: true },
+      subtitle: { type: String, required: true },
+      description: { type: String, required: true },
+      originalPrice: { type: String },
+      discountedPrice: { type: String, required: true },
+      discountBadge: { type: String },
+      buttonText: { type: String, default: "Book Now" },
+      buttonLink: { type: String },
+    },
+  ],
+});
+
 // Main Project Schema
 const ProjectSchema = new Schema<IProject>(
   {
@@ -344,16 +473,43 @@ const ProjectSchema = new Schema<IProject>(
     sections: {
       hero: { type: HeroSectionSchema, required: true },
       overview: { type: ProjectOverviewSectionSchema, required: true },
+      hoverExploration: { type: HoverExplorationSectionSchema },
       problemStatement: { type: ProblemStatementSectionSchema },
       solutions: { type: SolutionsSectionSchema },
+      quoteProcess: { type: QuoteProcessSectionSchema },
       branding: { type: BrandingSectionSchema },
       wireframes: { type: WireframesSectionSchema },
       uiuxDesign: { type: UIUXDesignSectionSchema },
+      themes: { type: ThemesSectionSchema },
       developmentProcess: { type: DevelopmentProcessSectionSchema },
+      specialOffers: { type: SpecialOffersSectionSchema },
       websitePreview: { type: WebsitePreviewSectionSchema },
       resultsImpact: { type: ResultsImpactSectionSchema },
       conclusion: { type: ConclusionSectionSchema },
       callToAction: { type: CallToActionSectionSchema },
+    },
+
+    // Custom section order
+    sectionOrder: {
+      type: [String],
+      default: [
+        "hero",
+        "hoverExploration",
+        "overview",
+        "quoteProcess",
+        "problemStatement",
+        "solutions",
+        "themes",
+        "branding",
+        "wireframes",
+        "uiuxDesign",
+        "specialOffers",
+        "developmentProcess",
+        "websitePreview",
+        "resultsImpact",
+        "conclusion",
+        "callToAction",
+      ],
     },
   },
   {
