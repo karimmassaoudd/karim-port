@@ -58,8 +58,14 @@ export async function GET(request: NextRequest) {
         );
       }
 
+      // Debug: Log raw overview data from DB
+      console.log("Raw DB overview data:", JSON.stringify(project.sections?.overview, null, 2));
+
       // Clean and migrate data
       const cleanedProject = cleanProjectData(project.toObject());
+
+      // Debug: Log after cleaning
+      console.log("After cleaning overview data:", JSON.stringify(cleanedProject.sections?.overview, null, 2));
 
       return NextResponse.json({ success: true, data: cleanedProject });
     }
@@ -258,6 +264,9 @@ export async function PUT(request: NextRequest) {
     if (updateData.sections?.overview?.description === "") {
       updateData.sections.overview.description = undefined;
     }
+
+    // Debug logging for overview section
+    console.log("Saving overview section:", JSON.stringify(updateData.sections?.overview, null, 2));
 
     const project = await Project.findByIdAndUpdate(
       id,

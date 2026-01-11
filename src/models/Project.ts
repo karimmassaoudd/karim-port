@@ -19,13 +19,17 @@ export interface IHeroSection {
 // Project Overview Section
 export interface IProjectOverviewSection {
   enabled: boolean;
+  role?: string;
+  type?: string;
+  highlights?: string[];
+  image?: IProjectImage;
+  // Legacy fields (keeping for backward compatibility)
   client?: string;
   timeline?: string;
-  role?: string;
   team?: string;
-  description: string;
-  keyFeatures: string[];
-  overviewImage?: IProjectImage; // Main overview image like in Travel World
+  description?: string;
+  keyFeatures?: string[];
+  overviewImage?: IProjectImage;
   subsections?: {
     title: string;
     content: string;
@@ -265,21 +269,25 @@ const HeroSectionSchema = new Schema<IHeroSection>({
 
 const ProjectOverviewSectionSchema = new Schema<IProjectOverviewSection>({
   enabled: { type: Boolean, default: true },
+  role: { type: String },
+  type: { type: String, default: undefined },  // 'type' is reserved in Mongoose, must be explicit
+  highlights: { type: [String], default: [] },
+  image: ProjectImageSchema,  // Embedded subdocument
+  // Legacy fields
   client: { type: String },
   timeline: { type: String },
-  role: { type: String },
   team: { type: String },
   description: { type: String, required: false },
   keyFeatures: { type: [String], default: [] },
-  overviewImage: { type: ProjectImageSchema },
+  overviewImage: ProjectImageSchema,  // Embedded subdocument
   subsections: [
     {
       title: { type: String },
       content: { type: String },
-      image: { type: ProjectImageSchema },
+      image: ProjectImageSchema,
     },
   ],
-});
+}, { strict: false });
 
 const ProblemStatementSectionSchema = new Schema<IProblemStatementSection>({
   enabled: { type: Boolean, default: false },

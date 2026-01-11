@@ -304,9 +304,13 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
       },
       overview: {
         enabled: true,
+        role: "",
+        type: "",
+        highlights: [] as string[],
+        image: { url: "", alt: "" },
+        // Legacy fields
         client: "",
         timeline: "",
-        role: "",
         team: "",
         description: "",
         keyFeatures: [] as string[],
@@ -484,6 +488,9 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
           ];
         }
 
+        // Debug: Log overview data from server
+        console.log("Fetched overview data:", data.sections?.overview);
+
         setFormData(data);
         // Sync section order state with loaded data
         if (data.sectionOrder && Array.isArray(data.sectionOrder)) {
@@ -595,11 +602,12 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
 
   const addArrayItem = (path: string, defaultValue: any) => {
     const current = getNestedValue(path);
-    updateNestedField(path, [...current, defaultValue]);
+    updateNestedField(path, [...(Array.isArray(current) ? current : []), defaultValue]);
   };
 
   const removeArrayItem = (path: string, index: number) => {
     const current = getNestedValue(path);
+    if (!Array.isArray(current)) return;
     updateNestedField(
       path,
       current.filter((_: any, i: number) => i !== index),
@@ -1054,8 +1062,9 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                             aria-label="Technology name"
                             className="flex-1 px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)] focus:outline-none focus:border-[var(--accent)]"
                             placeholder="React, TypeScript, etc."
-                            onKeyPress={(e) => {
+                            onKeyDown={(e) => {
                               if (e.key === "Enter") {
+                                e.preventDefault();
                                 const input = e.target as HTMLInputElement;
                                 if (input.value.trim()) {
                                   setFormData((prev) => ({
@@ -1070,14 +1079,15 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                               }
                             }}
                           />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
+                          <button
+                            type="button"
+                            className="px-4 py-2 bg-[var(--accent)] text-white rounded-lg hover:bg-[var(--accent)]/90 transition-colors flex items-center gap-1"
+                            onClick={(e) => {
+                              e.preventDefault();
                               const input = document.getElementById(
                                 "tech-input",
                               ) as HTMLInputElement;
-                              if (input.value.trim()) {
+                              if (input && input.value.trim()) {
                                 setFormData((prev) => ({
                                   ...prev,
                                   technologies: [
@@ -1086,11 +1096,13 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                                   ],
                                 }));
                                 input.value = "";
+                                input.focus();
                               }
                             }}
                           >
                             <MdAdd size={18} />
-                          </Button>
+                            Add
+                          </button>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {formData.technologies.map((tech, idx) => (
@@ -1100,7 +1112,9 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                             >
                               {tech}
                               <button
-                                onClick={() => {
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
                                   setFormData((prev) => ({
                                     ...prev,
                                     technologies: prev.technologies.filter(
@@ -1108,7 +1122,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                                     ),
                                   }));
                                 }}
-                                className="hover:text-red-400"
+                                className="hover:text-red-400 transition-colors"
                                 aria-label={`Remove ${tech} technology`}
                               >
                                 ×
@@ -1314,46 +1328,6 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label
-                            htmlFor="overview-client"
-                            className="block text-sm font-medium text-[var(--text)] mb-2"
-                          >
-                            Client
-                          </label>
-                          <input
-                            type="text"
-                            id="overview-client"
-                            value={formData.sections.overview.client || ""}
-                            onChange={(e) =>
-                              updateNestedField(
-                                "sections.overview.client",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)]"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="overview-timeline"
-                            className="block text-sm font-medium text-[var(--text)] mb-2"
-                          >
-                            Timeline
-                          </label>
-                          <input
-                            type="text"
-                            id="overview-timeline"
-                            value={formData.sections.overview.timeline || ""}
-                            onChange={(e) =>
-                              updateNestedField(
-                                "sections.overview.timeline",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)]"
-                          />
-                        </div>
-                        <div>
-                          <label
                             htmlFor="overview-role"
                             className="block text-sm font-medium text-[var(--text)] mb-2"
                           >
@@ -1369,81 +1343,66 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                                 e.target.value,
                               )
                             }
+                            placeholder="e.g., UX/UI Design & Front-end"
                             className="w-full px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)]"
                           />
                         </div>
                         <div>
                           <label
-                            htmlFor="overview-team"
+                            htmlFor="overview-type"
                             className="block text-sm font-medium text-[var(--text)] mb-2"
                           >
-                            Team
+                            Type
                           </label>
                           <input
                             type="text"
-                            id="overview-team"
-                            value={formData.sections.overview.team || ""}
+                            id="overview-type"
+                            value={formData.sections.overview.type || ""}
                             onChange={(e) =>
                               updateNestedField(
-                                "sections.overview.team",
+                                "sections.overview.type",
                                 e.target.value,
                               )
                             }
+                            placeholder="e.g., Marketing Website (Travel)"
                             className="w-full px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)]"
                           />
                         </div>
                       </div>
-                      <div>
-                        <label
-                          htmlFor="overview-description"
-                          className="block text-sm font-medium text-[var(--text)] mb-2"
-                        >
-                          Description
-                        </label>
-                        <textarea
-                          id="overview-description"
-                          value={formData.sections.overview.description}
-                          onChange={(e) =>
-                            updateNestedField(
-                              "sections.overview.description",
-                              e.target.value,
-                            )
-                          }
-                          className="w-full px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)] h-32"
-                        />
-                      </div>
+
                       <div>
                         <label className="block text-sm font-medium text-[var(--text)] mb-2">
-                          Key Features
+                          Highlights
                         </label>
-                        {formData.sections.overview.keyFeatures.map(
-                          (feature, idx) => (
+                        {(formData.sections.overview.highlights || []).map(
+                          (highlight, idx) => (
                             <div key={idx} className="flex gap-2 mb-2">
                               <input
                                 type="text"
-                                value={feature}
-                                aria-label={`Key feature ${idx + 1}`}
+                                value={highlight}
+                                aria-label={`Highlight ${idx + 1}`}
                                 onChange={(e) => {
-                                  const newFeatures = [
-                                    ...formData.sections.overview.keyFeatures,
+                                  const newHighlights = [
+                                    ...(formData.sections.overview.highlights || []),
                                   ];
-                                  newFeatures[idx] = e.target.value;
+                                  newHighlights[idx] = e.target.value;
                                   updateNestedField(
-                                    "sections.overview.keyFeatures",
-                                    newFeatures,
+                                    "sections.overview.highlights",
+                                    newHighlights,
                                   );
                                 }}
+                                placeholder="e.g., Destination cards"
                                 className="flex-1 px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)]"
                               />
                               <button
                                 onClick={() =>
                                   removeArrayItem(
-                                    "sections.overview.keyFeatures",
+                                    "sections.overview.highlights",
                                     idx,
                                   )
                                 }
                                 className="text-red-400"
-                                aria-label="Delete key feature"
+                                aria-label="Delete highlight"
                               >
                                 <MdDelete size={20} />
                               </button>
@@ -1454,27 +1413,26 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           variant="outline"
                           size="sm"
                           onClick={() =>
-                            addArrayItem("sections.overview.keyFeatures", "")
+                            addArrayItem("sections.overview.highlights", "")
                           }
                           className="flex items-center gap-2"
                         >
                           <MdAdd size={18} />
-                          Add Feature
+                          Add Highlight
                         </Button>
                       </div>
 
-                      {/* Overview Image - Like Travel World's main image */}
+                      {/* Overview Image */}
                       <div>
                         <label className="block text-sm font-medium text-[var(--text)] mb-2">
                           Overview Image
                         </label>
                         <p className="text-xs text-[var(--text-secondary)] mb-3">
-                          Main image for the overview section (like Travel
-                          World's bay photo)
+                          Main image for the overview section (like Travel World's bay photo)
                         </p>
-                        {formData.sections.overview.overviewImage?.url && (
+                        {formData.sections.overview.image?.url && (
                           <img
-                            src={formData.sections.overview.overviewImage.url}
+                            src={formData.sections.overview.image.url}
                             alt="Overview"
                             className="w-full h-48 object-cover rounded-lg mb-2"
                           />
@@ -1485,7 +1443,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           onChange={(e) =>
                             handleImageUpload(
                               e,
-                              "sections.overview.overviewImage",
+                              "sections.overview.image",
                             )
                           }
                           className="hidden"
@@ -1502,202 +1460,6 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                         >
                           <MdImage size={18} />
                           {uploading ? "Uploading..." : "Upload Overview Image"}
-                        </Button>
-                      </div>
-
-                      {/* Subsections with Images */}
-                      <div>
-                        <label className="block text-sm font-medium text-[var(--text)] mb-2">
-                          Subsections (with optional images)
-                        </label>
-                        <p className="text-xs text-[var(--text-secondary)] mb-3">
-                          Add content blocks like "ROLE", "TYPE", "HIGHLIGHTS" -
-                          each with optional image
-                        </p>
-
-                        {formData.sections.overview.subsections?.map(
-                          (subsection, idx) => (
-                            <div
-                              key={idx}
-                              className="bg-[var(--background)] border border-[var(--border)] rounded-lg p-4 mb-4"
-                            >
-                              <div className="space-y-3">
-                                <div>
-                                  <label
-                                    htmlFor={`subsection-title-${idx}`}
-                                    className="block text-xs font-medium text-[var(--text)] mb-1"
-                                  >
-                                    Title
-                                  </label>
-                                  <input
-                                    type="text"
-                                    id={`subsection-title-${idx}`}
-                                    value={subsection.title}
-                                    onChange={(e) => {
-                                      const newSubsections = [
-                                        ...(formData.sections.overview
-                                          .subsections || []),
-                                      ];
-                                      newSubsections[idx] = {
-                                        ...newSubsections[idx],
-                                        title: e.target.value,
-                                      };
-                                      updateNestedField(
-                                        "sections.overview.subsections",
-                                        newSubsections,
-                                      );
-                                    }}
-                                    placeholder="e.g., ROLE, TYPE, HIGHLIGHTS"
-                                    className="w-full px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded text-[var(--text)] text-sm"
-                                  />
-                                </div>
-                                <div>
-                                  <label
-                                    htmlFor={`subsection-content-${idx}`}
-                                    className="block text-xs font-medium text-[var(--text)] mb-1"
-                                  >
-                                    Content
-                                  </label>
-                                  <textarea
-                                    id={`subsection-content-${idx}`}
-                                    value={subsection.content}
-                                    onChange={(e) => {
-                                      const newSubsections = [
-                                        ...(formData.sections.overview
-                                          .subsections || []),
-                                      ];
-                                      newSubsections[idx] = {
-                                        ...newSubsections[idx],
-                                        content: e.target.value,
-                                      };
-                                      updateNestedField(
-                                        "sections.overview.subsections",
-                                        newSubsections,
-                                      );
-                                    }}
-                                    placeholder="Description or list items"
-                                    className="w-full px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded text-[var(--text)] text-sm h-20"
-                                  />
-                                </div>
-                                <div>
-                                  <label className="block text-xs font-medium text-[var(--text)] mb-1">
-                                    Image (optional)
-                                  </label>
-                                  {subsection.image?.url && (
-                                    <img
-                                      src={subsection.image.url}
-                                      alt={subsection.image.alt}
-                                      className="w-full h-32 object-cover rounded mb-2"
-                                    />
-                                  )}
-                                  <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={async (e) => {
-                                      const file = e.target.files?.[0];
-                                      if (!file) return;
-                                      setUploading(true);
-                                      const fd = new FormData();
-                                      fd.append("file", file);
-                                      try {
-                                        const response = await fetch(
-                                          "/api/projects/upload-image",
-                                          {
-                                            method: "POST",
-                                            body: fd,
-                                          },
-                                        );
-                                        const result =
-                                          await safeJsonParse(response);
-                                        if (result.success) {
-                                          const newSubsections = [
-                                            ...(formData.sections.overview
-                                              .subsections || []),
-                                          ];
-                                          newSubsections[idx] = {
-                                            ...newSubsections[idx],
-                                            image: {
-                                              url: result.uploads[0].url,
-                                              alt: result.uploads[0].alt,
-                                            },
-                                          };
-                                          updateNestedField(
-                                            "sections.overview.subsections",
-                                            newSubsections,
-                                          );
-                                          showMessage(
-                                            "success",
-                                            "Image uploaded!",
-                                          );
-                                        }
-                                      } catch (error) {
-                                        showMessage("error", "Upload failed");
-                                      } finally {
-                                        setUploading(false);
-                                      }
-                                      e.target.value = "";
-                                    }}
-                                    className="hidden"
-                                    id={`subsection-image-${idx}`}
-                                  />
-                                  <div className="flex gap-2">
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      type="button"
-                                      onClick={() =>
-                                        document
-                                          .getElementById(
-                                            `subsection-image-${idx}`,
-                                          )
-                                          ?.click()
-                                      }
-                                      disabled={uploading}
-                                    >
-                                      <MdImage size={16} />
-                                      {uploading
-                                        ? "Uploading..."
-                                        : subsection.image?.url
-                                          ? "Change Image"
-                                          : "Add Image"}
-                                    </Button>
-                                    <button
-                                      onClick={() => {
-                                        const newSubsections =
-                                          formData.sections.overview.subsections?.filter(
-                                            (_, i) => i !== idx,
-                                          );
-                                        updateNestedField(
-                                          "sections.overview.subsections",
-                                          newSubsections,
-                                        );
-                                      }}
-                                      className="text-red-400 hover:text-red-500"
-                                      aria-label="Delete subsection"
-                                    >
-                                      <MdDelete size={20} />
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ),
-                        )}
-
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            const currentSubsections =
-                              formData.sections.overview.subsections || [];
-                            updateNestedField("sections.overview.subsections", [
-                              ...currentSubsections,
-                              { title: "", content: "", image: undefined },
-                            ]);
-                          }}
-                        >
-                          <MdAdd size={18} />
-                          Add Subsection
                         </Button>
                       </div>
                     </div>

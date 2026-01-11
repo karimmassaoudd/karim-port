@@ -52,7 +52,7 @@ const fallbackProjects: Project[] = [
   {
     _id: "fallback-2",
     title: "Triple WAVE",
-    slug: "project-Triple-Wave",
+    slug: "triple-wave",
     sections: {
       hero: {
         heroImage: {
@@ -69,7 +69,7 @@ const fallbackProjects: Project[] = [
   {
     _id: "fallback-3",
     title: "Owen Bryce",
-    slug: "project-Owen-Bryce",
+    slug: "owen-bryce",
     sections: {
       hero: {
         heroImage: {

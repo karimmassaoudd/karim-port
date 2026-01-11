@@ -424,7 +424,6 @@ export default function TripleWaveProjectPage() {
                   width={1200}
                   height={800}
                   className="w-full h-auto max-h-150 object-cover"
-                  quality={95}
                   priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
                 />
@@ -561,7 +560,6 @@ export default function TripleWaveProjectPage() {
                     src="/assets/Room2.avif"
                     alt="Triple Wave interior"
                     fill
-                    quality={90}
                     className="object-cover"
                     sizes="(max-width: 768px) 200vw, 100vw"
                   />

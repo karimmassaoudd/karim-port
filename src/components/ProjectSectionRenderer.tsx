@@ -52,142 +52,132 @@ export function renderProjectSection({
       return (
         <section
           key="overview"
-          className="bg-[var(--Secondary-Background)] py-20"
+          className="reveal-section relative w-full bg-[var(--Secondary-Background)] py-16 md:py-20"
         >
-          <div className="container mx-auto px-6 max-w-6xl">
-            <div className="grid lg:grid-cols-2 gap-12">
-              <div className="space-y-8 pop-on-scroll">
-                <div>
-                  <h2 className="text-4xl font-bold text-[var(--headline)] mb-6 font-primary">
-                    Overview
-                  </h2>
-                  <p className="text-lg text-[var(--text)] leading-relaxed font-secondary">
-                    {section.description}
-                  </p>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-8">
+              <div className="w-50 h-1 rounded-full bg-[var(--accent)] mt-3 mb-1" />
+              <h2 className="text-[var(--text)] font-primary text-4xl md:text-5xl leading-tight tracking-wide">
+                OVERVIEW
+              </h2>
+            </div>
+            <div className="grid grid-cols-12 gap-8 items-start">
+              <div className="col-span-12 lg:col-span-7 space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="reveal-el rounded-2xl border border-black/5 dark:border-white/10 bg-white/90 dark:bg-[var(--Secondary-Background)]/70 shadow-sm hover:shadow-md transition p-5 md:p-6 flex items-start gap-3">
+                    <div className="mt-0.5 rounded-md p-1.5 bg-[var(--Secondary-Background)]/70 border border-white/10 text-[var(--text)]">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[11px] tracking-wide text-[var(--secondary-text)] mb-1">
+                        ROLE
+                      </p>
+                      <p className="text-[var(--text)] font-semibold">
+                        {section.role || "Not specified"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="reveal-el rounded-2xl border border-black/5 dark:border-white/10 bg-white/90 dark:bg-[var(--Secondary-Background)]/70 shadow-sm hover:shadow-md transition p-5 md:p-6 flex items-start gap-3">
+                    <div className="mt-0.5 rounded-md p-1.5 bg-[var(--Secondary-Background)]/70 border border-white/10 text-[var(--text)]">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[11px] tracking-wide text-[var(--secondary-text)] mb-1">
+                        TYPE
+                      </p>
+                      <p className="text-[var(--text)] font-semibold">
+                        {section.type || "Not specified"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                {section.keyFeatures?.length > 0 && (
-                  <div className="bg-[var(--card)] rounded-xl p-6 shadow-lg">
-                    <h3 className="text-xl font-semibold text-[var(--headline)] mb-4 font-primary">
-                      Key Features
-                    </h3>
-                    <ul className="space-y-3">
-                      {section.keyFeatures.map(
-                        (feature: string, idx: number) => (
-                          <li
+                <div className="reveal-el rounded-2xl border border-black/5 dark:border-white/10 bg-white/80 dark:bg-[var(--Secondary-Background)]/70 shadow-sm hover:shadow-md transition p-5 md:p-6">
+                  <p className="text-[11px] tracking-wide text-[var(--secondary-text)] mb-2">
+                    HIGHLIGHTS
+                  </p>
+                  {section.highlights?.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {section.highlights.map(
+                        (highlight: string, idx: number) => (
+                          <span
                             key={idx}
-                            className="flex items-start gap-3 text-[var(--text)] font-secondary"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] md:text-sm bg-[var(--Secondary-Background)]/70 border border-white/10 text-[var(--text)] shadow-sm transition transform hover:shadow-md hover:scale-[1.03]"
                           >
-                            <span className="text-[var(--accent)] mt-1 flex-shrink-0">
-                              →
-                            </span>
-                            <span>{feature}</span>
-                          </li>
+                            <svg
+                              className="w-3.5 h-3.5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                              />
+                            </svg>
+                            {highlight}
+                          </span>
                         ),
                       )}
-                    </ul>
+                    </div>
+                  ) : (
+                    <p className="text-[var(--secondary-text)] text-sm">No highlights added</p>
+                  )}
+                </div>
+              </div>
+              <div className="col-span-12 lg:col-span-5">
+                {section.image?.url ? (
+                  <div className="relative group max-w-xl lg:ml-auto">
+                    <div
+                      className="absolute -inset-6 bg-[var(--accent)]/20 blur-3xl rounded-3xl opacity-0 group-hover:opacity-100 transition pointer-events-none"
+                      aria-hidden="true"
+                    />
+                    <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl pop-on-scroll bg-[var(--background)]">
+                      <div className="relative w-full aspect-[5/2] overflow-hidden">
+                        <img
+                          src={section.image.url}
+                          alt={section.image.alt || "Project overview"}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative max-w-xl lg:ml-auto">
+                    <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[var(--Secondary-Background)]">
+                      <div className="relative w-full aspect-[5/2] flex items-center justify-center">
+                        <p className="text-[var(--secondary-text)]">No image uploaded</p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
-              <div className="space-y-6 pop-on-scroll">
-                <div className="bg-[var(--card)] rounded-xl p-8 shadow-lg space-y-6">
-                  {section.client && (
-                    <div className="group">
-                      <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                        Client
-                      </h4>
-                      <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                        {section.client}
-                      </p>
-                    </div>
-                  )}
-                  {section.timeline && (
-                    <div className="group">
-                      <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                        Timeline
-                      </h4>
-                      <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                        {section.timeline}
-                      </p>
-                    </div>
-                  )}
-                  {section.role && (
-                    <div className="group">
-                      <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                        Role
-                      </h4>
-                      <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                        {section.role}
-                      </p>
-                    </div>
-                  )}
-                  {section.team && (
-                    <div className="group">
-                      <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                        Team
-                      </h4>
-                      <p className="text-xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                        {section.team}
-                      </p>
-                    </div>
-                  )}
-                  {project.technologies?.length > 0 && (
-                    <div>
-                      <h4 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                        Technologies
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.map(
-                          (tech: string, idx: number) => (
-                            <span
-                              key={idx}
-                              className="px-4 py-2 bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5 text-[var(--accent)] rounded-xl text-sm font-semibold border border-[var(--accent)]/20 hover:border-[var(--accent)]/40 hover:shadow-lg hover:shadow-[var(--accent)]/10 transition-all duration-200"
-                            >
-                              {tech}
-                            </span>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
-
-            {/* Subsections with Images */}
-            {section.subsections && section.subsections.length > 0 && (
-              <div className="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {section.subsections.map((subsection: any, idx: number) => (
-                  <div
-                    key={idx}
-                    className="bg-[var(--card)] rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow pop-on-scroll"
-                  >
-                    {subsection.image?.url && (
-                      <div className="h-48 overflow-hidden">
-                        <img
-                          src={subsection.image.url}
-                          alt={subsection.image.alt || subsection.title}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <h3 className="text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]"></span>
-                        {subsection.title}
-                      </h3>
-                      <p className="text-[var(--text)] leading-relaxed font-secondary">
-                        {subsection.content}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </section>
       );
@@ -593,6 +583,79 @@ export function renderProjectSection({
                 </div>
               )}
             </div>
+          </div>
+        </section>
+      );
+
+    case "hoverExploration":
+      return (
+        <section
+          key="hoverExploration"
+          className="py-20 bg-[var(--background)]"
+        >
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="mb-8 pop-on-scroll">
+              {section.heading && (
+                <>
+                  <div className="w-24 h-1 rounded-full bg-[var(--accent)] mb-6" />
+                  <h2 className="text-[var(--text)] font-primary text-3xl md:text-4xl mb-4">
+                    {section.heading}
+                  </h2>
+                </>
+              )}
+              {section.description && (
+                <p className="text-lg text-[var(--secondary-text)] max-w-3xl font-secondary">
+                  {section.description}
+                </p>
+              )}
+            </div>
+
+            {section.tiles?.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {section.tiles.map((tile: any, idx: number) => (
+                  <div
+                    key={idx}
+                    className="group relative overflow-hidden rounded-2xl border border-white/10 shadow-md bg-[var(--background)] pop-on-scroll"
+                  >
+                    {tile.image?.url && (
+                      <div className="relative w-full aspect-[16/10]">
+                        <img
+                          src={tile.image.url}
+                          alt={tile.image.alt || tile.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                        />
+                      </div>
+                    )}
+
+                    {/* hover veil */}
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+
+                    {/* content */}
+                    <div className="absolute inset-x-0 bottom-0 p-4 flex items-end justify-between opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
+                      <div>
+                        {tile.subtitle && (
+                          <p className="text-white/90 text-xs">{tile.subtitle}</p>
+                        )}
+                        {tile.title && (
+                          <h3 className="text-white font-semibold text-lg leading-tight">
+                            {tile.title}
+                          </h3>
+                        )}
+                      </div>
+                      <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 text-[var(--accent)] font-bold shadow">
+                        ↗
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {section.footerText && (
+              <p className="text-[var(--secondary-text)] text-sm mt-6 pop-on-scroll">
+                {section.footerText}
+              </p>
+            )}
           </div>
         </section>
       );
