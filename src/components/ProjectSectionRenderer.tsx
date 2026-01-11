@@ -59,7 +59,7 @@ export function renderProjectSection({
               <div className="w-50 h-1 rounded-full bg-[var(--accent)] mt-3 mb-1" />
               <h2 className="text-[var(--text)] font-primary text-4xl md:text-5xl leading-tight tracking-wide">
                 OVERVIEW
-              </h2>
+              </h2>make everything ready for production
             </div>
             <div className="grid grid-cols-12 gap-8 items-start">
               <div className="col-span-12 lg:col-span-7 space-y-6">
