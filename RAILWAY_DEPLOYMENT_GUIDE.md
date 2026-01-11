@@ -24,21 +24,25 @@ Your project is now configured for production deployment on Railway!
 Before deploying, gather these required values:
 
 #### MongoDB
+
 - `MONGODB_URI` - Your MongoDB connection string
   - Format: `mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority`
   - Get from: MongoDB Atlas → Connect → Connect your application
 
 #### NextAuth
+
 - `NEXTAUTH_SECRET` - Generate with: `openssl rand -base64 32`
 - `NEXTAUTH_URL` - Will be your Railway domain (e.g., `https://your-app.up.railway.app`)
 
 #### Cloudinary (for image uploads)
+
 - `CLOUDINARY_CLOUD_NAME`
 - `CLOUDINARY_API_KEY`
 - `CLOUDINARY_API_SECRET`
 - Get from: Cloudinary Dashboard → Settings → Access Keys
 
 #### Optional
+
 - `NEXT_PUBLIC_LOADER_TEXT` - Custom loader text (default: "KARIM MASSAOUD")
 - `NEXT_PUBLIC_LOADER_TEXT_COLOR` - Loader color (default: "#155B86")
 - `NODE_ENV` - Set to `production`
@@ -89,11 +93,13 @@ railway up
 ### 3. Post-Deployment
 
 #### Update NEXTAUTH_URL
+
 1. After first deployment, Railway gives you a URL (e.g., `https://karim-port-production.up.railway.app`)
 2. Update the `NEXTAUTH_URL` variable to match this URL
 3. Redeploy if needed
 
 #### Custom Domain (Optional)
+
 1. In Railway dashboard → Settings → Domains
 2. Add your custom domain
 3. Update DNS records as instructed
@@ -104,6 +110,7 @@ railway up
 ## 🔍 Monitoring & Troubleshooting
 
 ### View Logs
+
 ```bash
 # Via CLI
 railway logs
@@ -115,21 +122,25 @@ railway logs
 ### Common Issues
 
 #### Build Fails
+
 - Check build logs in Railway dashboard
 - Verify all dependencies are in package.json
 - Ensure pnpm-lock.yaml is committed
 
 #### Database Connection Fails
+
 - Verify MONGODB_URI is correct
 - Check MongoDB Atlas network access (allow 0.0.0.0/0 for Railway)
 - Ensure database user has correct permissions
 
 #### Images Not Uploading
+
 - Verify Cloudinary credentials
 - Check API limits on Cloudinary free tier
 - Review server logs for upload errors
 
 #### Authentication Issues
+
 - Verify NEXTAUTH_SECRET is set
 - Ensure NEXTAUTH_URL matches your deployment URL
 - Check for CORS issues in browser console
@@ -139,16 +150,19 @@ railway logs
 ## ⚡ Performance Tips
 
 ### Database
+
 - Create indexes for frequently queried fields
 - Use MongoDB aggregation for complex queries
 - Monitor query performance in MongoDB Atlas
 
 ### Images
+
 - Images are already optimized via Next.js Image component
 - Cloudinary provides automatic optimization
 - Consider using CDN for static assets
 
 ### Caching
+
 - API routes have cache headers configured
 - Static assets cached automatically by Next.js
 - Consider Redis for session storage (advanced)
@@ -171,16 +185,19 @@ railway logs
 ## 📊 Build Information
 
 ### Build Command
+
 ```bash
 pnpm run build
 ```
 
 ### Start Command
+
 ```bash
 pnpm start
 ```
 
 ### Node Version
+
 - Required: Node.js >= 20.0.0
 - Required: pnpm >= 9.0.0
 
