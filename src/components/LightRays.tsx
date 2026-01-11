@@ -153,7 +153,7 @@ const LightRays: React.FC<LightRaysProps> = ({
 
       if (!containerRef.current) return;
 
-      const renderer = new Renderer({
+      const renderer = new (Renderer as any)({
         dpr: Math.min(window.devicePixelRatio, 2),
         alpha: true,
       });
@@ -291,13 +291,13 @@ void main() {
       };
       uniformsRef.current = uniforms;
 
-      const geometry = new Triangle(gl);
-      const program = new Program(gl, {
+      const geometry = new (Triangle as any)(gl);
+      const program = new (Program as any)(gl, {
         vertex: vert,
         fragment: frag,
         uniforms,
       });
-      const mesh = new Mesh(gl, { geometry, program });
+      const mesh = new (Mesh as any)(gl, { geometry, program });
       meshRef.current = mesh;
 
       const updatePlacement = () => {

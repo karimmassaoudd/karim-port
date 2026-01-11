@@ -186,8 +186,8 @@ export const ProjectsSection = () => {
           if (visibleProjects.length > 0) {
             // Remove duplicates by _id
             const uniqueProjects = visibleProjects.filter(
-              (project, index, self) =>
-                index === self.findIndex((p) => p._id === project._id),
+              (project: any, index: number, self: any[]) =>
+                index === self.findIndex((p: any) => p._id === project._id),
             );
             setProjects(uniqueProjects);
           }

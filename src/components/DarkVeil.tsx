@@ -106,20 +106,20 @@ export default function DarkVeil({
 
     // Limit device pixel ratio to avoid excessive GPU/CPU work on high-DPI devices.
     const maxDPR = 1.5; // compromise between crispness and performance
-    const renderer = new Renderer({
+    const renderer = new (Renderer as any)({
       dpr: Math.min(window.devicePixelRatio || 1, maxDPR),
       canvas,
     });
 
     const gl = renderer.gl;
-    const geometry = new Triangle(gl);
+    const geometry = new (Triangle as any)(gl);
 
-    const program = new Program(gl, {
+    const program = new (Program as any)(gl, {
       vertex,
       fragment,
       uniforms: {
         uTime: { value: 0 },
-        uResolution: { value: new Vec2() },
+        uResolution: { value: new (Vec2 as any)() },
         uHueShift: { value: hueShift },
         uNoise: { value: noiseIntensity },
         uScan: { value: scanlineIntensity },
@@ -129,7 +129,7 @@ export default function DarkVeil({
       },
     });
 
-    const mesh = new Mesh(gl, { geometry, program });
+    const mesh = new (Mesh as any)(gl, { geometry, program });
 
     const resize = () => {
       const w = parent.clientWidth,

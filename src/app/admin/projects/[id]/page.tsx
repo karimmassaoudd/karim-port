@@ -584,7 +584,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
       const keys = path.split(".");
       // Use structured cloning instead of JSON.parse/stringify
       const newData = structuredClone(prev);
-      let current = newData;
+      let current: any = newData;
 
       for (let i = 0; i < keys.length - 1; i++) {
         current = current[keys[i]];
@@ -851,7 +851,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                         icon={config.icon}
                         label={config.label}
                         isActive={activeTab === config.tab}
-                        isEnabled={formData.sections[sectionKey]?.enabled}
+                        isEnabled={(formData.sections as any)[sectionKey]?.enabled}
                         onClick={() => setActiveTab(config.tab)}
                       />
                     );
@@ -3367,7 +3367,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                         <input
                           type="text"
                           id="uiux-design-tool"
-                          value={formData.sections.uiuxDesign.designTool || ""}
+                          value={(formData.sections.uiuxDesign as any).designTool || ""}
                           onChange={(e) =>
                             updateNestedField(
                               "sections.uiuxDesign.designTool",
@@ -3449,15 +3449,15 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                             if (!file) return;
 
                             setUploading(true);
-                            const formData = new FormData();
-                            formData.append("file", file);
+                            const uploadFormData = new FormData();
+                            uploadFormData.append("file", file);
 
                             try {
                               const response = await fetch(
                                 "/api/projects/upload-image",
                                 {
                                   method: "POST",
-                                  body: formData,
+                                  body: uploadFormData,
                                 },
                               );
                               const result = await safeJsonParse(response);
@@ -3578,8 +3578,8 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                         <label className="block text-sm font-medium text-[var(--text)] mb-2">
                           Tech Stack
                         </label>
-                        {formData.sections.developmentProcess.techStack?.map(
-                          (tech, idx) => (
+                        {(formData.sections.developmentProcess as any).techStack?.map(
+                          (tech: string, idx: number) => (
                             <div key={idx} className="flex gap-2 mb-2">
                               <input
                                 type="text"
@@ -3587,7 +3587,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                                 aria-label={`Technology ${idx + 1}`}
                                 onChange={(e) => {
                                   const newStack = [
-                                    ...(formData.sections.developmentProcess
+                                    ...((formData.sections.developmentProcess as any)
                                       .techStack || []),
                                   ];
                                   newStack[idx] = e.target.value;
@@ -3602,8 +3602,8 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                               <button
                                 onClick={() => {
                                   const newStack =
-                                    formData.sections.developmentProcess.techStack?.filter(
-                                      (_, i) => i !== idx,
+                                    (formData.sections.developmentProcess as any).techStack?.filter(
+                                      (_: any, i: number) => i !== idx,
                                     );
                                   updateNestedField(
                                     "sections.developmentProcess.techStack",
@@ -3623,7 +3623,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           size="sm"
                           onClick={() => {
                             const currentStack =
-                              formData.sections.developmentProcess.techStack ||
+                              (formData.sections.developmentProcess as any).techStack ||
                               [];
                             updateNestedField(
                               "sections.developmentProcess.techStack",
