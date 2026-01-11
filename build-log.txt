@@ -1,0 +1,28 @@
+
+> karim-port@0.1.0 build C:\Users\waeli\OneDrive\Documents\Web Files\Next Projects\karim-port
+> next build
+
+   Γû▓ Next.js 15.5.4
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 8.5s
+   Linting and checking validity of types ...
+Failed to compile.
+
+./src/models/HomePage.ts:89:3
+Type error: Type '{ type: typeof Schema.Types.ObjectId; required: true; ref: string; }' is not assignable to type 'SchemaDefinitionProperty<string, IProjectReference, Document<unknown, {}, IProjectReference, { id: string; }, ResolveSchemaOptions<DefaultSchemaOptions>> & Omit<...> & { ...; }> | undefined'.
+  Types of property 'type' are incompatible.
+    Type 'typeof ObjectId' is not assignable to type 'StringSchemaDefinition | typeof Mixed | undefined'.
+      Type 'typeof ObjectId' is not assignable to type 'StringConstructor | typeof String | String | typeof Mixed'.
+        Type 'typeof ObjectId' is missing the following properties from type 'StringConstructor': fromCharCode, fromCodePoint, raw
+
+  87 |
+  88 | const ProjectReferenceSchema = new Schema<IProjectReference>({
+> 89 |   projectId: { type: Schema.Types.ObjectId, required: true, ref: "Project" },
+     |   ^
+  90 |   order: { type: Number, default: 0 },
+  91 |   isVisible: { type: Boolean, default: true },
+  92 | });
+Next.js build worker exited with code: 1 and signal: null
+ΓÇëELIFECYCLEΓÇë Command failed with exit code 1.

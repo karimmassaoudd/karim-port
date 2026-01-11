@@ -68,6 +68,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   // Default section order if not specified
   const defaultSectionOrder = [
     "hero",
+    "hoverExploration",
     "overview",
     "problemStatement",
     "solutions",

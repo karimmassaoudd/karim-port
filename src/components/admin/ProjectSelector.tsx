@@ -154,12 +154,12 @@ export default function ProjectSelector({
                   onClick={() => handleAddProject(project._id)}
                   className="flex items-center gap-3 p-3 border rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-colors text-left"
                 >
-                  {(project.sections?.hero?.heroImage?.url ||
-                    project.thumbnail?.url) && (
+                  {((project as any).sections?.hero?.heroImage?.url ||
+                    (project as any).thumbnail?.url) && (
                     <img
                       src={
-                        project.sections?.hero?.heroImage?.url ||
-                        project.thumbnail?.url
+                        (project as any).sections?.hero?.heroImage?.url ||
+                        (project as any).thumbnail?.url
                       }
                       alt={project.title}
                       className="w-16 h-16 object-cover rounded"
@@ -170,12 +170,12 @@ export default function ProjectSelector({
                       <h5 className="font-medium">{project.title}</h5>
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full ${
-                          project.status === "published"
+                          (project as any).status === "published"
                             ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                             : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
                         }`}
                       >
-                        {project.status === "published" ? "Published" : "Draft"}
+                        {(project as any).status === "published" ? "Published" : "Draft"}
                       </span>
                     </div>
                     <p className="text-sm text-gray-500">/{project.slug}</p>
@@ -244,12 +244,12 @@ export default function ProjectSelector({
 
                 <MdDragIndicator className="text-gray-400" size={20} />
 
-                {(project.sections?.hero?.heroImage?.url ||
-                  project.thumbnail?.url) && (
+                {((project as any).sections?.hero?.heroImage?.url ||
+                  (project as any).thumbnail?.url) && (
                   <img
                     src={
-                      project.sections?.hero?.heroImage?.url ||
-                      project.thumbnail?.url
+                      (project as any).sections?.hero?.heroImage?.url ||
+                      (project as any).thumbnail?.url
                     }
                     alt={project.title}
                     className="w-12 h-12 object-cover rounded"
@@ -261,12 +261,12 @@ export default function ProjectSelector({
                     <h5 className="font-medium">{project.title}</h5>
                     <span
                       className={`text-xs px-2 py-0.5 rounded-full ${
-                        project.status === "published"
+                        (project as any).status === "published"
                           ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                           : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
                       }`}
                     >
-                      {project.status === "published" ? "Published" : "Draft"}
+                      {(project as any).status === "published" ? "Published" : "Draft"}
                     </span>
                   </div>
                   <p className="text-sm text-gray-500">Order: {index + 1}</p>

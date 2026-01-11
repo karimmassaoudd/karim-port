@@ -5,34 +5,34 @@ import Project from "@/models/Project";
 // Helper function to clean and migrate project data
 function cleanProjectData(project: Record<string, unknown>) {
   // Migrate colorPalette from array to object
-  if (project.sections?.branding?.colorPalette) {
-    if (Array.isArray(project.sections.branding.colorPalette)) {
-      project.sections.branding.colorPalette = { primary: "", secondary: "" };
-    } else if (typeof project.sections.branding.colorPalette !== "object") {
-      project.sections.branding.colorPalette = { primary: "", secondary: "" };
+  if ((project as any).sections?.branding?.colorPalette) {
+    if (Array.isArray((project as any).sections.branding.colorPalette)) {
+      (project as any).sections.branding.colorPalette = { primary: "", secondary: "" };
+    } else if (typeof (project as any).sections.branding.colorPalette !== "object") {
+      (project as any).sections.branding.colorPalette = { primary: "", secondary: "" };
     } else {
       // Ensure primary and secondary exist
-      if (!project.sections.branding.colorPalette.primary) {
-        project.sections.branding.colorPalette.primary = "";
+      if (!(project as any).sections.branding.colorPalette.primary) {
+        (project as any).sections.branding.colorPalette.primary = "";
       }
-      if (!project.sections.branding.colorPalette.secondary) {
-        project.sections.branding.colorPalette.secondary = "";
+      if (!(project as any).sections.branding.colorPalette.secondary) {
+        (project as any).sections.branding.colorPalette.secondary = "";
       }
     }
   }
 
   // Ensure heroImage exists
-  if (!project.sections?.hero?.heroImage) {
-    if (!project.sections) project.sections = {};
-    if (!project.sections.hero) project.sections.hero = {};
-    project.sections.hero.heroImage = { url: "", alt: "", caption: "" };
+  if (!(project as any).sections?.hero?.heroImage) {
+    if (!(project as any).sections) (project as any).sections = {};
+    if (!(project as any).sections.hero) (project as any).sections.hero = {};
+    (project as any).sections.hero.heroImage = { url: "", alt: "", caption: "" };
   }
 
   // Ensure logo exists
-  if (!project.sections?.branding?.logo) {
-    if (!project.sections) project.sections = {};
-    if (!project.sections.branding) project.sections.branding = {};
-    project.sections.branding.logo = { url: "", alt: "", caption: "" };
+  if (!(project as any).sections?.branding?.logo) {
+    if (!(project as any).sections) (project as any).sections = {};
+    if (!(project as any).sections.branding) (project as any).sections.branding = {};
+    (project as any).sections.branding.logo = { url: "", alt: "", caption: "" };
   }
 
   return project;
@@ -58,8 +58,14 @@ export async function GET(request: NextRequest) {
         );
       }
 
+      // Debug: Log raw overview data from DB
+      console.log("Raw DB overview data:", JSON.stringify((project as any).sections?.overview, null, 2));
+
       // Clean and migrate data
       const cleanedProject = cleanProjectData(project.toObject());
+
+      // Debug: Log after cleaning
+      console.log("After cleaning overview data:", JSON.stringify((cleanedProject as any).sections?.overview, null, 2));
 
       return NextResponse.json({ success: true, data: cleanedProject });
     }
@@ -258,6 +264,9 @@ export async function PUT(request: NextRequest) {
     if (updateData.sections?.overview?.description === "") {
       updateData.sections.overview.description = undefined;
     }
+
+    // Debug logging for overview section
+    console.log("Saving overview section:", JSON.stringify(updateData.sections?.overview, null, 2));
 
     const project = await Project.findByIdAndUpdate(
       id,

@@ -2,13 +2,17 @@
 providers = ["node"]
 
 [phases.setup]
-nixPkgs = ["nodejs_20", "npm-9_x"]
+nixPkgs = ["nodejs_20"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = [
+  "corepack enable",
+  "corepack prepare pnpm@latest --activate",
+  "pnpm install --frozen-lockfile"
+]
 
 [phases.build]
-cmds = ["npm run build"]
+cmds = ["pnpm run build"]
 
 [start]
-cmd = "npm start"
+cmd = "pnpm start"

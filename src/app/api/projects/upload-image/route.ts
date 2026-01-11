@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { deleteFromCloudinary, uploadToCloudinary } from "@/lib/cloudinary";
 
+// Increase route timeout to 2 minutes for large uploads
+export const maxDuration = 120;
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -52,7 +55,7 @@ export async function POST(request: NextRequest) {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        // Upload to Cloudinary
+        // Upload to Cloudinary with timeout handling
         const result = await uploadToCloudinary(buffer, "portfolio/projects");
 
         results.push({
@@ -61,14 +64,19 @@ export async function POST(request: NextRequest) {
           filename: file.name,
           alt: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension for alt text
         });
-      } catch (uploadError) {
+      } catch (uploadError: any) {
         console.error(`Upload error for ${file.name}:`, uploadError);
+        
+        let errorMessage = "Failed to upload file";
+        if (uploadError?.message) {
+          errorMessage = uploadError.message;
+        } else if (uploadError?.error?.message) {
+          errorMessage = uploadError.error.message;
+        }
+        
         errors.push({
           filename: file.name,
-          error:
-            uploadError instanceof Error
-              ? uploadError.message
-              : "Failed to upload file",
+          error: errorMessage,
         });
       }
     }

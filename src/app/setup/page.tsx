@@ -17,10 +17,6 @@ export default function SetupPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {
-    checkSetupStatus();
-  }, [checkSetupStatus]);
-
   const checkSetupStatus = async () => {
     try {
       const response = await fetch("/api/setup/status");
@@ -67,6 +63,11 @@ export default function SetupPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    checkSetupStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
