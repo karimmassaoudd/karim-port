@@ -1,7 +1,5 @@
 "use client";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   Briefcase,
   CheckCircle2,
@@ -14,11 +12,12 @@ import {
   Target,
 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DarkVeil from "@/components/DarkVeil";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import PageAnimator from "@/components/PageAnimator";
 import SectionBackground from "@/components/SectionBackground";
-
-gsap.registerPlugin(ScrollTrigger);
 
 // Trip themes (from Travel World)
 type Theme = { id: number; title: string; images: string[] };
@@ -43,8 +42,6 @@ const themes: Theme[] = [
 // (hover tiles section removed)
 
 export default function TripleWaveProjectPage() {
-  const rootRef = useRef<HTMLDivElement | null>(null);
-
   // Clip used to constrain the screenshot inside the laptop display area
   const _laptopScreenClip = "inset(12.8% 11.8% 32.5% 11.8% round 12px)";
 
@@ -148,126 +145,15 @@ export default function TripleWaveProjectPage() {
     };
   }, []);
 
-  // Inline PageAnimator behavior (GSAP reveal + pop)
-  useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    if ((root as any).dataset && (root as any).dataset.gsapInit === "1") return;
-    try {
-      (root as any).dataset.gsapInit = "1";
-    } catch {}
-
-    const ctx = gsap.context((self) => {
-      const select =
-        self.selector?.bind(self) ??
-        ((q: string) => Array.from(root.querySelectorAll(q)));
-
-      (
-        gsap.utils.toArray<HTMLElement>(select("section.reveal-section")) || []
-      ).forEach((sec) => {
-        const children = sec.querySelectorAll<HTMLElement>(".reveal-el");
-        gsap.set(sec, { autoAlpha: 0, y: 28 });
-        if (children.length) gsap.set(children, { autoAlpha: 0, y: 20 });
-
-        gsap.fromTo(
-          sec,
-          { y: 28, autoAlpha: 0 },
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 0.7,
-            ease: "power2.out",
-            immediateRender: false,
-            scrollTrigger: {
-              trigger: sec,
-              start: "top 85%",
-              end: "bottom 25%",
-              toggleActions: "play reverse play reverse",
-            },
-          },
-        );
-
-        if (children.length) {
-          gsap.fromTo(
-            children,
-            { y: 20, autoAlpha: 0 },
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: 0.6,
-              ease: "power2.out",
-              immediateRender: false,
-              stagger: 0.08,
-              scrollTrigger: {
-                trigger: sec,
-                start: "top 85%",
-                end: "bottom 25%",
-                toggleActions: "play reverse play reverse",
-              },
-            },
-          );
-        }
-      });
-
-      gsap.set(select(".pop-on-scroll") as HTMLElement[], {
-        scale: 0.9,
-        autoAlpha: 0,
-      });
-      ScrollTrigger.batch(select(".pop-on-scroll"), {
-        start: "top 85%",
-        onEnter: (batch: Element[]) =>
-          gsap.to(batch, {
-            scale: 1,
-            autoAlpha: 1,
-            duration: 0.5,
-            ease: "back.out(1.6)",
-            stagger: 0.06,
-          }),
-        onLeave: (batch: Element[]) =>
-          gsap.to(batch, {
-            scale: 0.9,
-            autoAlpha: 0,
-            duration: 0.3,
-            ease: "power1.inOut",
-            stagger: 0.05,
-          }),
-        onEnterBack: (batch: Element[]) =>
-          gsap.to(batch, {
-            scale: 1,
-            autoAlpha: 1,
-            duration: 0.45,
-            ease: "back.out(1.4)",
-            stagger: 0.06,
-          }),
-        onLeaveBack: (batch: Element[]) =>
-          gsap.to(batch, {
-            scale: 0.9,
-            autoAlpha: 0,
-            duration: 0.25,
-            ease: "power1.inOut",
-            stagger: 0.05,
-          }),
-      });
-    }, root);
-
-    return () => {
-      try {
-        ctx.revert();
-      } finally {
-        try {
-          delete (root as any).dataset.gsapInit;
-        } catch {}
-      }
-    };
-  }, []);
-
   return (
-    <div ref={rootRef} className="relative space-y-16 md:space-y-24">
-      {/* Main Travel World project details (inlined) */}
-      <main className="relative space-y-16 md:space-y-24">
-        {/* Hero */}
-        <section className="reveal-section group relative bg-[var(--background)] py-20 md:py-50 min-h-screen w-full overflow-hidden">
+    <>
+      <Header />
+      <PageAnimator>
+        <div className="relative space-y-16 md:space-y-24">
+          {/* Main Travel World project details (inlined) */}
+          <main className="relative space-y-16 md:space-y-24">
+            {/* Hero */}
+            <section className="reveal-section group relative bg-[var(--background)] py-20 md:py-50 min-h-screen w-full overflow-hidden">
           <SectionBackground />
           <div className="pointer-events-none absolute inset-0 z-0 opacity-100">
             <DarkVeil
@@ -749,6 +635,9 @@ export default function TripleWaveProjectPage() {
           </div>
         </section>
       </main>
-    </div>
+        </div>
+      </PageAnimator>
+      <Footer />
+    </>
   );
 }

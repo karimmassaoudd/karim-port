@@ -201,13 +201,13 @@ export interface ISpecialOffersSection {
   heading: string;
   description?: string;
   offers: {
-    title: string;
-    subtitle: string;
-    description: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
     originalPrice?: string;
-    discountedPrice: string;
+    discountedPrice?: string;
     discountBadge?: string;
-    buttonText: string;
+    buttonText?: string;
     buttonLink?: string;
   }[];
 }
@@ -454,11 +454,11 @@ const SpecialOffersSectionSchema = new Schema<ISpecialOffersSection>({
   description: { type: String },
   offers: [
     {
-      title: { type: String, required: true },
-      subtitle: { type: String, required: true },
-      description: { type: String, required: true },
+      title: { type: String },
+      subtitle: { type: String },
+      description: { type: String },
       originalPrice: { type: String },
-      discountedPrice: { type: String, required: true },
+      discountedPrice: { type: String },
       discountBadge: { type: String },
       buttonText: { type: String, default: "Book Now" },
       buttonLink: { type: String },

@@ -20,19 +20,19 @@ export function renderProjectSection({
     case "hero":
       return (
         <section key="hero" className="container mx-auto px-6 pb-16 max-w-6xl">
-          <div className="text-center mb-12 pop-on-scroll">
-            <span className="inline-block px-4 py-2 bg-[var(--Secondary-Background)] text-[var(--accent)] rounded-lg text-sm font-semibold mb-6 font-secondary">
+          <div className="text-center mb-8 pop-on-scroll">
+            <span className="inline-block px-4 py-2 bg-[var(--Secondary-Background)] text-[var(--accent)] rounded-lg text-sm font-semibold mb-4 font-secondary">
               {section.category}
             </span>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-[var(--headline)] mb-6 font-primary leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl text-[var(--headline)] mb-4 font-primary leading-tight">
               {section.title}
             </h1>
-            <p className="text-xl md:text-2xl text-[var(--text)] max-w-3xl mx-auto font-secondary leading-relaxed">
+            <p className="text-base md:text-xl text-[var(--text)] max-w-3xl mx-auto font-secondary leading-relaxed">
               {section.tagline}
             </p>
           </div>
           {section.heroImage?.url && (
-            <div className="pop-on-scroll rounded-2xl overflow-hidden shadow-2xl">
+            <div className="pop-on-scroll rounded-2xl overflow-hidden shadow-2xl max-w-2xl mx-auto">
               <img
                 src={section.heroImage.url}
                 alt={section.heroImage.alt}
@@ -56,10 +56,10 @@ export function renderProjectSection({
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-8">
-              <div className="w-50 h-1 rounded-full bg-[var(--accent)] mt-3 mb-1" />
+              <div className="w-50 h-1 rounded-full bg-[var(--accent)] mb-3" />
               <h2 className="text-[var(--text)] font-primary text-4xl md:text-5xl leading-tight tracking-wide">
                 OVERVIEW
-              </h2>make everything ready for production
+              </h2>
             </div>
             <div className="grid grid-cols-12 gap-8 items-start">
               <div className="col-span-12 lg:col-span-7 space-y-6">
@@ -184,13 +184,13 @@ export function renderProjectSection({
 
     case "problemStatement":
       return (
-        <section key="problemStatement" className="py-20">
+        <section key="problemStatement" className="reveal-section py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-6 font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-6 font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] leading-relaxed mb-8 font-secondary">
+              <p className="text-base text-[var(--text)] leading-relaxed mb-8 font-secondary">
                 {section.description}
               </p>
 
@@ -210,14 +210,14 @@ export function renderProjectSection({
       return (
         <section
           key="solutions"
-          className="bg-[var(--Secondary-Background)] py-20"
+          className="reveal-section bg-[var(--Secondary-Background)] py-20"
         >
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="bg-[var(--card)] rounded-xl shadow-xl p-8 md:p-12 pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-6 font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-6 font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] leading-relaxed mb-8 font-secondary">
+              <p className="text-base text-[var(--text)] leading-relaxed mb-8 font-secondary">
                 {section.description}
               </p>
               {section.solutions?.length > 0 && (
@@ -227,7 +227,7 @@ export function renderProjectSection({
                       key={idx}
                       className="bg-[var(--Secondary-Background)] p-6 rounded-lg"
                     >
-                      <h4 className="text-lg font-semibold text-[var(--headline)] mb-3 font-primary">
+                      <h4 className="text-base font-semibold text-[var(--headline)] mb-3 font-primary">
                         {solution.title}
                       </h4>
                       <p className="text-[var(--text)] font-secondary">
@@ -247,10 +247,10 @@ export function renderProjectSection({
         <section key="branding" className="py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12 pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-4 font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-4 font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] max-w-3xl mx-auto font-secondary">
+              <p className="text-base text-[var(--text)] max-w-3xl mx-auto font-secondary">
                 {section.description}
               </p>
             </div>
@@ -339,10 +339,10 @@ export function renderProjectSection({
         <section key="wireframes" className="py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12 pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-4 font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-4 font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] max-w-3xl mx-auto font-secondary">
+              <p className="text-base text-[var(--text)] max-w-3xl mx-auto font-secondary">
                 {section.description}
               </p>
             </div>
@@ -379,10 +379,10 @@ export function renderProjectSection({
         >
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12 pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-4 font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-4 font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] max-w-3xl mx-auto font-secondary">
+              <p className="text-base text-[var(--text)] max-w-3xl mx-auto font-secondary">
                 {section.description}
               </p>
             </div>
@@ -414,10 +414,10 @@ export function renderProjectSection({
         >
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="bg-[var(--card)] rounded-xl shadow-xl p-8 md:p-12 pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-6 text-center font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-6 text-center font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] text-center mb-12 max-w-3xl mx-auto font-secondary">
+              <p className="text-base text-[var(--text)] text-center mb-12 max-w-3xl mx-auto font-secondary">
                 {section.description}
               </p>
               {section.techStack?.length > 0 && (
@@ -447,10 +447,10 @@ export function renderProjectSection({
         <section key="websitePreview" className="py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="bg-[var(--card)] rounded-xl shadow-xl p-8 md:p-12 pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-6 text-center font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-6 text-center font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] text-center mb-8 font-secondary">
+              <p className="text-base text-[var(--text)] text-center mb-8 font-secondary">
                 {section.description}
               </p>
               <div className="flex justify-center gap-4 mb-8">
@@ -499,10 +499,10 @@ export function renderProjectSection({
         >
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-12 pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-6 font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-6 font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] max-w-3xl mx-auto font-secondary">
+              <p className="text-base text-[var(--text)] max-w-3xl mx-auto font-secondary">
                 {section.description}
               </p>
             </div>
@@ -513,7 +513,7 @@ export function renderProjectSection({
                     key={idx}
                     className="bg-[var(--card)] text-center p-8 rounded-xl shadow-xl pop-on-scroll"
                   >
-                    <div className="text-5xl font-bold text-[var(--accent)] mb-3 font-primary">
+                    <div className="text-5xl  text-[var(--accent)] mb-3 font-primary">
                       {metric.value}
                     </div>
                     <p className="text-[var(--text)] font-semibold font-secondary">
@@ -532,10 +532,10 @@ export function renderProjectSection({
         <section key="conclusion" className="py-20">
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="bg-[var(--card)] rounded-xl shadow-xl p-8 md:p-12 pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-6 font-primary">
+              <h2 className="text-4xl  text-[var(--headline)] mb-6 font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] leading-relaxed mb-8 font-secondary">
+              <p className="text-base text-[var(--text)] leading-relaxed mb-8 font-secondary">
                 {section.description}
               </p>
               {section.lessonsLearned?.length > 0 && (
@@ -591,7 +591,7 @@ export function renderProjectSection({
       return (
         <section
           key="hoverExploration"
-          className="py-20 bg-[var(--background)]"
+          className="reveal-section py-20 bg-[var(--background)]"
         >
           <div className="container mx-auto px-6 max-w-6xl">
             <div className="mb-8 pop-on-scroll">
@@ -604,7 +604,7 @@ export function renderProjectSection({
                 </>
               )}
               {section.description && (
-                <p className="text-lg text-[var(--secondary-text)] max-w-3xl font-secondary">
+                <p className="text-base text-[var(--secondary-text)] max-w-3xl font-secondary">
                   {section.description}
                 </p>
               )}
@@ -637,12 +637,12 @@ export function renderProjectSection({
                           <p className="text-white/90 text-xs">{tile.subtitle}</p>
                         )}
                         {tile.title && (
-                          <h3 className="text-white font-semibold text-lg leading-tight">
+                          <h3 className="text-white font-semibold text-base leading-tight">
                             {tile.title}
                           </h3>
                         )}
                       </div>
-                      <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 text-[var(--accent)] font-bold shadow">
+                      <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 text-[var(--accent)]  shadow">
                         ↗
                       </span>
                     </div>
@@ -660,32 +660,200 @@ export function renderProjectSection({
         </section>
       );
 
+    case "quoteProcess":
+      return (
+        <section key="quoteProcess" className="reveal-section py-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            {section.quote && (
+              <div className="pop-on-scroll mb-12 text-center">
+                <blockquote className="text-2xl md:text-3xl text-[var(--headline)] italic max-w-4xl mx-auto font-primary">
+                  "{section.quote}"
+                </blockquote>
+              </div>
+            )}
+            {section.processCards && section.processCards.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {section.processCards.map((card: any, idx: number) => (
+                  <div
+                    key={idx}
+                    className="pop-on-scroll bg-[var(--card)] rounded-xl p-6 shadow-lg border border-[var(--border)]"
+                  >
+                    <h3 className="text-xl font-semibold text-[var(--headline)] mb-4 font-primary">
+                      {card.title}
+                    </h3>
+                    <ul className="space-y-2">
+                      {card.items?.map((item: string, itemIdx: number) => (
+                        <li
+                          key={itemIdx}
+                          className="text-[var(--text)] flex items-start gap-2 font-secondary"
+                        >
+                          <span className="text-[var(--accent)] mt-1">•</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      );
+
+    case "themes":
+      return (
+        <section
+          key="themes"
+          className="reveal-section bg-[var(--Secondary-Background)] py-20"
+        >
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-12 pop-on-scroll">
+              <h2 className="text-4xl  text-[var(--headline)] mb-4 font-primary">
+                {section.heading}
+              </h2>
+              {section.description && (
+                <p className="text-base text-[var(--text)] max-w-3xl mx-auto font-secondary">
+                  {section.description}
+                </p>
+              )}
+            </div>
+            {section.themes && section.themes.length > 0 && (
+              <div className="space-y-16">
+                {section.themes.map((theme: any, idx: number) => (
+                  <div key={idx} className="pop-on-scroll">
+                    <h3 className="text-2xl font-semibold text-[var(--headline)] mb-2 font-primary text-center">
+                      {theme.title}
+                    </h3>
+                    {theme.images && theme.images.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                        {theme.images.slice(0, 3).map((img: any, imgIdx: number) => (
+                          <div
+                            key={imgIdx}
+                            className="rounded-xl overflow-hidden shadow-lg"
+                          >
+                            <img
+                              src={img.url}
+                              alt={img.alt || theme.title}
+                              className="w-full h-auto"
+                            />
+                            {img.caption && (
+                              <p className="text-sm text-[var(--secondary-text)] mt-2 px-2 font-secondary">
+                                {img.caption}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      );
+
+    case "specialOffers":
+      return (
+        <section key="specialOffers" className="reveal-section py-20">
+          <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-12 pop-on-scroll">
+              <h2 className="text-4xl  text-[var(--headline)] mb-4 font-primary">
+                {section.heading}
+              </h2>
+              {section.description && (
+                <p className="text-base text-[var(--text)] max-w-3xl mx-auto font-secondary">
+                  {section.description}
+                </p>
+              )}
+            </div>
+            {section.offers && section.offers.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {section.offers.map((offer: any, idx: number) => (
+                  <div
+                    key={idx}
+                    className="pop-on-scroll bg-[var(--card)] rounded-xl p-6 shadow-lg border border-[var(--border)] hover:shadow-xl transition-shadow"
+                  >
+                    {offer.discountBadge && (
+                      <span className="inline-block px-3 py-1 bg-[var(--accent)] text-white text-sm font-semibold rounded-full mb-4 font-secondary">
+                        {offer.discountBadge}
+                      </span>
+                    )}
+                    <h3 className="text-2xl font-semibold text-[var(--headline)] mb-2 font-primary">
+                      {offer.title}
+                    </h3>
+                    {offer.subtitle && (
+                      <p className="text-[var(--text)] text-sm mb-3 font-secondary">
+                        {offer.subtitle}
+                      </p>
+                    )}
+                    {offer.description && (
+                      <p className="text-[var(--text)] mb-4 font-secondary">
+                        {offer.description}
+                      </p>
+                    )}
+                    <div className="flex items-baseline gap-3 mb-4">
+                      {offer.originalPrice && (
+                        <span className="text-[var(--text)] line-through text-base font-secondary">
+                          {offer.originalPrice}
+                        </span>
+                      )}
+                      {offer.discountedPrice && (
+                        <span className="text-[var(--accent)] text-2xl  font-primary">
+                          {offer.discountedPrice}
+                        </span>
+                      )}
+                    </div>
+                    {offer.buttonLink && offer.buttonText && (
+                      <a
+                        href={offer.buttonLink}
+                        className="block w-full text-center px-6 py-3 bg-[var(--accent)] text-white rounded-lg font-semibold hover:bg-[var(--accent-hover)] transition-colors shadow-lg font-secondary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {offer.buttonText}
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      );
+
     case "callToAction":
       return (
         <section
           key="callToAction"
-          className="bg-[var(--Secondary-Background)] py-20"
+          className="reveal-section bg-[var(--Secondary-Background)] py-10"
         >
-          <div className="container mx-auto px-6 max-w-4xl">
-            <div className="bg-[var(--card)] rounded-xl shadow-2xl p-12 text-center pop-on-scroll">
-              <h2 className="text-4xl font-bold text-[var(--headline)] mb-6 font-primary">
+          <div className="container mx-auto px-6 max-w-xl">
+            <div className="text-center pop-on-scroll space-y-4">
+              <h2 className="text-2xl md:text-3xl text-[var(--headline)] font-primary">
                 {section.heading}
               </h2>
-              <p className="text-lg text-[var(--text)] mb-8 font-secondary">
+              <p className="text-sm text-[var(--secondary-text)] font-secondary">
                 {section.description}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center items-center pt-2">
                 <Link
                   href={section.primaryButtonLink}
-                  className="px-8 py-4 bg-[var(--accent)] text-white rounded-lg font-semibold hover:bg-[var(--accent-hover)] transition-colors shadow-lg font-secondary"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--accent)] text-white rounded-lg text-sm font-medium hover:bg-[var(--accent-hover)] transition-all shadow-md hover:shadow-lg font-secondary"
                 >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                  </svg>
                   {section.primaryButtonText}
                 </Link>
                 {section.secondaryButtonText && (
                   <Link
                     href={section.secondaryButtonLink || "#"}
-                    className="btn btn-secondary"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-transparent text-[var(--text)] rounded-lg text-sm font-medium hover:bg-[var(--surface)] transition-all border border-[var(--border)] font-secondary"
                   >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+                    </svg>
                     {section.secondaryButtonText}
                   </Link>
                 )}

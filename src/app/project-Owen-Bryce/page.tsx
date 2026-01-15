@@ -3,7 +3,9 @@
 import { ChevronDown, GripVertical, Power } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import PageAnimator from "@/components/PageAnimator";
 import SectionBackground from "@/components/SectionBackground";
 
@@ -11,7 +13,6 @@ export default function OwenBrycePage() {
   const [activeTab, setActiveTab] = useState<
     "instagram" | "quotes" | "spotify" | "feedbacks"
   >("instagram");
-  const rootRef = useRef<HTMLDivElement | null>(null);
 
   // Animations are initialized once at the page level via PageAnimator wrapper
 
@@ -45,8 +46,10 @@ export default function OwenBrycePage() {
   ] as const;
 
   return (
-    <PageAnimator>
-      <main ref={rootRef} className="min-h-screen bg-[var(--background)]">
+    <>
+      <Header />
+      <PageAnimator>
+        <main className="min-h-screen bg-[var(--background)]">
         {/* Hero Section */}
         <section className="reveal-section relative min-h-[90vh] md:min-h-screen overflow-hidden">
           <SectionBackground />
@@ -817,6 +820,8 @@ export default function OwenBrycePage() {
           </div>
         </section>
       </main>
-    </PageAnimator>
+      </PageAnimator>
+      <Footer />
+    </>
   );
 }
