@@ -39,6 +39,10 @@ interface FooterData {
   }[];
 }
 
+interface Settings {
+  backgroundImage: string;
+}
+
 export default function AdminLayout({
   children,
 }: {
@@ -62,6 +66,9 @@ export default function AdminLayout({
     copyrightText: "© 2024 Portfolio Admin",
     socialLinks: [],
   });
+  const [settings, setSettings] = useState<Settings>({
+    backgroundImage: "",
+  });
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -70,7 +77,7 @@ export default function AdminLayout({
   }, [status, router]);
 
   useEffect(() => {
-    // Fetch footer data
+    // Fetch footer data and settings
     const fetchFooterData = async () => {
       try {
         const response = await fetch("/api/homepage");
@@ -78,6 +85,9 @@ export default function AdminLayout({
           const result = await response.json();
           if (result.data?.footer) {
             setFooterData(result.data.footer);
+          }
+          if (result.data?.settings) {
+            setSettings(result.data.settings);
           }
         }
       } catch (error) {
@@ -129,11 +139,21 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)] transition-colors duration-300">
+    <div 
+      className="min-h-screen bg-[var(--background)] transition-colors duration-300 relative"
+      style={{
+        backgroundImage: settings.backgroundImage 
+          ? `url(${settings.backgroundImage})` 
+          : 'none',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full backdrop-blur-xl bg-white/80 dark:bg-[var(--card)]/80 shadow-2xl border-r border-white/20 dark:border-white/10 z-50 transition-all duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full backdrop-blur-2xl bg-white/90 dark:bg-[var(--card)]/90 shadow-2xl border-r border-white/30 dark:border-white/20 z-50 transition-all duration-300 ease-in-out ${
           sidebarOpen ? "w-64" : "w-20"
         }`}
       >
@@ -390,7 +410,7 @@ export default function AdminLayout({
         }`}
       >
         {/* Top Header */}
-        <header className="h-16 backdrop-blur-xl bg-white/80 dark:bg-[var(--card)]/80 shadow-sm border-b border-white/20 dark:border-white/10 sticky top-0 z-40">
+        <header className="h-16 backdrop-blur-2xl bg-white/90 dark:bg-[var(--card)]/90 shadow-sm border-b border-white/30 dark:border-white/20 sticky top-0 z-40">
           <div className="h-full px-6 flex items-center justify-between">
             <div>
               <h5 className="text-base font-secondary font-bold text-headline">

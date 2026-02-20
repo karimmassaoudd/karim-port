@@ -113,7 +113,7 @@ export default function AdminProjectsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div className="min-h-screen">
       {message && (
         <Toast
           message={message.text}
@@ -149,8 +149,8 @@ export default function AdminProjectsPage() {
               onClick={() => setFilter(status)}
               className={`px-4 py-2 rounded-lg font-medium transition-all ${
                 filter === status
-                  ? "bg-[var(--accent)] text-white"
-                  : "bg-[var(--surface)] text-[var(--text-secondary)] hover:bg-[var(--surface-hover)]"
+                  ? "bg-[var(--accent)]/90 text-white backdrop-blur-lg shadow-lg"
+                  : "backdrop-blur-lg bg-white/70 dark:bg-[var(--card)]/70 text-[var(--text)] hover:bg-white/90 dark:hover:bg-[var(--card)]/90"
               }`}
             >
               {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -167,7 +167,7 @@ export default function AdminProjectsPage() {
 
         {/* Empty State */}
         {!loading && projects.length === 0 && (
-          <div className="text-center py-12 bg-[var(--surface)] rounded-lg border border-[var(--border)]">
+          <div className="text-center py-12 backdrop-blur-2xl bg-white/85 dark:bg-[var(--card)]/85 rounded-lg border border-white/40 dark:border-white/30">
             <p className="text-[var(--text-secondary)] text-lg mb-4">
               No projects found
             </p>
@@ -183,7 +183,7 @@ export default function AdminProjectsPage() {
             {projects.map((project) => (
               <div
                 key={project._id}
-                className="bg-[var(--surface)] rounded-lg border border-[var(--border)] overflow-hidden hover:shadow-lg transition-shadow"
+                className="backdrop-blur-2xl bg-white/85 dark:bg-[var(--card)]/85 rounded-lg border border-white/40 dark:border-white/30 overflow-hidden hover:shadow-xl transition-shadow"
               >
                 {/* Thumbnail */}
                 <div className="relative h-48 bg-[var(--surface-hover)]">

@@ -2,11 +2,14 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  MdCloudUpload,
   MdFolder,
   MdHome,
   MdInfo,
+  MdMenu,
   MdPerson,
   MdSave,
+  MdSettings,
   MdWork,
 } from "react-icons/md";
 import ProjectSelector from "@/components/admin/ProjectSelector";
@@ -33,6 +36,21 @@ interface SocialLink {
   platform: string;
   url: string;
   icon: string;
+  isVisible: boolean;
+}
+
+interface NavLink {
+  id: number;
+  label: string;
+  href: string;
+  isVisible: boolean;
+}
+
+interface ProjectDropdownLink {
+  id: number;
+  label: string;
+  href: string;
+  description: string;
   isVisible: boolean;
 }
 
@@ -67,6 +85,10 @@ interface HomePageData {
     items: ExperienceItem[];
   };
   featuredProjects: ProjectReference[];
+  header: {
+    mainLinks: NavLink[];
+    projectDropdownLinks: ProjectDropdownLink[];
+  };
   footer: {
     ownerName: string;
     ownerTitle: string;
@@ -78,11 +100,14 @@ interface HomePageData {
     copyrightText: string;
     socialLinks: SocialLink[];
   };
+  settings: {
+    backgroundImage: string;
+  };
 }
 
 export default function DashboardPage() {
   const [activeSection, setActiveSection] = useState<
-    "hero" | "bio" | "about" | "experience" | "projects"
+    "hero" | "bio" | "about" | "experience" | "projects" | "header" | "settings"
   >("hero");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -96,6 +121,13 @@ export default function DashboardPage() {
   const [selectedExperienceIndex, setSelectedExperienceIndex] = useState<
     number | null
   >(null);
+  const [selectedNavLinkIndex, setSelectedNavLinkIndex] = useState<
+    number | null
+  >(null);
+  const [selectedDropdownLinkIndex, setSelectedDropdownLinkIndex] = useState<
+    number | null
+  >(null);
+  const [uploading, setUploading] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
 
@@ -130,6 +162,10 @@ export default function DashboardPage() {
       items: [],
     },
     featuredProjects: [],
+    header: {
+      mainLinks: [],
+      projectDropdownLinks: [],
+    },
     footer: {
       ownerName: "",
       ownerTitle: "",
@@ -140,6 +176,9 @@ export default function DashboardPage() {
       location: "",
       copyrightText: "",
       socialLinks: [],
+    },
+    settings: {
+      backgroundImage: "",
     },
   });
 
@@ -152,6 +191,20 @@ export default function DashboardPage() {
         setFormData({
           ...result.data,
           featuredProjects: result.data.featuredProjects || [],
+          header: result.data.header || {
+            mainLinks: [
+              { id: 1, label: "ABOUT", href: "/#about", isVisible: true },
+              { id: 2, label: "USER EXPERIENCE", href: "/#user-experience", isVisible: true },
+              { id: 3, label: "CONTACT", href: "/#contact", isVisible: true },
+            ],
+            projectDropdownLinks: [
+              { id: 1, label: "View All", href: "/#projects", description: "Browse all projects", isVisible: true },
+              { id: 2, label: "Case Studies", href: "/projects", description: "Featured projects & case studies", isVisible: true },
+              { id: 3, label: "Travel World", href: "/project-details", description: "Travel website", isVisible: true },
+              { id: 4, label: "Triple WAVE", href: "/project-Triple-Wave", description: "Student guide platform", isVisible: true },
+              { id: 5, label: "Owen Bryce", href: "/project-Owen-Bryce", description: "Artist branding campaign", isVisible: true },
+            ],
+          },
           footer: result.data.footer || {
             ownerName: "",
             ownerTitle: "",
@@ -162,6 +215,9 @@ export default function DashboardPage() {
             location: "",
             copyrightText: "",
             socialLinks: [],
+          },
+          settings: result.data.settings || {
+            backgroundImage: "",
           },
         });
       } else {
@@ -259,6 +315,84 @@ export default function DashboardPage() {
     });
   }, []);
 
+  // Header navigation link management
+  const addNavLink = useCallback(() => {
+    setFormData((prev) => {
+      const newId = Math.max(...prev.header.mainLinks.map(l => l.id), 0) + 1;
+      return {
+        ...prev,
+        header: {
+          ...prev.header,
+          mainLinks: [
+            ...prev.header.mainLinks,
+            {
+              id: newId,
+              label: "",
+              href: "",
+              isVisible: true,
+            },
+          ],
+        },
+      };
+    });
+    setSelectedNavLinkIndex(formData.header.mainLinks.length);
+  }, [formData.header.mainLinks.length]);
+
+  const removeNavLink = useCallback((index: number) => {
+    setFormData((prev) => {
+      const newLinks = prev.header.mainLinks.filter((_, i) => i !== index);
+      return {
+        ...prev,
+        header: { ...prev.header, mainLinks: newLinks },
+      };
+    });
+    setSelectedNavLinkIndex((prev) => {
+      const newLength = formData.header.mainLinks.length - 1;
+      if (prev === index) return newLength > 0 ? 0 : null;
+      if (prev !== null && prev > index) return prev - 1;
+      return prev;
+    });
+  }, [formData.header.mainLinks.length]);
+
+  const addDropdownLink = useCallback(() => {
+    setFormData((prev) => {
+      const newId = Math.max(...prev.header.projectDropdownLinks.map(l => l.id), 0) + 1;
+      return {
+        ...prev,
+        header: {
+          ...prev.header,
+          projectDropdownLinks: [
+            ...prev.header.projectDropdownLinks,
+            {
+              id: newId,
+              label: "",
+              href: "",
+              description: "",
+              isVisible: true,
+            },
+          ],
+        },
+      };
+    });
+    setSelectedDropdownLinkIndex(formData.header.projectDropdownLinks.length);
+  }, [formData.header.projectDropdownLinks.length]);
+
+  const removeDropdownLink = useCallback((index: number) => {
+    setFormData((prev) => {
+      const newLinks = prev.header.projectDropdownLinks.filter((_, i) => i !== index);
+      return {
+        ...prev,
+        header: { ...prev.header, projectDropdownLinks: newLinks },
+      };
+    });
+    setSelectedDropdownLinkIndex((prev) => {
+      const newLength = formData.header.projectDropdownLinks.length - 1;
+      if (prev === index) return newLength > 0 ? 0 : null;
+      if (prev !== null && prev > index) return prev - 1;
+      return prev;
+    });
+  }, [formData.header.projectDropdownLinks.length]);
+
   // Optimized field update handlers to prevent recreation
   const _updateHeroField = useCallback(
     (field: keyof HomePageData["hero"], value: string) => {
@@ -316,7 +450,7 @@ export default function DashboardPage() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header and Tabs Container */}
-      <div className="mb-6 backdrop-blur-xl bg-white/60 dark:bg-[var(--card)]/60 rounded-xl shadow-lg border border-white/30 dark:border-white/20 p-6">
+      <div className="mb-6 backdrop-blur-2xl bg-white/85 dark:bg-[var(--card)]/85 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
         {/* Header */}
         <div className="mb-6">
           <h3 className="text-base font-secondary font-bold text-headline mb-2">
@@ -390,6 +524,30 @@ export default function DashboardPage() {
               <MdFolder className="text-xl" />
               <span>Projects</span>
             </button>
+            <button
+              type="button"
+              onClick={() => setActiveSection("header")}
+              className={`flex items-center gap-2 px-4 py-3 rounded-lg font-secondary font-semibold transition-all whitespace-nowrap ${
+                activeSection === "header"
+                  ? "bg-[var(--accent)]/20 backdrop-blur-md text-[var(--accent)] border border-[var(--accent)]/30 shadow-md"
+                  : "text-[var(--text)] hover:bg-white/50 dark:hover:bg-white/20 backdrop-blur-md border border-transparent hover:border-white/30"
+              }`}
+            >
+              <MdMenu className="text-xl" />
+              <span>Header</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSection("settings")}
+              className={`flex items-center gap-2 px-4 py-3 rounded-lg font-secondary font-semibold transition-all whitespace-nowrap ${
+                activeSection === "settings"
+                  ? "bg-[var(--accent)]/20 backdrop-blur-md text-[var(--accent)] border border-[var(--accent)]/30 shadow-md"
+                  : "text-[var(--text)] hover:bg-white/50 dark:hover:bg-white/20 backdrop-blur-md border border-transparent hover:border-white/30"
+              }`}
+            >
+              <MdSettings className="text-xl" />
+              <span>Settings</span>
+            </button>
           </div>
         </div>
       </div>
@@ -397,7 +555,7 @@ export default function DashboardPage() {
       <form onSubmit={handleSubmit}>
         <div
           ref={contentRef}
-          className="backdrop-blur-xl bg-white/70 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6 mb-6"
+          className="backdrop-blur-2xl bg-white/85 dark:bg-[var(--card)]/85 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6 mb-6"
         >
           {/* Hero Section */}
           {activeSection === "hero" && (
@@ -993,6 +1151,471 @@ export default function DashboardPage() {
                     }))
                   }
                 />
+              </div>
+            </div>
+          )}
+
+          {/* Header Section */}
+          {activeSection === "header" && (
+            <div className="space-y-5">
+              <h3 className="text-xs font-secondary font-bold text-headline mb-6">
+                Header Navigation
+              </h3>
+
+              {/* Main Navigation Links */}
+              <div className="backdrop-blur-xl bg-white/70 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="text-sm font-secondary font-bold text-headline">
+                      Main Navigation Links
+                    </h4>
+                    <p className="text-xs font-secondary text-gray-600 dark:text-gray-300 mt-1">
+                      Manage the main header navigation links
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addNavLink}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold text-xs backdrop-blur-md bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all"
+                  >
+                    <span className="text-lg">+</span>
+                    Add Link
+                  </button>
+                </div>
+
+                {/* Main Links List */}
+                {formData.header.mainLinks.length > 0 ? (
+                  <div className="space-y-3 mb-5">
+                    {formData.header.mainLinks.map((link, index) => (
+                      <div
+                        key={`nav-${link.id}`}
+                        className={`backdrop-blur-sm bg-white/50 dark:bg-gray-800/30 rounded-lg p-3 border transition-all cursor-pointer ${
+                          selectedNavLinkIndex === index
+                            ? "border-[var(--accent)]/50 shadow-md"
+                            : "border-white/30 dark:border-white/10 hover:border-[var(--accent)]/30"
+                        }`}
+                        onClick={() => setSelectedNavLinkIndex(index)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1">
+                            <p className="text-sm font-secondary font-semibold text-headline">
+                              {link.label || "Untitled Link"}
+                            </p>
+                            <p className="text-xs font-secondary text-gray-600 dark:text-gray-400">
+                              {link.href || "No URL set"}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeNavLink(index);
+                            }}
+                            className="px-3 py-1 text-xs font-secondary font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-all"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs font-secondary text-gray-500 dark:text-gray-400 mb-4">
+                    No navigation links yet. Click "Add Link" to create one.
+                  </p>
+                )}
+
+                {/* Edit Main Link Form */}
+                {selectedNavLinkIndex !== null &&
+                  formData.header.mainLinks[selectedNavLinkIndex] && (
+                    <div className="backdrop-blur-sm bg-gradient-to-br from-[var(--accent)]/5 to-transparent rounded-lg p-4 border border-[var(--accent)]/20 space-y-4">
+                      <h5 className="text-xs font-secondary font-bold text-headline">
+                        Edit Link
+                      </h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">
+                            Label
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.header.mainLinks[selectedNavLinkIndex].label}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                header: {
+                                  ...prev.header,
+                                  mainLinks: prev.header.mainLinks.map((l, i) =>
+                                    i === selectedNavLinkIndex
+                                      ? { ...l, label: e.target.value }
+                                      : l
+                                  ),
+                                },
+                              }))
+                            }
+                            className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] focus:outline-none transition-all"
+                            placeholder="e.g., ABOUT"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">
+                            URL
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.header.mainLinks[selectedNavLinkIndex].href}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                header: {
+                                  ...prev.header,
+                                  mainLinks: prev.header.mainLinks.map((l, i) =>
+                                    i === selectedNavLinkIndex
+                                      ? { ...l, href: e.target.value }
+                                      : l
+                                  ),
+                                },
+                              }))
+                            }
+                            className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] focus:outline-none transition-all"
+                            placeholder="e.g., /#about"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`nav-visible-${selectedNavLinkIndex}`}
+                          checked={formData.header.mainLinks[selectedNavLinkIndex].isVisible}
+                          onChange={(e) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              header: {
+                                ...prev.header,
+                                mainLinks: prev.header.mainLinks.map((l, i) =>
+                                  i === selectedNavLinkIndex
+                                    ? { ...l, isVisible: e.target.checked }
+                                    : l
+                                ),
+                              },
+                            }))
+                          }
+                          className="w-4 h-4 rounded border-gray-300 text-[var(--accent)] focus:ring-[var(--accent)]"
+                        />
+                        <label
+                          htmlFor={`nav-visible-${selectedNavLinkIndex}`}
+                          className="text-xs font-secondary font-semibold text-headline"
+                        >
+                          Visible
+                        </label>
+                      </div>
+                    </div>
+                  )}
+              </div>
+
+              {/* Project Dropdown Links */}
+              <div className="backdrop-blur-xl bg-white/70 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="text-sm font-secondary font-bold text-headline">
+                      MY PROJECTS Dropdown Links
+                    </h4>
+                    <p className="text-xs font-secondary text-gray-600 dark:text-gray-300 mt-1">
+                      Manage links in the MY PROJECTS dropdown menu
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addDropdownLink}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold text-xs backdrop-blur-md bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all"
+                  >
+                    <span className="text-lg">+</span>
+                    Add Project Link
+                  </button>
+                </div>
+
+                {/* Dropdown Links List */}
+                {formData.header.projectDropdownLinks.length > 0 ? (
+                  <div className="space-y-3 mb-5">
+                    {formData.header.projectDropdownLinks.map((link, index) => (
+                      <div
+                        key={`dropdown-${link.id}`}
+                        className={`backdrop-blur-sm bg-white/50 dark:bg-gray-800/30 rounded-lg p-3 border transition-all cursor-pointer ${
+                          selectedDropdownLinkIndex === index
+                            ? "border-[var(--accent)]/50 shadow-md"
+                            : "border-white/30 dark:border-white/10 hover:border-[var(--accent)]/30"
+                        }`}
+                        onClick={() => setSelectedDropdownLinkIndex(index)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1">
+                            <p className="text-sm font-secondary font-semibold text-headline">
+                              {link.label || "Untitled Link"}
+                            </p>
+                            <p className="text-xs font-secondary text-gray-600 dark:text-gray-400">
+                              {link.description || "No description"}
+                            </p>
+                            <p className="text-xs font-secondary text-gray-500 dark:text-gray-500 mt-1">
+                              {link.href || "No URL"}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeDropdownLink(index);
+                            }}
+                            className="px-3 py-1 text-xs font-secondary font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-all"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs font-secondary text-gray-500 dark:text-gray-400 mb-4">
+                    No dropdown links yet. Click "Add Project Link" to create one.
+                  </p>
+                )}
+
+                {/* Edit Dropdown Link Form */}
+                {selectedDropdownLinkIndex !== null &&
+                  formData.header.projectDropdownLinks[selectedDropdownLinkIndex] && (
+                    <div className="backdrop-blur-sm bg-gradient-to-br from-[var(--accent)]/5 to-transparent rounded-lg p-4 border border-[var(--accent)]/20 space-y-4">
+                      <h5 className="text-xs font-secondary font-bold text-headline">
+                        Edit Project Link
+                      </h5>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">
+                            Label
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.header.projectDropdownLinks[selectedDropdownLinkIndex].label}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                header: {
+                                  ...prev.header,
+                                  projectDropdownLinks: prev.header.projectDropdownLinks.map((l, i) =>
+                                    i === selectedDropdownLinkIndex
+                                      ? { ...l, label: e.target.value }
+                                      : l
+                                  ),
+                                },
+                              }))
+                            }
+                            className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] focus:outline-none transition-all"
+                            placeholder="e.g., Travel World"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-secondary font-semibold text-headline mb-2">
+                            URL
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.header.projectDropdownLinks[selectedDropdownLinkIndex].href}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                header: {
+                                  ...prev.header,
+                                  projectDropdownLinks: prev.header.projectDropdownLinks.map((l, i) =>
+                                    i === selectedDropdownLinkIndex
+                                      ? { ...l, href: e.target.value }
+                                      : l
+                                  ),
+                                },
+                              }))
+                            }
+                            className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] focus:outline-none transition-all"
+                            placeholder="e.g., /project-details"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-secondary font-semibold text-headline mb-2">
+                          Description
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.header.projectDropdownLinks[selectedDropdownLinkIndex].description}
+                          onChange={(e) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              header: {
+                                ...prev.header,
+                                projectDropdownLinks: prev.header.projectDropdownLinks.map((l, i) =>
+                                  i === selectedDropdownLinkIndex
+                                    ? { ...l, description: e.target.value }
+                                    : l
+                                ),
+                              },
+                            }))
+                          }
+                          className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] focus:outline-none transition-all"
+                          placeholder="e.g., Travel website"
+                        />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id={`dropdown-visible-${selectedDropdownLinkIndex}`}
+                          checked={formData.header.projectDropdownLinks[selectedDropdownLinkIndex].isVisible}
+                          onChange={(e) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              header: {
+                                ...prev.header,
+                                projectDropdownLinks: prev.header.projectDropdownLinks.map((l, i) =>
+                                  i === selectedDropdownLinkIndex
+                                    ? { ...l, isVisible: e.target.checked }
+                                    : l
+                                ),
+                              },
+                            }))
+                          }
+                          className="w-4 h-4 rounded border-gray-300 text-[var(--accent)] focus:ring-[var(--accent)]"
+                        />
+                        <label
+                          htmlFor={`dropdown-visible-${selectedDropdownLinkIndex}`}
+                          className="text-xs font-secondary font-semibold text-headline"
+                        >
+                          Visible
+                        </label>
+                      </div>
+                    </div>
+                  )}
+              </div>
+            </div>
+          )}
+
+          {/* Settings Section */}
+          {activeSection === "settings" && (
+            <div className="space-y-5">
+              <h3 className="text-xs font-secondary font-bold text-headline mb-6">
+                Settings
+              </h3>
+              
+              <div className="space-y-5">
+                {/* Upload File */}
+                <div>
+                  <label className="block text-xs font-secondary font-semibold text-headline mb-2">
+                    Upload Background Image
+                  </label>
+                  <div className="flex gap-3 items-start">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+
+                        setUploading(true);
+                        try {
+                          const formData = new FormData();
+                          formData.append("file", file);
+
+                          const response = await fetch("/api/upload", {
+                            method: "POST",
+                            body: formData,
+                          });
+
+                          const result = await response.json();
+
+                          if (result.success) {
+                            setFormData((prev) => ({
+                              ...prev,
+                              settings: {
+                                ...prev.settings,
+                                backgroundImage: result.url,
+                              },
+                            }));
+                            setMessage({ type: "success", text: "Image uploaded successfully!" });
+                          } else {
+                            setMessage({ type: "error", text: result.error || "Upload failed" });
+                          }
+                        } catch (error) {
+                          console.error("Upload error:", error);
+                          setMessage({ type: "error", text: "Failed to upload image" });
+                        } finally {
+                          setUploading(false);
+                          e.target.value = ""; // Reset input
+                        }
+                      }}
+                      className="hidden"
+                      id="background-upload"
+                      disabled={uploading}
+                    />
+                    <label
+                      htmlFor="background-upload"
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold backdrop-blur-md bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all cursor-pointer ${
+                        uploading ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                    >
+                      <MdCloudUpload className="text-xl" />
+                      <span>{uploading ? "Uploading..." : "Choose File"}</span>
+                    </label>
+                  </div>
+                  <p className="mt-2 text-xs text-[var(--secondary-text)]">
+                    Upload an image from your computer (max 5MB). Supported formats: JPG, PNG, GIF, WebP, AVIF.
+                  </p>
+                </div>
+
+                {/* OR Divider */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-px bg-white/20"></div>
+                  <span className="text-xs font-secondary font-semibold text-[var(--secondary-text)]">OR</span>
+                  <div className="flex-1 h-px bg-white/20"></div>
+                </div>
+
+                {/* Enter URL */}
+                <div>
+                  <label className="block text-xs font-secondary font-semibold text-headline mb-2">
+                    Background Image URL
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.settings.backgroundImage}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        settings: {
+                          ...prev.settings,
+                          backgroundImage: e.target.value,
+                        },
+                      }))
+                    }
+                    className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] focus:outline-none transition-all"
+                    placeholder="https://example.com/background.jpg or /assets/background.jpg"
+                  />
+                  <p className="mt-2 text-xs text-[var(--secondary-text)]">
+                    Or enter an external URL or path to your background image.
+                  </p>
+                </div>
+
+                {/* Preview */}
+                {formData.settings.backgroundImage && (
+                  <div className="mt-4">
+                    <p className="text-xs font-secondary font-semibold text-headline mb-2">
+                      Preview:
+                    </p>
+                    <div className="relative w-full h-48 rounded-lg overflow-hidden border border-white/30 dark:border-white/20">
+                      <img
+                        src={formData.settings.backgroundImage}
+                        alt="Background preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src = "";
+                          e.currentTarget.alt = "Failed to load image";
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -9,6 +9,35 @@ export const revalidate = 60; // Revalidate every 60 seconds
 // GET - Fetch homepage content
 export async function GET() {
   try {
+    const strapiBaseUrl = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    if (strapiBaseUrl) {
+      const normalizedBaseUrl = strapiBaseUrl.replace(/\/+$/, "");
+      const url = new URL("/api/homepage", normalizedBaseUrl);
+      url.searchParams.set("populate", "deep");
+
+      const response = await fetch(url.toString(), { next: { revalidate } });
+      if (!response.ok) {
+        return NextResponse.json(
+          { success: false, error: "Failed to fetch homepage content" },
+          { status: response.status },
+        );
+      }
+
+      const payload = await response.json();
+      const data = payload?.data?.attributes
+        ? { id: payload.data.id, ...payload.data.attributes }
+        : payload?.data ?? null;
+
+      return NextResponse.json({ success: true, data });
+    }
+
+    if (!process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { success: false, error: "Content source is not configured" },
+        { status: 503 },
+      );
+    }
+
     await dbConnect();
 
     // Ensure Project model is registered
@@ -117,6 +146,9 @@ export async function GET() {
           ],
         },
         footer: defaultFooter,
+        settings: {
+          backgroundImage: "",
+        },
       });
     } else if (!homePage.footer || !homePage.footer.ownerName) {
       // If document exists but has no footer or footer is incomplete, add it
@@ -140,6 +172,21 @@ export async function GET() {
 // PUT - Update homepage content
 export async function PUT(request: Request) {
   try {
+    const strapiBaseUrl = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    if (strapiBaseUrl) {
+      return NextResponse.json(
+        { success: false, error: "Homepage is managed in Strapi" },
+        { status: 501 },
+      );
+    }
+
+    if (!process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { success: false, error: "Content source is not configured" },
+        { status: 503 },
+      );
+    }
+
     await dbConnect();
 
     const body = await request.json();

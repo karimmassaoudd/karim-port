@@ -67,6 +67,10 @@ export interface IFooterSection {
   socialLinks: ISocialLink[];
 }
 
+export interface ISettings {
+  backgroundImage: string;
+}
+
 export interface IHomePage {
   hero: IHeroSection;
   bio: IBioSection;
@@ -74,6 +78,7 @@ export interface IHomePage {
   userExperience: IUserExperienceSection;
   featuredProjects: IProjectReference[]; // Changed from projects array
   footer: IFooterSection;
+  settings?: ISettings;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -196,6 +201,10 @@ const FooterSectionSchema = new Schema<IFooterSection>({
   },
 });
 
+const SettingsSchema = new Schema<ISettings>({
+  backgroundImage: { type: String, default: "" },
+});
+
 const HomePageSchema = new Schema<IHomePage>(
   {
     hero: { type: HeroSectionSchema, required: true },
@@ -204,6 +213,7 @@ const HomePageSchema = new Schema<IHomePage>(
     userExperience: { type: UserExperienceSectionSchema, required: true },
     featuredProjects: { type: [ProjectReferenceSchema], default: [] },
     footer: { type: FooterSectionSchema, required: true },
+    settings: { type: SettingsSchema, default: () => ({ backgroundImage: "" }) },
   },
   {
     timestamps: true,

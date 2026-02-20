@@ -1,37 +1,18 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
+  const strapiBaseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
   const { pathname } = request.nextUrl;
 
-  // Protect admin routes
-  if (pathname.startsWith("/admin")) {
-    if (!token) {
-      const url = new URL("/auth", request.url);
-      url.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(url);
-    }
-  }
-
-  // Redirect to dashboard if already logged in and trying to access auth pages
-  if (
-    pathname.startsWith("/auth/signin") ||
-    pathname.startsWith("/auth/signup")
-  ) {
-    if (token) {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
+  if ((pathname.startsWith("/admin") || pathname.startsWith("/auth")) && strapiBaseUrl) {
+    const normalizedBaseUrl = strapiBaseUrl.replace(/\/+$/, "");
+    return NextResponse.redirect(new URL("/admin", normalizedBaseUrl));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/auth/signin", "/auth/signup"],
+  matcher: ["/admin/:path*", "/auth/:path*"],
 };

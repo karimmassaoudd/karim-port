@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import "./globals.css";
 import "@/components/ProfileCard.css";
 import { Providers } from "./providers";
@@ -57,17 +56,21 @@ export default function RootLayout({
         />
 
         {/* Prevent theme flash: set initial theme class before hydration */}
-        <Script id="theme-init" strategy="beforeInteractive">{`
-          (() => {
-            try {
-              const s = localStorage.getItem('theme');
-              const t = s ?? 'dark';
-              const el = document.documentElement;
-              if (t === 'dark') el.classList.add('dark');
-              else el.classList.remove('dark');
-            } catch {}
-          })();
-        `}</Script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (() => {
+                try {
+                  const s = localStorage.getItem('theme');
+                  const t = s ?? 'dark';
+                  const el = document.documentElement;
+                  if (t === 'dark') el.classList.add('dark');
+                  else el.classList.remove('dark');
+                } catch {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className="bg-[var(--background)] relative">
         <Providers>{children}</Providers>

@@ -41,6 +41,62 @@ function cleanProjectData(project: Record<string, unknown>) {
 // GET all projects or single project by ID
 export async function GET(request: NextRequest) {
   try {
+    const strapiBaseUrl = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    if (strapiBaseUrl) {
+      const normalizedBaseUrl = strapiBaseUrl.replace(/\/+$/, "");
+      const { searchParams } = new URL(request.url);
+      const id = searchParams.get("id");
+      const slug = searchParams.get("slug");
+      const status = searchParams.get("status");
+
+      let url: URL;
+      if (id) {
+        url = new URL(`/api/projects/${id}`, normalizedBaseUrl);
+        url.searchParams.set("populate", "deep");
+      } else {
+        url = new URL("/api/projects", normalizedBaseUrl);
+        url.searchParams.set("populate", "deep");
+        if (slug) {
+          url.searchParams.set("filters[slug][$eq]", slug);
+        }
+        if (status && status !== "all") {
+          url.searchParams.set("filters[status][$eq]", status);
+        }
+      }
+
+      const response = await fetch(url.toString(), { next: { revalidate: 60 } });
+      if (!response.ok) {
+        return NextResponse.json(
+          { success: false, error: "Failed to fetch projects" },
+          { status: response.status },
+        );
+      }
+
+      const payload = await response.json();
+      const toProject = (item: any) =>
+        item?.attributes ? { id: item.id, ...item.attributes } : item;
+
+      if (id) {
+        return NextResponse.json({ success: true, data: toProject(payload?.data) });
+      }
+
+      const list = Array.isArray(payload?.data)
+        ? payload.data.map(toProject)
+        : payload?.data
+          ? [toProject(payload.data)]
+          : [];
+
+      const data = slug ? list[0] ?? null : list;
+      return NextResponse.json({ success: true, data });
+    }
+
+    if (!process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { success: false, error: "Content source is not configured" },
+        { status: 503 },
+      );
+    }
+
     await dbConnect();
 
     const { searchParams } = new URL(request.url);
@@ -109,6 +165,21 @@ export async function GET(request: NextRequest) {
 // POST - Create new project
 export async function POST(request: NextRequest) {
   try {
+    const strapiBaseUrl = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    if (strapiBaseUrl) {
+      return NextResponse.json(
+        { success: false, error: "Projects are managed in Strapi" },
+        { status: 501 },
+      );
+    }
+
+    if (!process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { success: false, error: "Content source is not configured" },
+        { status: 503 },
+      );
+    }
+
     await dbConnect();
 
     const body = await request.json();

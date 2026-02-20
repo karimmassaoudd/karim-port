@@ -255,6 +255,22 @@ const Header = () => {
                 </Link>
               </div>
 
+              {/* Projects Page Link */}
+              <div className="px-3 py-2">
+                <Link
+                  href="/projects"
+                  role="menuitem"
+                  tabIndex={isProjectsOpen ? 0 : -1}
+                  className={`block px-3 py-3 rounded-lg transition-all ${pathname === "/projects" ? "bg-[var(--accent)]/20 text-[var(--accent)] font-semibold border border-[var(--accent)]/40 shadow-md shadow-[var(--accent)]/10" : "text-[var(--text)]/90 hover:bg-[var(--accent)]/10 border border-[var(--accent)]/20 hover:border-[var(--accent)]/30"} border`}
+                  onClick={() => setIsProjectsOpen(false)}
+                >
+                  <span className="font-semibold text-sm">Case Studies</span>
+                  <p className="text-xs text-[var(--secondary-text)] mt-0.5">
+                    Featured projects & case studies
+                  </p>
+                </Link>
+              </div>
+
               {/* Divider */}
               <div className="h-px bg-gradient-to-r from-transparent via-[var(--accent)]/20 to-transparent mx-2" />
 
@@ -381,6 +397,18 @@ const Header = () => {
                       }}
                     >
                       All Projects
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/projects"
+                      className="block px-3 py-2 rounded-md hover:bg-[var(--Secondary-Background)]/60"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        setIsMobileProjectsOpen(false);
+                      }}
+                    >
+                      Case Studies
                     </Link>
                   </li>
                   <li>
