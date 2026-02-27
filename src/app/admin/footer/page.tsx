@@ -48,25 +48,19 @@ export default function FooterPage() {
   });
 
   const fetchData = async () => {
-    console.log("Footer: Starting fetchData...");
     try {
       const response = await fetch("/api/homepage");
-      console.log("Footer: Response status:", response.status);
       const result = await response.json();
-      console.log("Footer: Result:", result);
 
       if (result.success && result.data.footer) {
         setFormData(result.data.footer);
-        console.log("Footer: Data loaded successfully");
       } else {
-        console.error("Footer: No footer data in response");
         setMessage({ type: "error", text: "Failed to load footer data" });
       }
     } catch (error) {
-      console.error("Footer: Failed to fetch footer data:", error);
+      // Silently handle fetch errors
       setMessage({ type: "error", text: "Failed to load footer data" });
     } finally {
-      console.log("Footer: Setting loading to false");
       setLoading(false);
     }
   };
@@ -97,7 +91,7 @@ export default function FooterPage() {
         });
       }
     } catch (error) {
-      console.error("Failed to save footer:", error);
+      // Silently handle save errors
       setMessage({ type: "error", text: "Failed to save footer" });
     } finally {
       setSaving(false);
@@ -325,11 +319,10 @@ export default function FooterPage() {
                       updated[index].isVisible = !updated[index].isVisible;
                       setFormData({ ...formData, socialLinks: updated });
                     }}
-                    className={`px-3 py-2 rounded-lg font-secondary text-xs ${
-                      link.isVisible
+                    className={`px-3 py-2 rounded-lg font-secondary text-xs ${link.isVisible
                         ? "bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30"
                         : "bg-gray-500/20 text-gray-600 dark:text-gray-400 border border-gray-500/30"
-                    }`}
+                      }`}
                   >
                     {link.isVisible ? "Visible" : "Hidden"}
                   </button>
