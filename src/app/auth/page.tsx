@@ -16,7 +16,13 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 function AuthContent() {
   const router = useRouter();
-  const _searchParams = useSearchParams();
+  const searchParams = useSearchParams();
+
+  const callbackUrlParam = searchParams.get("callbackUrl");
+  const callbackUrl =
+    callbackUrlParam && callbackUrlParam.startsWith("/")
+      ? callbackUrlParam
+      : "/admin/dashboard";
 
   const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [checkingSetup, setCheckingSetup] = useState(true);
@@ -54,6 +60,10 @@ function AuthContent() {
   }, []);
 
   const flipCard = (newMode: "signin" | "signup" | "forgot") => {
+    if (newMode === "signup" && !setupMode) {
+      setError("Sign up is disabled for this site.");
+      return;
+    }
     setIsFlipping(true);
     setError("");
     setSuccess("");
@@ -84,7 +94,7 @@ function AuthContent() {
     try {
       if (mode === "signup") {
         const response = await fetch(
-          setupMode ? "/api/setup/create" : "/api/auth/register",
+          setupMode ? "/api/setup/create" : "/api/auth/signup",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -103,7 +113,7 @@ function AuthContent() {
           });
 
           if (result?.ok) {
-            router.push("/admin/dashboard");
+            router.push(callbackUrl);
           } else {
             setError(
               "Account created but sign in failed. Please sign in manually.",
@@ -123,7 +133,7 @@ function AuthContent() {
         if (result?.error) {
           setError(result.error);
         } else {
-          router.push("/admin/dashboard");
+          router.push(callbackUrl);
         }
       } else if (mode === "forgot") {
         // Handle forgot password
@@ -383,27 +393,7 @@ function AuthContent() {
 
                 {mode === "signin" && !setupMode && (
                   <p className="text-sm text-[var(--text)]/70">
-                    Don't have an account?{" "}
-                    <button
-                      type="button"
-                      onClick={() => flipCard("signup")}
-                      className="text-[var(--accent)] hover:text-[var(--accent)]/80 font-semibold transition-colors"
-                    >
-                      Sign Up
-                    </button>
-                  </p>
-                )}
-
-                {mode === "signup" && !setupMode && (
-                  <p className="text-sm text-[var(--text)]/70">
-                    Already have an account?{" "}
-                    <button
-                      type="button"
-                      onClick={() => flipCard("signin")}
-                      className="text-[var(--accent)] hover:text-[var(--accent)]/80 font-semibold transition-colors"
-                    >
-                      Sign In
-                    </button>
+                    Admin access only.
                   </p>
                 )}
               </div>

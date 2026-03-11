@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { MdChevronLeft, MdChevronRight, MdClose } from "react-icons/md";
 
 interface ImageCarouselProps {

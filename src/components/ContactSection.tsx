@@ -105,7 +105,7 @@ export const ContactSection: React.FC = () => {
         );
       }
     } catch (error) {
-      console.error("Form submission error", error);
+      // Silently handle submission errors
       setStatus("error");
       setFeedback("Network error. Please try again.");
     }

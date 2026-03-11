@@ -52,7 +52,7 @@ export default function ProjectSelector({
         setAllProjects(data.data);
       }
     } catch (error) {
-      console.error("Error fetching projects:", error);
+      // Silently handle fetch errors
     }
     setLoading(false);
   };
@@ -175,7 +175,9 @@ export default function ProjectSelector({
                             : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
                         }`}
                       >
-                        {(project as any).status === "published" ? "Published" : "Draft"}
+                        {(project as any).status === "published"
+                          ? "Published"
+                          : "Draft"}
                       </span>
                     </div>
                     <p className="text-sm text-gray-500">/{project.slug}</p>
@@ -266,7 +268,9 @@ export default function ProjectSelector({
                           : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400"
                       }`}
                     >
-                      {(project as any).status === "published" ? "Published" : "Draft"}
+                      {(project as any).status === "published"
+                        ? "Published"
+                        : "Draft"}
                     </span>
                   </div>
                   <p className="text-sm text-gray-500">Order: {index + 1}</p>

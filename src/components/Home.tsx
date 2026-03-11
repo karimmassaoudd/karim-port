@@ -23,7 +23,7 @@ const ProfileCard = dynamic(() => import("@/components/ProfileCard"), {
   ssr: false,
 });
 
-const DarkVeil = dynamic(() => import("@/components/DarkVeil"), {
+const Silk = dynamic(() => import("@/components/Silk"), {
   ssr: false,
 });
 
@@ -72,6 +72,7 @@ export default function Home() {
   const [backgroundColor, setBackgroundColor] = useState<
     [number, number, number]
   >([0.88, 0.87, 0.86]);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [openId, setOpenId] = useState<number | null>(4);
   const [pageData, setPageData] = useState<HomePageData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -86,7 +87,7 @@ export default function Home() {
           setPageData(result.data);
         }
       } catch (error) {
-        console.error("Error fetching page data:", error);
+        // Silently handle fetch errors
       } finally {
         setLoading(false);
       }
@@ -119,6 +120,9 @@ export default function Home() {
     };
 
     const updateBackground = () => {
+      const isDark = document.documentElement.classList.contains("dark");
+      setIsDarkMode(isDark);
+
       const bgValue = getComputedStyle(document.documentElement)
         .getPropertyValue("--background")
         .trim();
@@ -167,28 +171,46 @@ export default function Home() {
       {/* Decorative blur background elements */}
       <div className="pointer-events-none fixed inset-0 z-0">
         {/* Top left accent blur */}
-        <div className="absolute -left-20 top-0 h-96 w-96 rounded-full bg-[var(--accent)]/20 blur-3xl" />
+        <div
+          className="parallax-el absolute -left-20 top-0 h-96 w-96 rounded-full bg-[var(--accent)]/20 blur-3xl"
+          data-scroll-speed="0.05"
+        />
 
         {/* Top right accent blur */}
-        <div className="absolute -right-20 top-[10%] h-96 w-96 rounded-full bg-[var(--accent)]/20 blur-3xl" />
+        <div
+          className="parallax-el absolute -right-20 top-[10%] h-96 w-96 rounded-full bg-[var(--accent)]/20 blur-3xl"
+          data-scroll-speed="0.08"
+        />
 
         {/* Middle left white blur */}
-        <div className="absolute -left-32 top-1/2 h-80 w-80 rounded-full bg-white/8 blur-[140px]" />
+        <div
+          className="parallax-el absolute -left-32 top-1/2 h-80 w-80 rounded-full bg-white/8 blur-[140px]"
+          data-scroll-speed="0.12"
+        />
 
         {/* Middle right accent blur */}
-        <div className="absolute -right-32 top-1/2 h-80 w-80 rounded-full bg-[var(--accent)]/18 blur-3xl" />
+        <div
+          className="parallax-el absolute -right-32 top-1/2 h-80 w-80 rounded-full bg-[var(--accent)]/18 blur-3xl"
+          data-scroll-speed="0.06"
+        />
 
         {/* Bottom left accent blur */}
-        <div className="absolute -left-20 bottom-0 h-96 w-96 rounded-full bg-[var(--accent)]/15 blur-3xl" />
+        <div
+          className="parallax-el absolute -left-20 bottom-0 h-96 w-96 rounded-full bg-[var(--accent)]/15 blur-3xl"
+          data-scroll-speed="0.1"
+        />
 
         {/* Bottom right white blur */}
-        <div className="absolute -right-20 bottom-[5%] h-96 w-96 rounded-full bg-white/10 blur-[140px]" />
+        <div
+          className="parallax-el absolute -right-20 bottom-[5%] h-96 w-96 rounded-full bg-white/10 blur-[140px]"
+          data-scroll-speed="0.15"
+        />
       </div>
 
       <div className="relative z-10">
         <MantisLoader />
-        <Header />
         <PageAnimator>
+          <Header />
           <main ref={rootRef}>
             {/* HERO SECTION */}
             <section
@@ -196,33 +218,34 @@ export default function Home() {
               id="hero"
               className="group relative flex flex-col justify-center h-lvh overflow-visible"
             >
-              {/* Hover veil like before – fades in on hover */}
-              <div className="pointer-events-none absolute -inset-2 transform-gpu z-0 opacity-100">
-                <DarkVeil
-                  hueShift={32}
-                  noiseIntensity={0.02}
-                  scanlineIntensity={0}
-                  scanlineFrequency={0}
-                  warpAmount={0.5}
-                  speed={1.5}
-                  backgroundColor={backgroundColor}
+              {/* Silk Background */}
+              <div
+                className="pointer-events-none absolute -inset-2 transform-gpu z-0 transition-opacity duration-300"
+                style={{ opacity: isDarkMode ? 1 : 0.4 }}
+              >
+                <Silk
+                  speed={5}
+                  scale={1}
+                  color={isDarkMode ? "#3f4652" : backgroundColor}
+                  noiseIntensity={isDarkMode ? 1.5 : 0.8}
+                  rotation={0}
                 />
               </div>
               <div className="text-center relative z-10">
-                <h1 className="hero-fade">{pageData.hero.mainTitle}</h1>
-                <h4 className="portfolio-subtitle hero-fade hero-fade-delay">
+                <h1 className="split-text mb-4">{pageData.hero.mainTitle}</h1>
+                <h4 className="portfolio-subtitle reveal-el mb-8">
                   {pageData.hero.subtitle}
                 </h4>
-                <div className="mt-6 sm:mt-8 hero-fade hero-fade-delay flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
+                <div className="reveal-el flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
                   <a
                     href={pageData.hero.primaryButtonLink}
-                    className="btn btn-primary text-sm py-2 px-6"
+                    className="magnetic-el btn btn-primary text-sm py-2 px-6"
                   >
                     {pageData.hero.primaryButtonText}
                   </a>
                   <a
                     href={pageData.hero.secondaryButtonLink}
-                    className="btn text-sm py-2 px-6 backdrop-blur-md bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition-all duration-300 text-[var(--text)] font-medium text-center"
+                    className="magnetic-el btn text-sm py-2 px-6 backdrop-blur-md bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition-all duration-300 text-[var(--text)] font-medium text-center"
                   >
                     {pageData.hero.secondaryButtonText}
                   </a>
@@ -354,41 +377,69 @@ export default function Home() {
                   </h3>
                 </div>
                 <div>
-                  {experienceData.map((item) => (
-                    <div
-                      key={item.id}
-                      className="ux-item pop-on-scroll border-b border-[var(--secondary-text)] py-3 sm:py-4 transition-all duration-300 ease-in-out"
-                    >
+                  {experienceData.map((item) => {
+                    const isOpen = openId === item.id;
+                    return (
                       <div
-                        className="flex justify-between items-start cursor-pointer"
-                        onClick={() =>
-                          setOpenId(openId === item.id ? null : item.id)
-                        }
+                        key={item.id}
+                        className={`ux-item pop-on-scroll border-b border-[var(--secondary-text)]/30 py-4 sm:py-6 transition-colors duration-300 ease-in-out ${isOpen
+                          ? "bg-[var(--accent)]/5 rounded-lg px-2 sm:px-4 -mx-2 sm:-mx-4 border-transparent"
+                          : "hover:border-[var(--accent)]/50"
+                          }`}
                       >
-                        <div className="flex items-start">
-                          <span className="text-[var(--secondary-text)] mr-3 sm:mr-4 min-w-[20px] text-sm sm:text-base">{`0${item.id}`}</span>
-                          <div>
-                            <h3 className="text-base sm:text-lg text-[var(--text)] body-text-b">
-                              {item.title}
-                            </h3>
-                            <p className="text-[var(--secondary-text)] text-xs sm:text-sm mt-1">
-                              {item.description}
+                        <div
+                          className="flex justify-between items-center cursor-pointer group"
+                          onClick={() => setOpenId(isOpen ? null : item.id)}
+                        >
+                          <div className="flex items-center w-full pr-4">
+                            <span
+                              className={`text-sm sm:text-base mr-4 sm:mr-6 min-w-[30px] font-number transition-colors duration-300 ${isOpen
+                                ? "text-[var(--accent)]"
+                                : "text-[var(--secondary-text)] group-hover:text-[var(--text)]"
+                                }`}
+                            >
+                              {`0${item.id}`}
+                            </span>
+                            <div className="flex-1">
+                              <h3
+                                className={`text-lg sm:text-xl font-primary tracking-wide transition-colors duration-300 ${isOpen
+                                  ? "text-[var(--accent)]"
+                                  : "text-[var(--text)] group-hover:text-[var(--accent)]"
+                                  }`}
+                              >
+                                {item.title}
+                              </h3>
+                              <p className="text-[var(--secondary-text)] text-sm sm:text-base mt-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
+                                {item.description}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${isOpen
+                              ? "border-[var(--accent)] bg-[var(--accent)] text-[var(--card)] rotate-180"
+                              : "border-[var(--secondary-text)]/50 text-[var(--text)] group-hover:border-[var(--accent)] group-hover:text-[var(--accent)]"
+                              }`}
+                          >
+                            <span className="text-xl leading-none">
+                              {isOpen ? "−" : "+"}
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          className={`grid transition-all duration-500 ease-in-out ${isOpen
+                            ? "grid-rows-[1fr] opacity-100 mt-5 sm:mt-6"
+                            : "grid-rows-[0fr] opacity-0 mt-0"
+                            }`}
+                        >
+                          <div className="overflow-hidden pl-[46px] sm:pl-[54px]">
+                            <p className="text-[var(--text)]/90 text-sm sm:text-base leading-relaxed max-w-3xl pb-2">
+                              {item.fullDescription}
                             </p>
                           </div>
                         </div>
-                        <span className="text-[var(--text)] text-2xl transition-transform duration-300">
-                          {openId === item.id ? "−" : "+"}
-                        </span>
                       </div>
-                      <div
-                        className={`transition-all duration-300 ease-in-out ${openId === item.id ? "max-h-[500px] opacity-100 mt-4 pl-8" : "max-h-0 opacity-0 mt-0 pl-8 overflow-hidden"}`}
-                      >
-                        <p className="text-[var(--secondary-text)] text-sm">
-                          {item.fullDescription}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </section>
@@ -396,9 +447,9 @@ export default function Home() {
             {/* CONTACT SECTION */}
             <ContactSection />
           </main>
+          <Projects />
+          <Footer />
         </PageAnimator>
-        <Projects />
-        <Footer />
         <ScrollToTopButton />
       </div>
     </>

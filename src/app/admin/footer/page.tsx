@@ -47,27 +47,27 @@ export default function FooterPage() {
     socialLinks: [],
   });
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch("/api/homepage");
-      const result = await response.json();
-
-      if (result.success && result.data.footer) {
-        setFormData(result.data.footer);
-      } else {
-        setMessage({ type: "error", text: "Failed to load footer data" });
-      }
-    } catch (error) {
-      // Silently handle fetch errors
-      setMessage({ type: "error", text: "Failed to load footer data" });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/homepage");
+        const result = await response.json();
+
+        if (result.success && result.data.footer) {
+          setFormData(result.data.footer);
+        } else {
+          setMessage({ type: "error", text: "Failed to load footer data" });
+        }
+      } catch (_error) {
+        // Silently handle fetch errors
+        setMessage({ type: "error", text: "Failed to load footer data" });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -319,10 +319,11 @@ export default function FooterPage() {
                       updated[index].isVisible = !updated[index].isVisible;
                       setFormData({ ...formData, socialLinks: updated });
                     }}
-                    className={`px-3 py-2 rounded-lg font-secondary text-xs ${link.isVisible
+                    className={`px-3 py-2 rounded-lg font-secondary text-xs ${
+                      link.isVisible
                         ? "bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30"
                         : "bg-gray-500/20 text-gray-600 dark:text-gray-400 border border-gray-500/30"
-                      }`}
+                    }`}
                   >
                     {link.isVisible ? "Visible" : "Hidden"}
                   </button>

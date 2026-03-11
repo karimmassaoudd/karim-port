@@ -47,7 +47,7 @@ export default function AdminProjectsPage() {
         setProjects(result.data);
       }
     } catch (error) {
-      console.error("Error fetching projects:", error);
+      // Silently handle fetch errors
       showMessage("error", "Failed to load projects");
     } finally {
       setLoading(false);

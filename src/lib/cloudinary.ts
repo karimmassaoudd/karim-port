@@ -17,7 +17,11 @@ export async function uploadToCloudinary(
   return new Promise((resolve, reject) => {
     // Set a timeout of 2 minutes
     const timeout = setTimeout(() => {
-      reject(new Error("Upload timeout - please try again with a smaller file or compress it first"));
+      reject(
+        new Error(
+          "Upload timeout - please try again with a smaller file or compress it first",
+        ),
+      );
     }, 120000);
 
     const uploadStream = cloudinary.uploader.upload_stream(

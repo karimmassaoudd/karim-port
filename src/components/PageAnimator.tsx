@@ -31,98 +31,113 @@ export default function PageAnimator({
     }
     try {
       (root as any).dataset.gsapInit = "1";
-    } catch {}
+    } catch { }
 
     const ctx = gsap.context((self) => {
       const select =
         self.selector?.bind(self) ??
         ((q: string) => Array.from(root.querySelectorAll(q)));
 
-      // Hero title scroll animations
-      const heroTitle = root.querySelector("section#hero h1");
-      const heroSubtitle = root.querySelector("section#hero h4");
-
-      if (heroTitle) {
-        gsap.set(heroTitle, { x: 0, opacity: 1 });
-        gsap.to(heroTitle, {
-          x: "150vw",
-          opacity: 0,
-          ease: "power3.in",
-          scrollTrigger: {
-            trigger: root.querySelector("section#hero"),
-            start: "top top",
-            end: "60% top",
-            scrub: 1,
-            markers: false,
-          },
+      // --- 1. Text Splitting (Letter-by-Letter) ---
+      (select(".split-text") as HTMLElement[]).forEach((el) => {
+        const text = el.innerText;
+        el.innerHTML = "";
+        text.split("").forEach((char) => {
+          const span = document.createElement("span");
+          span.innerText = char === " " ? "\u00A0" : char;
+          span.style.display = "inline-block";
+          span.className = "char";
+          el.appendChild(span);
         });
-        console.log("Hero title animation created");
-      } else {
-        console.log("Hero title NOT found");
-      }
 
-      if (heroSubtitle) {
-        gsap.set(heroSubtitle, { x: 0, opacity: 1 });
-        gsap.to(heroSubtitle, {
-          x: "-150vw",
-          opacity: 0,
-          ease: "power3.in",
-          scrollTrigger: {
-            trigger: root.querySelector("section#hero"),
-            start: "top top",
-            end: "60% top",
-            scrub: 1,
-            markers: false,
+        const chars = el.querySelectorAll(".char");
+        gsap.fromTo(
+          chars,
+          { y: 40, opacity: 0, scale: 1.2, skewX: 10 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            skewX: 0,
+            duration: 1.2,
+            stagger: 0.03,
+            ease: "expo.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
           },
-        });
-        console.log("Hero subtitle animation created");
-      } else {
-        console.log("Hero subtitle NOT found");
-      }
+        );
+      });
 
-      // Section reveals (fade+slide) with symmetric up/down behavior
-      (
-        gsap.utils.toArray<HTMLElement>(select("section.reveal-section")) || []
-      ).forEach((sec) => {
+      // --- 2. Magnetic Effect ---
+      const magneticEls = select(".magnetic-el") as HTMLElement[];
+      magneticEls.forEach((el) => {
+        el.addEventListener("mousemove", (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          gsap.to(el, {
+            x: x * 0.4,
+            y: y * 0.4,
+            duration: 0.6,
+            ease: "power2.out",
+          });
+        });
+        el.addEventListener("mouseleave", () => {
+          gsap.to(el, {
+            x: 0,
+            y: 0,
+            duration: 0.8,
+            ease: "elastic.out(1, 0.3)",
+          });
+        });
+      });
+
+      // --- 3. Horizontal Scroll for Projects (REMOVED) ---
+      // Reverted to original grid layout as per user request.
+
+      // --- 4. Refined Section Reveals ---
+      (gsap.utils.toArray<HTMLElement>(select("section.reveal-section")) || []).forEach((sec) => {
         const children = sec.querySelectorAll<HTMLElement>(".reveal-el");
-        gsap.set(sec, { autoAlpha: 0, y: 28 });
-        if (children.length) gsap.set(children, { autoAlpha: 0, y: 20 });
 
-        // Section container
+        // Main section reveal
         gsap.fromTo(
           sec,
-          { y: 28, autoAlpha: 0 },
+          { y: 60, autoAlpha: 0, skewY: 2 },
           {
             y: 0,
             autoAlpha: 1,
-            duration: 0.7,
-            ease: "power2.out",
-            immediateRender: false,
+            skewY: 0,
+            duration: 1.2,
+            ease: "expo.out",
             scrollTrigger: {
               trigger: sec,
-              start: "top 85%",
-              end: "bottom 25%",
+              start: "top 90%",
+              end: "bottom 10%",
               toggleActions: "play reverse play reverse",
             },
           },
         );
 
-        // Child reveals
+        // Child reveals with delay
         if (children.length) {
           gsap.fromTo(
             children,
-            { y: 20, autoAlpha: 0 },
+            { y: 30, autoAlpha: 0, scale: 0.95 },
             {
               y: 0,
               autoAlpha: 1,
-              duration: 0.6,
-              ease: "power2.out",
-              immediateRender: false,
-              stagger: 0.08,
+              scale: 1,
+              duration: 1,
+              ease: "expo.out",
+              stagger: 0.1,
               scrollTrigger: {
                 trigger: sec,
                 start: "top 85%",
-                end: "bottom 25%",
+                end: "bottom 15%",
                 toggleActions: "play reverse play reverse",
               },
             },
@@ -130,44 +145,90 @@ export default function PageAnimator({
         }
       });
 
+      // --- 5. Parallax Elements ---
+      (select(".parallax-el") as HTMLElement[]).forEach((el) => {
+        const speed = parseFloat(el.dataset.scrollSpeed || "0.1");
+        gsap.to(el, {
+          y: () => -window.innerHeight * speed,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      });
+
+      // Hero title scroll animations (keep existing but refine)
+      const heroTitle = root.querySelector("section#hero h1");
+      const heroSubtitle = root.querySelector("section#hero h4");
+
+      if (heroTitle) {
+        gsap.to(heroTitle, {
+          y: -100,
+          opacity: 0,
+          ease: "power2.in",
+          scrollTrigger: {
+            trigger: root.querySelector("section#hero"),
+            start: "top top",
+            end: "40% top",
+            scrub: true,
+          },
+        });
+      }
+
+      if (heroSubtitle) {
+        gsap.to(heroSubtitle, {
+          y: -50,
+          opacity: 0,
+          ease: "power2.in",
+          scrollTrigger: {
+            trigger: root.querySelector("section#hero"),
+            start: "top top",
+            end: "30% top",
+            scrub: true,
+          },
+        });
+      }
+
       // Pop-on-scroll elements: small scale-in
       gsap.set(select(".pop-on-scroll") as HTMLElement[], {
         scale: 0.9,
         autoAlpha: 0,
       });
       ScrollTrigger.batch(select(".pop-on-scroll"), {
-        start: "top 85%",
+        start: "top 90%",
+        end: "bottom 10%",
         onEnter: (batch: Element[]) =>
           gsap.to(batch, {
             scale: 1,
             autoAlpha: 1,
-            duration: 0.5,
-            ease: "back.out(1.6)",
-            stagger: 0.06,
+            duration: 0.8,
+            ease: "expo.out",
+            stagger: 0.1,
           }),
         onLeave: (batch: Element[]) =>
           gsap.to(batch, {
             scale: 0.9,
             autoAlpha: 0,
-            duration: 0.3,
-            ease: "power1.inOut",
-            stagger: 0.05,
+            duration: 0.4,
+            ease: "power2.in",
           }),
         onEnterBack: (batch: Element[]) =>
           gsap.to(batch, {
             scale: 1,
             autoAlpha: 1,
-            duration: 0.45,
-            ease: "back.out(1.4)",
-            stagger: 0.06,
+            duration: 0.8,
+            ease: "expo.out",
+            stagger: 0.1,
           }),
         onLeaveBack: (batch: Element[]) =>
           gsap.to(batch, {
             scale: 0.9,
             autoAlpha: 0,
-            duration: 0.25,
-            ease: "power1.inOut",
-            stagger: 0.05,
+            duration: 0.4,
+            ease: "power2.in",
           }),
       });
     }, root);
@@ -178,7 +239,7 @@ export default function PageAnimator({
       } finally {
         try {
           delete (root as any).dataset.gsapInit;
-        } catch {}
+        } catch { }
       }
     };
   }, [enable]);

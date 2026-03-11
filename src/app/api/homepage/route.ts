@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
 import dbConnect from "@/lib/mongodb";
 import HomePage from "@/models/HomePage";
 import Project from "@/models/Project";
+
+export const runtime = "nodejs";
 
 // Enable static generation with revalidation
 export const revalidate = 60; // Revalidate every 60 seconds
@@ -9,7 +14,8 @@ export const revalidate = 60; // Revalidate every 60 seconds
 // GET - Fetch homepage content
 export async function GET() {
   try {
-    const strapiBaseUrl = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    const strapiBaseUrl =
+      process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
     if (strapiBaseUrl) {
       const normalizedBaseUrl = strapiBaseUrl.replace(/\/+$/, "");
       const url = new URL("/api/homepage", normalizedBaseUrl);
@@ -26,7 +32,7 @@ export async function GET() {
       const payload = await response.json();
       const data = payload?.data?.attributes
         ? { id: payload.data.id, ...payload.data.attributes }
-        : payload?.data ?? null;
+        : (payload?.data ?? null);
 
       return NextResponse.json({ success: true, data });
     }
@@ -172,11 +178,20 @@ export async function GET() {
 // PUT - Update homepage content
 export async function PUT(request: Request) {
   try {
-    const strapiBaseUrl = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    const strapiBaseUrl =
+      process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
     if (strapiBaseUrl) {
       return NextResponse.json(
         { success: false, error: "Homepage is managed in Strapi" },
         { status: 501 },
+      );
+    }
+
+    const session = await getServerSession(authOptions);
+    if (!isAdminSession(session)) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
       );
     }
 

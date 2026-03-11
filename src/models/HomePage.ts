@@ -91,7 +91,11 @@ const ExperienceItemSchema = new Schema<IExperienceItem>({
 });
 
 const ProjectReferenceSchema = new Schema<IProjectReference>({
-  projectId: { type: Schema.Types.ObjectId as any, required: true, ref: "Project" },
+  projectId: {
+    type: Schema.Types.ObjectId as any,
+    required: true,
+    ref: "Project",
+  },
   order: { type: Number, default: 0 },
   isVisible: { type: Boolean, default: true },
 });
@@ -213,7 +217,10 @@ const HomePageSchema = new Schema<IHomePage>(
     userExperience: { type: UserExperienceSectionSchema, required: true },
     featuredProjects: { type: [ProjectReferenceSchema], default: [] },
     footer: { type: FooterSectionSchema, required: true },
-    settings: { type: SettingsSchema, default: () => ({ backgroundImage: "" }) },
+    settings: {
+      type: SettingsSchema,
+      default: () => ({ backgroundImage: "" }),
+    },
   },
   {
     timestamps: true,

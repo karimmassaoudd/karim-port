@@ -59,7 +59,7 @@ export default function SettingsPage() {
         // Don't set the password since it's masked
       }
     } catch (error) {
-      console.error("Error fetching email config:", error);
+      // Silently handle fetch errors
     }
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
@@ -19,9 +19,12 @@ type Project = {
     };
     overview?: {
       tagline?: string;
+      category?: string;
     };
+    [key: string]: any;
   };
   technologies?: string[];
+  liveUrl?: string;
 };
 
 type ProjectReference = {
@@ -45,9 +48,17 @@ const fallbackProjects: Project[] = [
       overview: {
         tagline:
           "A simple, friendly travel website that makes exploring destinations feel fun and effortless.",
+        category: "TRAVEL BOOKING PLATFORM",
       },
+      problemStatement: {
+        enabled: true,
+        heading: "The Challenge",
+        description: "International travelers often find existing trip planning platforms clunky and overwhelming. Our goal was to build a modern, high-performance travel guide.",
+        images: [{ url: "/assets/Travel World Project Background .png" }]
+      }
     },
-    technologies: [],
+    technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+    liveUrl: "#",
   },
   {
     _id: "fallback-2",
@@ -62,9 +73,17 @@ const fallbackProjects: Project[] = [
       overview: {
         tagline:
           "A friendly guide for international students in Eindhoven find housing, get around, manage finances, and discover local events.",
+        category: "STUDENT GUIDE APPLICATION",
+      },
+      problemStatement: {
+        enabled: true,
+        heading: "The Challenge",
+        description: "International students often struggle to find reliable housing and navigate the local financial system in Eindhoven. Triple WAVE aims to bridge this gap with an all-in-one intuitive platform.",
+        images: [{ url: "/assets/Triple Wvee.jpg", alt: "Triple Wave Challenge" }],
       },
     },
-    technologies: [],
+    technologies: ["React", "Node.js", "Express.js"],
+    liveUrl: "#",
   },
   {
     _id: "fallback-3",
@@ -79,89 +98,162 @@ const fallbackProjects: Project[] = [
       overview: {
         tagline:
           "A comprehensive promotional campaign for an emerging folk/indie artist, creating a cohesive brand identity across multiple platforms",
+        category: "ARTIST PORTFOLIO WEBSITE",
       },
+      problemStatement: {
+        enabled: true,
+        heading: "The Challenge",
+        description: "Owen Bryce needed to establish his brand identity and promote his debut EP in a crowded music market. We focused on creating a distinctive visual voice.",
+        images: [{ url: "/assets/owen bryce4.png" }]
+      }
     },
-    technologies: [],
+    technologies: ["React", "GSAP", "Tailwind CSS"],
+    liveUrl: "#",
   },
 ];
 
-const ProjectCard: React.FC<{ project: Project; priority?: boolean }> = ({
-  project,
-  priority = false,
-}) => {
-  const { title, slug, sections, technologies } = project;
+// Spotlight Project Card (Large Featured)
+const SpotlightProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+  const { title, slug, sections, technologies, liveUrl } = project;
   const imageUrl = sections?.hero?.heroImage?.url || "/assets/Room2.avif";
   const description = sections?.overview?.tagline || "";
+  const category = sections?.overview?.category || "PERSONAL PORTFOLIO WEBSITE";
 
   return (
-    <Link
-      href={`/projects/${slug}`}
-      className="relative [perspective:1000px] block"
-    >
-      <div className="tilt-card tilt-card-transform pop-on-scroll w-full max-w-[500px] h-[420px] sm:h-[480px] md:h-[520px] lg:h-[560px] xl:h-[600px] bg-[var(--Secondary-Background)] shadow-xl rounded-xl overflow-hidden relative group cursor-pointer mx-auto">
-        {/* 1. Project Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={imageUrl}
-            alt={title}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            quality={90}
-            priority={priority}
-            loading={priority ? undefined : "lazy"}
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        </div>
+    <div className="pop-on-scroll relative bg-gradient-to-br from-[var(--card)]/80 via-[var(--card)]/60 to-[var(--card)]/40 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden group h-full">
+      {/* Spotlight Badge */}
+      <div className="absolute top-6 right-6 z-30 flex items-center gap-2 bg-[var(--background)]/90 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+        <div className="w-2 h-2 bg-[var(--accent)] rounded-full animate-pulse" />
+        <span className="text-xs font-semibold tracking-wider text-[var(--text)]">
+          Spotlight
+        </span>
+      </div>
 
-        {/* 2. Dark Overlay - always visible on mobile, hover on desktop */}
-        <div className="absolute inset-0 z-10 transition-colors duration-500 ease-in-out bg-black/60 group-hover:bg-black/70" />
+      {/* Background Image */}
+      <div className="relative h-[400px] overflow-hidden">
+        <Image
+          src={imageUrl}
+          alt={title}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          quality={90}
+          priority
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)] via-[var(--card)]/50 to-transparent" />
+      </div>
 
-        {/* 3. Content - Always visible with gradient at bottom */}
-        <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8 text-white">
-          {/* Bottom Content - Always visible */}
-          <div
-            className="
-          opacity-100 visible translate-y-0
-          transition-all duration-300 ease-out"
-          >
-            {/* Project Name */}
-            <h3 className="project-card-title text-2xl sm:text-3xl font-[var(--font-primary)] font-bold mb-2 tracking-tight text-[var(--accent)]">
-              {title.toUpperCase()}
-            </h3>
+      {/* Content */}
+      <div className="p-8 space-y-6">
+        {/* Category Label */}
+        <p className="text-xs font-semibold tracking-[0.2em] text-[var(--secondary-text)] uppercase">
+          {category}
+        </p>
 
-            {/* Description */}
-            <p className="text-xs sm:text-sm font-[var(--font-secondary)] font-light leading-relaxed mb-4 line-clamp-3">
-              {description}
-            </p>
+        {/* Title */}
+        <h3 className="text-3xl font-bold text-[var(--headline)] font-primary">
+          {title}
+        </h3>
 
-            {/* Technologies */}
-            {technologies && technologies.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                {technologies.slice(0, 4).map((tech, index) => (
-                  <span
-                    key={index}
-                    className="text-xs px-2 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            )}
+        {/* Description */}
+        <p className="text-sm text-[var(--text)] leading-relaxed">
+          {description}
+        </p>
 
-            {/* View Project Button */}
-            <span className="text-white font-semibold text-xs tracking-widest inline-flex items-center font-[var(--font-secondary)] group-hover:text-[var(--accent)] transition-colors">
-              VIEW PROJECT{" "}
-              <ArrowRight className="inline w-4 h-4 ml-1 -translate-y-[1px]" />
-            </span>
+        {/* Technologies */}
+        {technologies && technologies.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {technologies.map((tech, index) => (
+              <span
+                key={index}
+                className="text-xs px-3 py-1.5 bg-[var(--Secondary-Background)] text-[var(--text)] rounded-md border border-white/10"
+              >
+                {tech}
+              </span>
+            ))}
           </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="flex gap-4 pt-4">
+          <Link
+            href={`/projects/${slug}`}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--background)] hover:bg-[var(--Secondary-Background)] text-[var(--headline)] rounded-xl border border-white/10 transition-all duration-300 text-sm font-semibold"
+          >
+            View details
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+          {liveUrl && liveUrl !== "#" && (
+            <a
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--accent)]/10 hover:bg-[var(--accent)]/20 text-[var(--accent)] rounded-xl border border-[var(--accent)]/30 transition-all duration-300 text-sm font-semibold"
+            >
+              Live demo
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          )}
         </div>
       </div>
-    </Link>
+    </div>
+  );
+};
+
+// Compact Project Card (Smaller Cards in List)
+const CompactProjectCard: React.FC<{
+  project: Project;
+  index: number;
+  onClick: () => void;
+}> = ({ project, index, onClick }) => {
+  const { title, sections, technologies } = project;
+  const description = sections?.overview?.tagline || "";
+  const category = sections?.overview?.category || "PERSONAL PORTFOLIO WEBSITE";
+
+  return (
+    <button
+      onClick={onClick}
+      className="pop-on-scroll block w-full text-left bg-gradient-to-br from-[var(--card)]/50 via-[var(--card)]/30 to-transparent backdrop-blur-xl rounded-2xl border border-white/10 p-6 hover:border-[var(--accent)]/30 transition-all duration-300 group cursor-pointer"
+    >
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex-1">
+          <p className="text-xs font-semibold tracking-[0.2em] text-[var(--secondary-text)] uppercase mb-3 text-left">
+            {category}
+          </p>
+          <h4 className="text-xl font-bold text-[var(--headline)] font-primary mb-2 group-hover:text-[var(--accent)] transition-colors text-left">
+            {title}
+          </h4>
+        </div>
+        <span className="text-3xl font-bold text-[var(--secondary-text)]/30 font-number">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
+
+      <p className="text-sm text-[var(--text)] leading-relaxed mb-4 line-clamp-2 text-left">
+        {description}
+      </p>
+
+      {/* Technologies */}
+      {technologies && technologies.length > 0 && (
+        <div className="flex flex-wrap gap-2 justify-start">
+          {technologies.slice(0, 3).map((tech, idx) => (
+            <span
+              key={idx}
+              className="text-xs px-2.5 py-1 bg-[var(--Secondary-Background)] text-[var(--text)] rounded-md"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      )}
+    </button>
   );
 };
 
 export const ProjectsSection = () => {
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
+  const [spotlightId, setSpotlightId] = useState<string | null>(null);
 
   // Fetch projects from database
   useEffect(() => {
@@ -193,7 +285,7 @@ export const ProjectsSection = () => {
           }
         }
       } catch (error) {
-        console.error("Error fetching projects:", error);
+        // Silently handle fetch errors
         // Keep fallback projects on error
       }
     };
@@ -201,79 +293,82 @@ export const ProjectsSection = () => {
     fetchProjects();
   }, []);
 
-  // Scroll-based 3D tilt
-  useLayoutEffect(() => {
-    let cancelled = false;
-    let cleanup: (() => void) | undefined;
-    (async () => {
-      const gsapModule = await import("gsap");
-      const stModule = await import("gsap/ScrollTrigger");
-      const gsap = (gsapModule as any).default ?? (gsapModule as any);
-      const ScrollTrigger =
-        (stModule as any).ScrollTrigger ?? (stModule as any).default;
-      gsap.registerPlugin(ScrollTrigger);
+  // Determine the currently spotlighted project
+  const spotlightProject = spotlightId
+    ? projects.find((p) => p._id === spotlightId) || projects[0]
+    : projects[0];
 
-      const ctx = gsap.context(() => {
-        (gsap.utils.toArray(".tilt-card") as HTMLElement[]).forEach(
-          (el: HTMLElement) => {
-            // set initial slight depth
-            gsap.set(el, { z: -60, rotateX: 8 });
-            gsap.to(el, {
-              z: 0,
-              rotateX: 0,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: el,
-                start: "top 85%",
-                end: "top 35%",
-                scrub: 0.5,
-              },
-            });
-          },
-        );
-      });
-
-      if (cancelled) {
-        // If the component unmounted before we finished initializing, revert immediately
-        ctx.revert();
-      } else {
-        cleanup = () => ctx.revert();
-      }
-    })();
-    return () => {
-      cancelled = true;
-      cleanup?.();
-    };
-  }, []);
+  // The other projects are the ones *not* currently spotlighted
+  const otherProjects = projects.filter((p) => p._id !== spotlightProject?._id);
 
   return (
     <section
       id="projects"
-      className="reveal-section py-12 sm:py-16 md:py-20 font-[var(--font-secondary)] min-h-screen relative overflow-hidden max-w-7xl mx-auto"
+      className="reveal-section py-16 sm:py-20 md:py-24 font-[var(--font-secondary)] min-h-screen relative overflow-hidden"
     >
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header mimicking the provided image */}
-        <div className="flex justify-between items-end mb-12 sm:mb-16">
-          <div>
-            {/* My Projects */}
-            <h4 className="mb-2 text-right body-text-b reveal-el">
-              My Projects
-            </h4>
-            <div className="w-155 h-px bg-[var(--secondary-text)] opacity-50 mb-2 reveal-el" />
-            {/* BRINGING IDEAS TO LIFE */}
-            <h3 className="font-primary reveal-el">BRINGING IDEAS TO LIFE</h3>
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="mb-12">
+          {/* Top Label */}
+          <p className="text-xs font-semibold tracking-[0.3em] text-[var(--secondary-text)] uppercase mb-4 reveal-el">
+            PROJECT CAPSULE
+          </p>
+
+          {/* Main Heading */}
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-6">
+            <div>
+              <h2 className="split-text text-4xl sm:text-5xl md:text-6xl font-bold">
+                <span className="text-[var(--secondary-text)]/50 font-light">
+                  Featured
+                </span>{" "}
+                <span className="text-[var(--headline)]">Projects</span>
+              </h2>
+              <p className="text-sm text-[var(--text)] mt-3 reveal-el">
+                Top picks · Live previews · Case study ready
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/#projects"
+                className="magnetic-el px-6 py-3 bg-[var(--background)] hover:bg-[var(--Secondary-Background)] text-[var(--headline)] rounded-xl border border-white/10 transition-all duration-300 text-sm font-semibold"
+              >
+                View all projects
+              </Link>
+              <Link
+                href="/#contact"
+                className="magnetic-el px-6 py-3 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded-xl transition-all duration-300 text-sm font-semibold"
+              >
+                Start a project
+              </Link>
+            </div>
           </div>
+
+          {/* Divider Line */}
+          <div className="h-px bg-gradient-to-r from-[var(--accent)]/30 via-[var(--accent)]/10 to-transparent reveal-el" />
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={project._id}
-              project={project}
-              priority={index === 0}
-            />
-          ))}
+        {/* Projects Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left: Spotlight Project */}
+          {spotlightProject && (
+            <div className="lg:row-span-2 relative transition-all duration-500 ease-in-out">
+              <SpotlightProjectCard project={spotlightProject} />
+            </div>
+          )}
+
+          {/* Right: Other Projects */}
+          <div className="space-y-6">
+            {otherProjects.map((project, index) => (
+              <CompactProjectCard
+                key={project._id}
+                project={project}
+                index={index}
+                onClick={() => setSpotlightId(project._id)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

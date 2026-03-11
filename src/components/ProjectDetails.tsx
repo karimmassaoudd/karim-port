@@ -355,65 +355,82 @@ export default function ProjectDetails({
         </div>
       </section>
 
-      {/* Key Screens - editorial block */}
-      {/* Editorial block: refined layout with smaller image and a clean content card */}
-      <section className="reveal-section relative py-16 md:py-20">
-        <div className="hidden lg:block text-number text-6xl text-[var(--secondary-text)] absolute -right-0 top-6 -rotate-90 select-none pointer-events-none">
+      {/* Redesigned Section 03: The Challenge / Project Summary */}
+      <section className="reveal-section relative py-20 bg-[#070b12] overflow-hidden">
+        <div className="hidden lg:block text-number text-6xl text-[var(--secondary-text)] absolute -right-0 top-6 -rotate-90 select-none pointer-events-none opacity-20">
           03
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Image (smaller on large screens) */}
-            <div className="col-span-12 lg:col-span-5 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5 border border-white/10">
-              <Image
-                src="/assets/Travel World Project Background .png"
-                alt="Travel World"
-                width={1400}
-                height={900}
-                className="w-full h-auto"
-              />
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="flex flex-col lg:flex-row items-stretch gap-12 lg:gap-20">
+
+            {/* Left Side: Large Visual Image */}
+            <div className="flex-1 lg:w-1/2 reveal-el">
+              <div className="relative w-full h-full min-h-[400px] lg:min-h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
+                <Image
+                  src="/assets/Travel World Project Background .png"
+                  alt="Travel World Challenge"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+              </div>
             </div>
-            {/* Content card */}
-            <div className="col-span-12 lg:col-span-7 lg:pl-4">
-              <div className="rounded-2xl border border-black/10 dark:border-white/10 bg-white/80 dark:bg-[var(--Secondary-Background)]/70 shadow-sm p-6">
-                <p className="text-xs tracking-wide text-[var(--secondary-text)] mb-1">
-                  Overview
-                </p>
-                <h3 className="font-primary text-[var(--text)] text-3xl md:text-4xl leading-tight">
-                  A SEAMLESS TRAVEL EXPERIENCE
-                </h3>
-                <div className="w-24 h-1 rounded-full bg-[var(--accent)] mt-3 mb-4" />
-                <p className="text-[var(--text)]/90 leading-relaxed mb-4">
-                  A modern, user-friendly travel website designed to make
-                  discovering new destinations enjoyable and effortless.
-                </p>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-                  <li>
-                    <span className="font-semibold">Role:</span> Web Designer &
-                    Front-End Developer
-                  </li>
-                  <li>
-                    <span className="font-semibold">Type:</span> Marketing
-                    Website (Travel)
-                  </li>
-                  <li className="sm:col-span-2">
-                    <span className="font-semibold">Highlights:</span>{" "}
-                    Destination cards, special offers, testimonials, clear CTAs
-                  </li>
-                </ul>
-                <div className="mt-5">
-                  <a
-                    href="https://travel-website-complete-w0th.onrender.com/index.html"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 bg-[var(--accent)] text-white px-5 py-2.5 rounded-md font-semibold hover:bg-[var(--accent-hover)] transition shadow-md"
-                  >
-                    <ExternalLink size={16} />
-                    <span>Open Live Demo</span>
-                  </a>
+
+            {/* Right Side: Project Summary Card */}
+            <div className="flex-1 lg:w-1/2 flex items-center reveal-el">
+              <div className="w-full bg-[#0a0f18]/80 backdrop-blur-xl border border-white/5 rounded-[2rem] p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative group text-left">
+                {/* Subtle top-left highlight */}
+                <div className="absolute top-0 left-0 w-32 h-32 bg-[var(--accent)]/10 blur-[80px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+
+                <div className="relative z-10 space-y-8">
+                  <div>
+                    <p className="text-[10px] md:text-xs font-semibold tracking-[0.3em] text-[var(--secondary-text)] uppercase mb-3 opacity-60">
+                      Project Summary
+                    </p>
+                    <h2 className="text-3xl md:text-4xl xl:text-5xl text-white font-primary tracking-wide leading-tight uppercase m-0">
+                      The Challenge
+                    </h2>
+                    <div className="w-20 h-[2px] bg-[var(--accent)] mt-4 shadow-[0_0_15px_rgba(var(--accent-rgb),0.5)]" />
+                  </div>
+
+                  <p className="text-sm md:text-base text-[#a0acb9] font-secondary leading-relaxed font-light">
+                    International travelers often find existing trip planning platforms clunky and overwhelming. Our goal was to build a modern, high-performance travel guide that makes inspiration and booking a effortless journey.
+                  </p>
+
+                  {/* Metadata Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-8 pt-4 border-t border-white/5">
+                    <div>
+                      <p className="text-[10px] tracking-widest text-[#a0acb9]/60 font-semibold mb-1 uppercase">Role</p>
+                      <p className="text-sm text-white font-secondary">Lead Designer & Developer</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] tracking-widest text-[#a0acb9]/60 font-semibold mb-1 uppercase">Type</p>
+                      <p className="text-sm text-white font-secondary">E-commerce / Travel</p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <p className="text-[10px] tracking-widest text-[#a0acb9]/60 font-semibold mb-1 uppercase">Highlights</p>
+                      <p className="text-sm text-white font-secondary leading-relaxed">
+                        Destination Cards, Live Booking, Curated Themes, 4K Mockups
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="pt-4">
+                    <a
+                      href="https://travel-website-complete-w0th.onrender.com/index.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-3 px-8 py-3.5 bg-[var(--accent)] text-white rounded-xl text-sm font-bold tracking-wide hover:bg-[#144880] transition-all duration-300 shadow-[0_10px_20px_rgba(var(--accent-rgb),0.2)] hover:shadow-[0_15px_25px_rgba(var(--accent-rgb),0.3)] hover:-translate-y-1"
+                    >
+                      <ExternalLink size={18} />
+                      OPEN LIVE DEMO
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
@@ -572,7 +589,7 @@ export default function ProjectDetails({
                   key={`${currentTheme.id}-b`}
                   src={
                     currentTheme.images[
-                      (currentImageIndex + 1) % currentTheme.images.length
+                    (currentImageIndex + 1) % currentTheme.images.length
                     ]
                   }
                   alt={`${currentTheme.title} - Image ${((currentImageIndex + 1) % currentTheme.images.length) + 1}`}

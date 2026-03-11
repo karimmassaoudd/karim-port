@@ -21,6 +21,8 @@ const AdminThemeToggle = dynamic(
   },
 );
 
+const Aurora = dynamic(() => import("@/components/Aurora"), { ssr: false });
+
 interface FooterData {
   ownerName: string;
   ownerTitle: string;
@@ -91,7 +93,8 @@ export default function AdminLayout({
           }
         }
       } catch (error) {
-        console.error("Failed to fetch footer data:", error);
+        // Silently handle fetch errors to prevent console flooding
+        // Error is expected on initial load if database isn't configured
       }
     };
     fetchFooterData();
@@ -139,23 +142,41 @@ export default function AdminLayout({
   }
 
   return (
-    <div 
-      className="min-h-screen bg-[var(--background)] transition-colors duration-300 relative"
-      style={{
-        backgroundImage: settings.backgroundImage 
-          ? `url(${settings.backgroundImage})` 
-          : 'none',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
-      }}
+    <div
+      className="min-h-screen bg-[var(--background)] transition-colors duration-300 relative overflow-hidden"
     >
+      {/* Global Admin Animated Background */}
+      <div className="fixed inset-0 z-0 opacity-100 pointer-events-none">
+
+        {/* Top Aurora */}
+        <div className="absolute top-0 left-0 w-full h-[60vh]">
+          <Aurora
+            colorStops={["#1e3a8a", "#60a5fa", "#6b7280"]}
+            blend={0.5}
+            amplitude={1.2}
+            speed={1}
+          />
+        </div>
+
+        {/* Bottom Aurora (Flipped) */}
+        <div className="absolute bottom-0 left-0 w-full h-[60vh] rotate-180">
+          <Aurora
+            colorStops={["#60a5fa", "#6b7280", "#1e3a8a"]}
+            blend={0.5}
+            amplitude={1.5}
+            speed={1.2}
+          />
+        </div>
+
+        {/* Frost / Blur Overlay overlaying the animations */}
+        <div className="absolute inset-0 bg-white/5 dark:bg-black/10 backdrop-blur-[45px] z-10"></div>
+      </div>
+
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full backdrop-blur-2xl bg-white/90 dark:bg-[var(--card)]/90 shadow-2xl border-r border-white/30 dark:border-white/20 z-50 transition-all duration-300 ease-in-out ${
-          sidebarOpen ? "w-64" : "w-20"
-        }`}
+        className={`fixed top-0 left-0 h-full backdrop-blur-2xl bg-white/90 dark:bg-[var(--card)]/90 shadow-2xl border-r border-white/30 dark:border-white/20 z-50 transition-all duration-300 ease-in-out ${sidebarOpen ? "w-64" : "w-20"
+          }`}
       >
         {/* Logo/Brand */}
         <div className="h-16 flex items-center px-4 border-b border-white/20 dark:border-white/10">
@@ -201,11 +222,10 @@ export default function AdminLayout({
               <Link
                 key={item.path}
                 href={item.path}
-                className={`nav-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${
-                  isActive
-                    ? "bg-[var(--accent)]/10 backdrop-blur-md text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm"
-                    : "text-headline hover:bg-white/40 dark:hover:bg-white/10 backdrop-blur-sm"
-                }`}
+                className={`nav-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${isActive
+                  ? "bg-[var(--accent)]/10 backdrop-blur-md text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm"
+                  : "text-headline hover:bg-white/40 dark:hover:bg-white/10 backdrop-blur-sm"
+                  }`}
               >
                 <Icon
                   className={`text-xl ${isActive ? "scale-110" : "group-hover:scale-110"} transition-transform`}
@@ -345,20 +365,20 @@ export default function AdminLayout({
                           "twitter",
                           "instagram",
                         ].includes(link.icon)) && (
-                        <svg
-                          className="w-3.5 h-3.5 text-headline"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                          />
-                        </svg>
-                      )}
+                          <svg
+                            className="w-3.5 h-3.5 text-headline"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                            />
+                          </svg>
+                        )}
                     </a>
                   ))}
               </div>
@@ -405,9 +425,8 @@ export default function AdminLayout({
       {/* Main Content */}
       <div
         ref={contentRef}
-        className={`transition-all duration-300 ${
-          sidebarOpen ? "ml-64" : "ml-20"
-        }`}
+        className={`transition-all duration-300 ${sidebarOpen ? "ml-64" : "ml-20"
+          }`}
       >
         {/* Top Header */}
         <header className="h-16 backdrop-blur-2xl bg-white/90 dark:bg-[var(--card)]/90 shadow-sm border-b border-white/30 dark:border-white/20 sticky top-0 z-40">

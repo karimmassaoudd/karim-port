@@ -1,0 +1,70 @@
+
+> karim-port@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.9
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.0s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/39) ...
+   Generating static pages (9/39) 
+   Generating static pages (19/39) 
+   Generating static pages (29/39) 
+ ✓ Generating static pages (39/39)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS  Revalidate  Expire
+┌ ○ /                                    8.22 kB         178 kB          1m      1y
+├ ○ /_not-found                             1 kB         103 kB
+├ ○ /about                                 203 B         170 kB
+├ ○ /admin                                 176 B         103 kB
+├ ○ /admin/dashboard                     7.49 kB         129 kB
+├ ○ /admin/footer                        4.47 kB         111 kB
+├ ○ /admin/messages                        176 B         103 kB
+├ ○ /admin/projects                      2.66 kB         124 kB
+├ ƒ /admin/projects/[id]                 28.7 kB         150 kB
+├ ○ /admin/settings                      7.12 kB         151 kB
+├ ƒ /api/auth/[...nextauth]                176 B         103 kB
+├ ƒ /api/auth/change-password              176 B         103 kB
+├ ƒ /api/auth/forgot-password              176 B         103 kB
+├ ƒ /api/auth/reset-password               176 B         103 kB
+├ ƒ /api/auth/signup                       176 B         103 kB
+├ ƒ /api/contact                           176 B         103 kB
+├ ƒ /api/email-config                      176 B         103 kB
+├ ƒ /api/homepage                          176 B         103 kB
+├ ƒ /api/init-footer                       176 B         103 kB
+├ ƒ /api/projects                          176 B         103 kB
+├ ƒ /api/projects/upload-image             176 B         103 kB
+├ ƒ /api/setup/create                      176 B         103 kB
+├ ƒ /api/setup/status                      176 B         103 kB
+├ ƒ /api/upload                            176 B         103 kB
+├ ○ /auth                                8.38 kB         165 kB
+├ ○ /auth/error                          1.24 kB         104 kB
+├ ○ /auth/forgot-password                  573 B         103 kB
+├ ○ /auth/reset-password                 2.06 kB         141 kB
+├ ○ /auth/signin                           569 B         103 kB
+├ ○ /auth/signup                           572 B         103 kB
+├ ○ /contact                               176 B         103 kB
+├ ○ /experience                            176 B         103 kB
+├ ○ /project-details                     7.63 kB         197 kB
+├ ○ /project-Owen-Bryce                  6.58 kB         177 kB
+├ ○ /project-Triple-Wave                 5.81 kB         195 kB
+├ ○ /projects                            2.61 kB         173 kB
+├ ƒ /projects/[slug]                     5.88 kB         176 kB
+├ ○ /projects/travel-world               6.64 kB         179 kB
+└ ○ /setup                               3.21 kB         138 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/43d3624b-f201411be1781be0.js  54.2 kB
+  ├ chunks/7817-6069914bb070ea22.js      46.1 kB
+  └ other shared chunks (total)          2.14 kB
+
+
+ƒ Middleware                             33.9 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

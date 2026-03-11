@@ -1,11 +1,24 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
 import { deleteFromCloudinary, uploadToCloudinary } from "@/lib/cloudinary";
+
+export const runtime = "nodejs";
 
 // Increase route timeout to 2 minutes for large uploads
 export const maxDuration = 120;
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!isAdminSession(session)) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const formData = await request.formData();
     const files = formData.getAll("file") as File[];
 
@@ -64,16 +77,24 @@ export async function POST(request: NextRequest) {
           filename: file.name,
           alt: file.name.replace(/\.[^/.]+$/, ""), // Remove file extension for alt text
         });
-      } catch (uploadError: any) {
+      } catch (uploadError: unknown) {
         console.error(`Upload error for ${file.name}:`, uploadError);
-        
+
         let errorMessage = "Failed to upload file";
-        if (uploadError?.message) {
-          errorMessage = uploadError.message;
-        } else if (uploadError?.error?.message) {
-          errorMessage = uploadError.error.message;
+        if (uploadError && typeof uploadError === "object") {
+          const message = (uploadError as { message?: unknown }).message;
+          if (typeof message === "string") {
+            errorMessage = message;
+          } else {
+            const nested = (uploadError as { error?: unknown }).error;
+            if (nested && typeof nested === "object") {
+              const nestedMessage = (nested as { message?: unknown }).message;
+              if (typeof nestedMessage === "string")
+                errorMessage = nestedMessage;
+            }
+          }
         }
-        
+
         errors.push({
           filename: file.name,
           error: errorMessage,
@@ -106,6 +127,14 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!isAdminSession(session)) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const publicId = searchParams.get("publicId");
 

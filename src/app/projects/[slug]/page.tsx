@@ -20,7 +20,10 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
   const fetchProject = useCallback(async () => {
     try {
-      const response = await fetch(`/api/projects?slug=${resolvedParams.slug}`);
+      // Add timestamp to prevent caching the old response
+      const response = await fetch(
+        `/api/projects?slug=${resolvedParams.slug}&t=${Date.now()}`,
+      );
       const result = await response.json();
 
       if (result.success) {
@@ -43,7 +46,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
   useEffect(() => {
     fetchProject();
-  }, [resolvedParams.slug]);
+  }, [fetchProject]);
 
   if (loading) {
     return (

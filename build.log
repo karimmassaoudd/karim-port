@@ -1,0 +1,31 @@
+
+> karim-port@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.9
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/app/admin/footer/page.tsx
+Error:   [31mx[0m Expected unicode escape
+    ,-[[36;1;4mC:\Users\karim\Documents\Second Year Fontys\Frontend 1 Semester\Karimmassaoud_Portfolio\karim-port\src\app\admin\footer\page.tsx[0m:58:1]
+ [2m55[0m |       if (result.success && result.data.footer) {
+ [2m56[0m |         setFormData(result.data.footer);
+ [2m57[0m |       } else {
+ [2m58[0m |         setMessage({ type: "error", text: "Failed to load footer data" });\n      }
+    : [35;1m                                                                          ^[0m
+ [2m59[0m |     } catch (error) {
+ [2m60[0m |       // Silently handle fetch errors
+ [2m60[0m |       setMessage({ type: "error", text: "Failed to load footer data" });
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/admin/footer/page.tsx
+
+
+> Build failed because of webpack errors

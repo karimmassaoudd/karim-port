@@ -267,27 +267,30 @@ const HeroSectionSchema = new Schema<IHeroSection>({
   category: { type: String, required: false },
 });
 
-const ProjectOverviewSectionSchema = new Schema<IProjectOverviewSection>({
-  enabled: { type: Boolean, default: true },
-  role: { type: String },
-  type: { type: String, default: undefined },  // 'type' is reserved in Mongoose, must be explicit
-  highlights: { type: [String], default: [] },
-  image: ProjectImageSchema,  // Embedded subdocument
-  // Legacy fields
-  client: { type: String },
-  timeline: { type: String },
-  team: { type: String },
-  description: { type: String, required: false },
-  keyFeatures: { type: [String], default: [] },
-  overviewImage: ProjectImageSchema,  // Embedded subdocument
-  subsections: [
-    {
-      title: { type: String },
-      content: { type: String },
-      image: ProjectImageSchema,
-    },
-  ],
-}, { strict: false });
+const ProjectOverviewSectionSchema = new Schema<IProjectOverviewSection>(
+  {
+    enabled: { type: Boolean, default: true },
+    role: { type: String },
+    type: { type: String, default: undefined }, // 'type' is reserved in Mongoose, must be explicit
+    highlights: { type: [String], default: [] },
+    image: ProjectImageSchema, // Embedded subdocument
+    // Legacy fields
+    client: { type: String },
+    timeline: { type: String },
+    team: { type: String },
+    description: { type: String, required: false },
+    keyFeatures: { type: [String], default: [] },
+    overviewImage: ProjectImageSchema, // Embedded subdocument
+    subsections: [
+      {
+        title: { type: String },
+        content: { type: String },
+        image: ProjectImageSchema,
+      },
+    ],
+  },
+  { strict: false },
+);
 
 const ProblemStatementSectionSchema = new Schema<IProblemStatementSection>({
   enabled: { type: Boolean, default: false },

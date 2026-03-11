@@ -1,15 +1,17 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
 import dbConnect from "@/lib/mongodb";
 import EmailConfig from "@/models/EmailConfig";
+
+export const runtime = "nodejs";
 
 // GET email configuration
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-
-    if (!session) {
+    if (!isAdminSession(session)) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 },
@@ -56,8 +58,7 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-
-    if (!session) {
+    if (!isAdminSession(session)) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 },

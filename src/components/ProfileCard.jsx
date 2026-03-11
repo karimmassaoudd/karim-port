@@ -240,7 +240,9 @@ const ProfileCardComponent = ({
               );
             }
           })
-          .catch((err) => console.error(err));
+          .catch((err) => {
+            // Silently handle permission errors
+          });
       } else {
         window.addEventListener("deviceorientation", deviceOrientationHandler);
       }

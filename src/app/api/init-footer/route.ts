@@ -1,10 +1,23 @@
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
 import dbConnect from "@/lib/mongodb";
+
+export const runtime = "nodejs";
 
 // POST - Initialize footer data in existing document
 export async function POST() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!isAdminSession(session)) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     await dbConnect();
 
     const defaultFooter = {

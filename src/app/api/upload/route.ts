@@ -2,15 +2,52 @@ import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
+
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!isAdminSession(session)) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
     if (!file) {
       return NextResponse.json(
         { success: false, error: "No file uploaded" },
+        { status: 400 },
+      );
+    }
+
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+      "image/avif",
+    ];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { success: false, error: "Unsupported file type" },
+        { status: 400 },
+      );
+    }
+
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        { success: false, error: "File size exceeds 5MB limit" },
         { status: 400 },
       );
     }

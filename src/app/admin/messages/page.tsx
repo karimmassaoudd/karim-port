@@ -1,5 +1,9 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
 
 export const runtime = "nodejs"; // server component with Node APIs
 
@@ -21,6 +25,11 @@ async function getMessages() {
 }
 
 export default async function MessagesPage() {
+  const session = await getServerSession(authOptions);
+  if (!isAdminSession(session)) {
+    redirect("/auth");
+  }
+
   const messages = await getMessages();
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

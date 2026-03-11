@@ -1,6 +1,10 @@
+import crypto from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { type NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
 
 export const runtime = "nodejs"; // ensure Node APIs (fs) are available
 
@@ -21,6 +25,8 @@ interface ContactItem {
   message: string;
   phone?: string;
   createdAt: string;
+  userAgent?: string;
+  ip?: string;
 }
 
 // Basic validation helper
@@ -55,7 +61,7 @@ export async function POST(req: NextRequest) {
     const raw = await fs.readFile(dataFile, "utf8");
     const list = JSON.parse(raw || "[]") as ContactItem[];
 
-    const item = {
+    const item: ContactItem = {
       id: crypto.randomUUID(),
       name: String(body.name).trim(),
       email: String(body.email).trim(),
@@ -81,6 +87,14 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!isAdminSession(session)) {
+      return NextResponse.json(
+        { ok: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const raw = await fs.readFile(dataFile, "utf8").catch(() => "[]");
     const list = JSON.parse(raw || "[]");
     return NextResponse.json({ ok: true, list });

@@ -1,5 +1,23 @@
 "use client";
+import {
+  closestCenter,
+  DndContext,
+  type DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { use, useCallback, useEffect, useState } from "react";
@@ -12,41 +30,24 @@ import {
   MdDesignServices,
   MdDragIndicator,
   MdDraw,
+  MdExplore,
+  MdFormatQuote,
   MdHome,
   MdImage,
   MdInfo,
   MdLightbulb,
+  MdLocalOffer,
   MdPalette,
   MdPhone,
   MdPreview,
   MdSave,
   MdSwapVert,
+  MdTouchApp,
   MdTrendingUp,
   MdWarning,
-  MdTouchApp,
-  MdFormatQuote,
-  MdExplore,
-  MdLocalOffer,
 } from "react-icons/md";
-import { Button } from "@/components/ui/button";
 import SectionOrderManager from "@/components/admin/SectionOrderManager";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { Button } from "@/components/ui/button";
 
 const Toast = dynamic(() => import("@/components/Toast"), { ssr: false });
 
@@ -89,11 +90,10 @@ function SortableNavItem({
       <button
         aria-label={`Navigate to ${label} section`}
         onClick={onClick}
-        className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all duration-200 text-left group relative overflow-hidden ${
-          isActive
-            ? "bg-gradient-to-r from-[var(--accent)] to-[var(--accent)]/80 text-white shadow-lg shadow-[var(--accent)]/20"
-            : "text-[var(--text)] hover:bg-[var(--surface)]/50 hover:shadow-md"
-        } ${isDragging ? "opacity-50" : ""}`}
+        className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all duration-200 text-left group relative overflow-hidden ${isActive
+          ? "bg-gradient-to-r from-[var(--accent)] to-[var(--accent)]/80 text-white shadow-lg shadow-[var(--accent)]/20"
+          : "text-[var(--text)] hover:bg-[var(--surface)]/50 hover:shadow-md"
+          } ${isDragging ? "opacity-50" : ""}`}
       >
         {isActive && (
           <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-50"></div>
@@ -103,11 +103,10 @@ function SortableNavItem({
         <div
           {...attributes}
           {...listeners}
-          className={`cursor-grab active:cursor-grabbing p-1 rounded transition-colors ${
-            isActive
-              ? "text-white/70 hover:text-white"
-              : "text-[var(--text-secondary)] hover:text-[var(--accent)]"
-          }`}
+          className={`cursor-grab active:cursor-grabbing p-1 rounded transition-colors ${isActive
+            ? "text-white/70 hover:text-white"
+            : "text-[var(--text-secondary)] hover:text-[var(--accent)]"
+            }`}
           onClick={(e) => e.stopPropagation()}
         >
           <MdDragIndicator className="w-4 h-4" />
@@ -115,18 +114,16 @@ function SortableNavItem({
 
         {/* Icon */}
         <span
-          className={`relative z-10 transition-transform duration-200 ${
-            isActive ? "text-white" : "text-[var(--accent)]"
-          }`}
+          className={`relative z-10 transition-transform duration-200 ${isActive ? "text-white" : "text-[var(--accent)]"
+            }`}
         >
           {icon}
         </span>
 
         {/* Label */}
         <span
-          className={`relative z-10 flex-1 text-sm font-semibold transition-all ${
-            isActive ? "text-white" : "text-[var(--text)]"
-          }`}
+          className={`relative z-10 flex-1 text-sm font-semibold transition-all ${isActive ? "text-white" : "text-[var(--text)]"
+            }`}
         >
           {label}
         </span>
@@ -134,11 +131,10 @@ function SortableNavItem({
         {/* Status Indicator */}
         {isEnabled !== undefined && (
           <span
-            className={`relative z-10 w-2 h-2 rounded-full transition-all ${
-              isEnabled
-                ? "bg-green-400 shadow-lg shadow-green-400/50"
-                : "bg-gray-500/50"
-            }`}
+            className={`relative z-10 w-2 h-2 rounded-full transition-all ${isEnabled
+              ? "bg-green-400 shadow-lg shadow-green-400/50"
+              : "bg-gray-500/50"
+              }`}
           />
         )}
       </button>
@@ -164,11 +160,10 @@ function NavItem({
     <button
       onClick={onClick}
       aria-label={`Navigate to ${label} section`}
-      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left group relative overflow-hidden ${
-        isActive
-          ? "bg-gradient-to-r from-[var(--accent)] to-[var(--accent)]/80 text-white shadow-lg shadow-[var(--accent)]/20 scale-[1.02]"
-          : "text-[var(--text)] hover:bg-[var(--surface)]/50 hover:shadow-md hover:scale-[1.01] hover:border-[var(--border)]"
-      }`}
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left group relative overflow-hidden ${isActive
+        ? "bg-gradient-to-r from-[var(--accent)] to-[var(--accent)]/80 text-white shadow-lg shadow-[var(--accent)]/20 scale-[1.02]"
+        : "text-[var(--text)] hover:bg-[var(--surface)]/50 hover:shadow-md hover:scale-[1.01] hover:border-[var(--border)]"
+        }`}
     >
       {isActive && (
         <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-50"></div>
@@ -185,11 +180,10 @@ function NavItem({
       </span>
       {isEnabled !== undefined && (
         <span
-          className={`relative z-10 w-2 h-2 rounded-full transition-all ${
-            isEnabled
-              ? "bg-green-400 shadow-lg shadow-green-400/50 animate-pulse"
-              : "bg-gray-500/50"
-          }`}
+          className={`relative z-10 w-2 h-2 rounded-full transition-all ${isEnabled
+            ? "bg-green-400 shadow-lg shadow-green-400/50 animate-pulse"
+            : "bg-gray-500/50"
+            }`}
         />
       )}
     </button>
@@ -197,8 +191,8 @@ function NavItem({
 }
 
 export default function ProjectEditor({ params }: ProjectEditorProps) {
-  const resolvedParams = use(params);
   const router = useRouter();
+  const resolvedParams = use(params);
   const isNew = resolvedParams.id === "new";
 
   const [loading, setLoading] = useState(!isNew);
@@ -232,7 +226,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
     try {
       return JSON.parse(text);
     } catch (error) {
-      console.error("JSON parse error:", error, "Response text:", text);
+      // Silently handle JSON parse errors
       throw new Error("Invalid JSON response from server");
     }
   };
@@ -488,9 +482,6 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
           ];
         }
 
-        // Debug: Log overview data from server
-        console.log("Fetched overview data:", data.sections?.overview);
-
         setFormData(data);
         // Sync section order state with loaded data
         if (data.sectionOrder && Array.isArray(data.sectionOrder)) {
@@ -567,8 +558,14 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
       if (result.success && result.uploads && result.uploads.length > 0) {
         // Update the appropriate field with the first uploaded image
         const upload = result.uploads[0];
-        updateNestedField(field, { url: upload.url, alt: upload.alt || file.name });
-        showMessage("success", "Image uploaded! Remember to click 'Save Project' to persist changes.");
+        updateNestedField(field, {
+          url: upload.url,
+          alt: upload.alt || file.name,
+        });
+        showMessage(
+          "success",
+          "Image uploaded! Remember to click 'Save Project' to persist changes.",
+        );
       } else {
         showMessage("error", result.error || "Upload failed");
       }
@@ -602,7 +599,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
 
   const addArrayItem = (path: string, defaultValue: any) => {
     const current = getNestedValue(path);
-    updateNestedField(path, [...(Array.isArray(current) ? current : []), defaultValue]);
+    updateNestedField(path, [
+      ...(Array.isArray(current) ? current : []),
+      defaultValue,
+    ]);
   };
 
   const removeArrayItem = (path: string, index: number) => {
@@ -736,14 +736,6 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                     oldIndex,
                     newIndex,
                   );
-                  console.log("🔄 Reordering sections:", {
-                    from: active.id,
-                    to: over.id,
-                    oldIndex,
-                    newIndex,
-                    oldOrder: sectionOrder,
-                    newOrder,
-                  });
                   setSectionOrder(newOrder);
                   setFormData((prev) => ({ ...prev, sectionOrder: newOrder }));
                 }
@@ -766,7 +758,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                       },
                       hoverExploration: {
                         icon: <MdTouchApp size={18} />,
-                        label: "Hover Tiles",
+                        label: "Overview Grid",
                         tab: "hoverExploration",
                       },
                       overview: {
@@ -851,7 +843,9 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                         icon={config.icon}
                         label={config.label}
                         isActive={activeTab === config.tab}
-                        isEnabled={(formData.sections as any)[sectionKey]?.enabled}
+                        isEnabled={
+                          (formData.sections as any)[sectionKey]?.enabled
+                        }
                         onClick={() => setActiveTab(config.tab)}
                       />
                     );
@@ -875,11 +869,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                     {isNew ? "Create Project" : "Edit Project"}
                   </h1>
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      formData.status === "published"
-                        ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                        : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                    }`}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${formData.status === "published"
+                      ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                      : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                      }`}
                   >
                     {formData.status === "published" ? "Published" : "Draft"}
                   </span>
@@ -1008,7 +1001,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                         Thumbnail Image
                       </label>
                       <div className="flex gap-4 items-start">
-                        {formData.thumbnail.url && (
+                        {formData?.thumbnail?.url && (
                           <img
                             src={formData.thumbnail.url}
                             alt="Thumbnail"
@@ -1039,7 +1032,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           </Button>
                           <input
                             type="text"
-                            value={formData.thumbnail.alt}
+                            value={formData?.thumbnail?.alt || ""}
                             onChange={(e) =>
                               updateNestedField("thumbnail.alt", e.target.value)
                             }
@@ -1185,11 +1178,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           !formData.sections.hero.enabled,
                         )
                       }
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        formData.sections.hero.enabled
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-gray-500/20 text-gray-400"
-                      }`}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium ${formData.sections.hero.enabled
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-gray-500/20 text-gray-400"
+                        }`}
                     >
                       {formData.sections.hero.enabled ? "Enabled" : "Disabled"}
                     </button>
@@ -1311,11 +1303,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           !formData.sections.overview.enabled,
                         )
                       }
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        formData.sections.overview.enabled
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-gray-500/20 text-gray-400"
-                      }`}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium ${formData.sections.overview.enabled
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-gray-500/20 text-gray-400"
+                        }`}
                     >
                       {formData.sections.overview.enabled
                         ? "Enabled"
@@ -1383,7 +1374,8 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                                 aria-label={`Highlight ${idx + 1}`}
                                 onChange={(e) => {
                                   const newHighlights = [
-                                    ...(formData.sections.overview.highlights || []),
+                                    ...(formData.sections.overview.highlights ||
+                                      []),
                                   ];
                                   newHighlights[idx] = e.target.value;
                                   updateNestedField(
@@ -1428,7 +1420,8 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           Overview Image
                         </label>
                         <p className="text-xs text-[var(--text-secondary)] mb-3">
-                          Main image for the overview section (like Travel World's bay photo)
+                          Main image for the overview section (like Travel
+                          World's bay photo)
                         </p>
                         {formData.sections.overview.image?.url && (
                           <img
@@ -1441,10 +1434,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           type="file"
                           accept="image/*"
                           onChange={(e) =>
-                            handleImageUpload(
-                              e,
-                              "sections.overview.image",
-                            )
+                            handleImageUpload(e, "sections.overview.image")
                           }
                           className="hidden"
                           id="overview-image"
@@ -1474,7 +1464,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                 <div className="bg-[var(--surface)] rounded-lg border border-[var(--border)] p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-semibold text-[var(--text)]">
-                      Hover Exploration Section
+                      Overview Grid
                     </h2>
                     <button
                       onClick={() =>
@@ -1483,11 +1473,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           !formData.sections.hoverExploration.enabled,
                         )
                       }
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        formData.sections.hoverExploration.enabled
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-gray-500/20 text-gray-400"
-                      }`}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium ${formData.sections.hoverExploration.enabled
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-gray-500/20 text-gray-400"
+                        }`}
                     >
                       {formData.sections.hoverExploration.enabled
                         ? "Enabled"
@@ -1514,7 +1503,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                               e.target.value,
                             )
                           }
-                          placeholder="Explore by hovering"
+                          placeholder="What We Offer"
                           className="w-full px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)]"
                         />
                       </div>
@@ -1703,11 +1692,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           !formData.sections.problemStatement.enabled,
                         )
                       }
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        formData.sections.problemStatement.enabled
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-gray-500/20 text-gray-400"
-                      }`}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium ${formData.sections.problemStatement.enabled
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-gray-500/20 text-gray-400"
+                        }`}
                     >
                       {formData.sections.problemStatement.enabled
                         ? "Enabled"
@@ -1867,14 +1855,11 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                                 showMessage(
                                   "success",
                                   result.message ||
-                                    `${files.length} images uploaded!`,
+                                  `${files.length} images uploaded!`,
                                 );
 
                                 if (result.errors && result.errors.length > 0) {
-                                  console.warn(
-                                    "Some uploads failed:",
-                                    result.errors,
-                                  );
+                                  // Silently handle partial upload failures
                                 }
                               } else {
                                 showMessage(
@@ -1883,7 +1868,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                                 );
                               }
                             } catch (error) {
-                              console.error("Upload error:", error);
+                              // Silently handle upload errors
                               showMessage("error", "Upload failed");
                             } finally {
                               setUploading(false);
@@ -1907,6 +1892,35 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           <MdAdd size={18} />
                           {uploading ? "Uploading..." : "Add Images (Multiple)"}
                         </Button>
+                      </div>
+
+                      {/* Live Preview of the Redesigned Section */}
+                      <div className="mt-12 pt-10 border-t border-[var(--border)]">
+                        <div className="flex items-center gap-2 mb-6 text-[var(--text-secondary)]">
+                          <MdPreview size={18} className="text-[var(--accent)]" />
+                          <span className="text-xs font-bold uppercase tracking-widest">Visual Style Preview</span>
+                        </div>
+
+                        <div className="rounded-3xl overflow-hidden border border-white/5 shadow-2xl bg-[#070b12] p-8 max-w-4xl mx-auto">
+                          <div className="flex flex-col lg:flex-row gap-8 items-center">
+                            <div className="flex-1 lg:w-1/2 aspect-video relative rounded-2xl overflow-hidden bg-[#10141b] border border-white/5">
+                              {formData.sections.problemStatement.images?.[0]?.url ? (
+                                <Image src={formData.sections.problemStatement.images[0].url} alt="Preview" fill className="object-cover" />
+                              ) : (
+                                <div className="absolute inset-0 flex items-center justify-center opacity-20"><MdImage size={40} /></div>
+                              )}
+                            </div>
+                            <div className="flex-1 lg:w-1/2 text-left space-y-4">
+                              <div className="inline-block px-3 py-1 rounded bg-[var(--accent)]/10 text-[var(--accent)] text-[10px] uppercase tracking-widest font-bold">Project Summary</div>
+                              <h4 className="text-2xl text-white font-primary uppercase tracking-wide">{formData.sections.problemStatement.heading || "The Challenge"}</h4>
+                              <div className="w-12 h-0.5 bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]" />
+                              <p className="text-xs text-[#a0acb9] font-secondary leading-relaxed line-clamp-3">{formData.sections.problemStatement.description || "Enter a description above..."}</p>
+                              <div className="pt-2">
+                                <div className="inline-flex items-center gap-2 px-6 py-2 bg-[var(--accent)] text-white rounded-lg text-[10px] font-bold tracking-widest uppercase">Open Live Demo</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -1966,11 +1980,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           !formData.sections.quoteProcess.enabled,
                         )
                       }
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        formData.sections.quoteProcess.enabled
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-gray-500/20 text-gray-400"
-                      }`}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium ${formData.sections.quoteProcess.enabled
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-gray-500/20 text-gray-400"
+                        }`}
                     >
                       {formData.sections.quoteProcess.enabled
                         ? "Enabled"
@@ -2216,11 +2229,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           !formData.sections.themes.enabled,
                         )
                       }
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        formData.sections.themes.enabled
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-gray-500/20 text-gray-400"
-                      }`}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium ${formData.sections.themes.enabled
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-gray-500/20 text-gray-400"
+                        }`}
                     >
                       {formData.sections.themes.enabled
                         ? "Enabled"
@@ -2494,11 +2506,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                           !formData.sections.specialOffers.enabled,
                         )
                       }
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        formData.sections.specialOffers.enabled
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-gray-500/20 text-gray-400"
-                      }`}
+                      className={`px-3 py-1 rounded-lg text-sm font-medium ${formData.sections.specialOffers.enabled
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-gray-500/20 text-gray-400"
+                        }`}
                     >
                       {formData.sections.specialOffers.enabled
                         ? "Enabled"
@@ -3262,7 +3273,7 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                                 );
                               }
                             } catch (error) {
-                              console.error("Upload error:", error);
+                              // Silently handle upload errors
                               showMessage("error", "Upload failed");
                             } finally {
                               setUploading(false);
@@ -3367,7 +3378,10 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                         <input
                           type="text"
                           id="uiux-design-tool"
-                          value={(formData.sections.uiuxDesign as any).designTool || ""}
+                          value={
+                            (formData.sections.uiuxDesign as any).designTool ||
+                            ""
+                          }
                           onChange={(e) =>
                             updateNestedField(
                               "sections.uiuxDesign.designTool",
@@ -3578,53 +3592,55 @@ export default function ProjectEditor({ params }: ProjectEditorProps) {
                         <label className="block text-sm font-medium text-[var(--text)] mb-2">
                           Tech Stack
                         </label>
-                        {(formData.sections.developmentProcess as any).techStack?.map(
-                          (tech: string, idx: number) => (
-                            <div key={idx} className="flex gap-2 mb-2">
-                              <input
-                                type="text"
-                                value={tech}
-                                aria-label={`Technology ${idx + 1}`}
-                                onChange={(e) => {
-                                  const newStack = [
-                                    ...((formData.sections.developmentProcess as any)
-                                      .techStack || []),
-                                  ];
-                                  newStack[idx] = e.target.value;
-                                  updateNestedField(
-                                    "sections.developmentProcess.techStack",
-                                    newStack,
-                                  );
-                                }}
-                                className="flex-1 px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)]"
-                                placeholder="React, Node.js..."
-                              />
-                              <button
-                                onClick={() => {
-                                  const newStack =
-                                    (formData.sections.developmentProcess as any).techStack?.filter(
-                                      (_: any, i: number) => i !== idx,
-                                    );
-                                  updateNestedField(
-                                    "sections.developmentProcess.techStack",
-                                    newStack,
-                                  );
-                                }}
-                                className="text-red-400"
-                                aria-label="Delete technology"
-                              >
-                                <MdDelete size={20} />
-                              </button>
-                            </div>
-                          ),
-                        )}
+                        {(
+                          formData.sections.developmentProcess as any
+                        ).techStack?.map((tech: string, idx: number) => (
+                          <div key={idx} className="flex gap-2 mb-2">
+                            <input
+                              type="text"
+                              value={tech}
+                              aria-label={`Technology ${idx + 1}`}
+                              onChange={(e) => {
+                                const newStack = [
+                                  ...((
+                                    formData.sections.developmentProcess as any
+                                  ).techStack || []),
+                                ];
+                                newStack[idx] = e.target.value;
+                                updateNestedField(
+                                  "sections.developmentProcess.techStack",
+                                  newStack,
+                                );
+                              }}
+                              className="flex-1 px-4 py-2 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--text)]"
+                              placeholder="React, Node.js..."
+                            />
+                            <button
+                              onClick={() => {
+                                const newStack = (
+                                  formData.sections.developmentProcess as any
+                                ).techStack?.filter(
+                                  (_: any, i: number) => i !== idx,
+                                );
+                                updateNestedField(
+                                  "sections.developmentProcess.techStack",
+                                  newStack,
+                                );
+                              }}
+                              className="text-red-400"
+                              aria-label="Delete technology"
+                            >
+                              <MdDelete size={20} />
+                            </button>
+                          </div>
+                        ))}
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => {
                             const currentStack =
-                              (formData.sections.developmentProcess as any).techStack ||
-                              [];
+                              (formData.sections.developmentProcess as any)
+                                .techStack || [];
                             updateNestedField(
                               "sections.developmentProcess.techStack",
                               [...currentStack, ""],

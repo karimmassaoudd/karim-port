@@ -1,0 +1,710 @@
+{
+  "success": true,
+  "data": [
+    {
+      "sections": {
+        "hero": {
+          "enabled": true,
+          "title": "Youssef Ragaee Portfolio",
+          "tagline": "A fully functional portfolio website for Waer Ayman, featuring powerful GSAP animations, modern UI/UX design, and a complete admin dashboard for content management.",
+          "heroImage": {
+            "url": "/assets/Frame 129.png",
+            "alt": "Youssef Ragaee Portfolio Website",
+            "_id": "69974dfaf7ca4c147ab48020"
+          },
+          "category": "Personal Portfolio Website",
+          "_id": "69974e26c4af17d18e49ca25"
+        },
+        "overview": {
+          "enabled": true,
+          "role": "Full-Stack Developer & Designer",
+          "type": "Personal Project",
+          "highlights": [
+            "Modern, responsive design",
+            "GSAP animations",
+            "Admin dashboard",
+            "Content management system"
+          ],
+          "description": "A fully functional portfolio website featuring powerful GSAP animations, modern UI/UX design, and a complete admin dashboard for content management.",
+          "keyFeatures": [],
+          "subsections": [],
+          "_id": "69974e26c4af17d18e49ca26"
+        },
+        "problemStatement": {
+          "enabled": false,
+          "heading": "The Challenge",
+          "challenges": [],
+          "images": [],
+          "_id": "69974e26c4af17d18e49ca27"
+        },
+        "solutions": {
+          "enabled": false,
+          "heading": "The Solutions",
+          "solutions": [],
+          "images": [],
+          "_id": "69974e26c4af17d18e49ca28"
+        },
+        "branding": {
+          "enabled": false,
+          "heading": "Branding & Visual Direction",
+          "brandImages": [],
+          "_id": "69974e26c4af17d18e49ca29"
+        },
+        "wireframes": {
+          "enabled": false,
+          "heading": "Wireframes",
+          "wireframes": [],
+          "_id": "69974e26c4af17d18e49ca2a"
+        },
+        "uiuxDesign": {
+          "enabled": false,
+          "heading": "UI/UX Design",
+          "designPrinciples": [],
+          "mockups": [],
+          "_id": "69974e26c4af17d18e49ca2b"
+        },
+        "developmentProcess": {
+          "enabled": false,
+          "heading": "Development Process",
+          "technicalChallenges": [],
+          "codeSnippets": [],
+          "images": [],
+          "_id": "69974e26c4af17d18e49ca2c"
+        },
+        "websitePreview": {
+          "enabled": false,
+          "heading": "Final Website",
+          "screenshots": [],
+          "_id": "69974e26c4af17d18e49ca2d"
+        },
+        "resultsImpact": {
+          "enabled": false,
+          "heading": "Results & Impact",
+          "metrics": [],
+          "testimonials": [],
+          "images": [],
+          "_id": "69974e26c4af17d18e49ca2e"
+        },
+        "conclusion": {
+          "enabled": false,
+          "heading": "Conclusion",
+          "lessonsLearned": [],
+          "futureImprovements": [],
+          "_id": "69974e26c4af17d18e49ca2f"
+        },
+        "callToAction": {
+          "enabled": false,
+          "heading": "Let's Work Together",
+          "primaryButtonText": "Contact Me",
+          "primaryButtonLink": "/contact",
+          "_id": "69974e26c4af17d18e49ca30"
+        },
+        "hoverExploration": {
+          "enabled": false,
+          "heading": "Explore by hovering",
+          "tiles": [],
+          "_id": "69974e26c4af17d18e49ca31"
+        },
+        "quoteProcess": {
+          "enabled": false,
+          "processCards": [],
+          "images": [],
+          "_id": "69974e26c4af17d18e49ca32"
+        },
+        "themes": {
+          "enabled": false,
+          "heading": "Themes",
+          "themes": [],
+          "_id": "69974e26c4af17d18e49ca33"
+        },
+        "specialOffers": {
+          "enabled": false,
+          "heading": "Special Offers",
+          "offers": [],
+          "_id": "69974e26c4af17d18e49ca34"
+        }
+      },
+      "_id": "69974dfaf7ca4c147ab4801e",
+      "title": "Youssef aa",
+      "slug": "youssef-ragaee-portfolio",
+      "shortDescription": "A fully functional portfolio website for Waer Ayman, featuring powerful GSAP animations, modern UI/UX design, and a complete admin dashboard for content management.",
+      "thumbnail": {
+        "url": "/assets/Frame 129.png",
+        "alt": "Youssef Ragaee Portfolio Website",
+        "_id": "69974dfaf7ca4c147ab4801f"
+      },
+      "technologies": ["React", "Tailwind CSS", "GSAP", "MongoDB", "+4"],
+      "status": "published",
+      "featured": true,
+      "order": 0,
+      "sectionOrder": [],
+      "createdAt": "2026-02-19T17:52:58.181Z",
+      "updatedAt": "2026-02-19T17:55:35.138Z",
+      "__v": 0
+    },
+    {
+      "sections": {
+        "hero": {
+          "enabled": true,
+          "title": "Karim Massaoud Portfolio",
+          "tagline": "Modern personal portfolio built with Next.js to showcase academic and professional work. Highlight technical expertise and project case studies.",
+          "heroImage": {
+            "url": "/assets/image 4.png",
+            "alt": "Karim Massaoud Portfolio",
+            "_id": "69974dfaf7ca4c147ab48025"
+          },
+          "category": "Personal Portfolio Website",
+          "_id": "69a6316304b60164266a494d"
+        },
+        "overview": {
+          "enabled": true,
+          "role": "Full-Stack Developer",
+          "type": "Personal Portfolio",
+          "highlights": [
+            "Next.js App Router",
+            "MongoDB integration",
+            "Dynamic case studies",
+            "Admin dashboard"
+          ],
+          "description": "Modern personal portfolio built with Next.js to showcase academic and professional work, highlighting technical expertise and project case studies.",
+          "keyFeatures": [],
+          "subsections": [],
+          "_id": "69a6316304b60164266a494e"
+        },
+        "problemStatement": {
+          "enabled": false,
+          "challenges": [],
+          "images": [],
+          "heading": "The Challenge",
+          "_id": "69a6316304b60164266a494f"
+        },
+        "solutions": {
+          "enabled": false,
+          "solutions": [],
+          "images": [],
+          "heading": "The Solutions",
+          "_id": "69a6316304b60164266a4950"
+        },
+        "branding": {
+          "enabled": false,
+          "brandImages": [],
+          "heading": "Branding & Visual Direction",
+          "_id": "69a6316304b60164266a4951"
+        },
+        "wireframes": {
+          "enabled": false,
+          "wireframes": [],
+          "heading": "Wireframes",
+          "_id": "69a6316304b60164266a4952"
+        },
+        "uiuxDesign": {
+          "enabled": false,
+          "designPrinciples": [],
+          "mockups": [],
+          "heading": "UI/UX Design",
+          "_id": "69a6316304b60164266a4953"
+        },
+        "developmentProcess": {
+          "enabled": false,
+          "technicalChallenges": [],
+          "codeSnippets": [],
+          "images": [],
+          "heading": "Development Process",
+          "_id": "69a6316304b60164266a4954"
+        },
+        "websitePreview": {
+          "enabled": false,
+          "screenshots": [],
+          "heading": "Final Website",
+          "_id": "69a6316304b60164266a4955"
+        },
+        "resultsImpact": {
+          "enabled": false,
+          "metrics": [],
+          "testimonials": [],
+          "images": [],
+          "heading": "Results & Impact",
+          "_id": "69a6316304b60164266a4956"
+        },
+        "conclusion": {
+          "enabled": false,
+          "lessonsLearned": [],
+          "futureImprovements": [],
+          "heading": "Conclusion",
+          "_id": "69a6316304b60164266a4957"
+        },
+        "callToAction": {
+          "enabled": false,
+          "heading": "Let's Work Together",
+          "primaryButtonText": "Contact Me",
+          "primaryButtonLink": "/contact",
+          "_id": "69a6316304b60164266a4958"
+        },
+        "hoverExploration": {
+          "enabled": false,
+          "tiles": [],
+          "heading": "Explore by hovering",
+          "_id": "69a6316304b60164266a4959"
+        },
+        "quoteProcess": {
+          "enabled": false,
+          "processCards": [],
+          "images": [],
+          "_id": "69a6316304b60164266a495a"
+        },
+        "themes": {
+          "enabled": false,
+          "themes": [],
+          "heading": "Themes",
+          "_id": "69a6316304b60164266a495b"
+        },
+        "specialOffers": {
+          "enabled": false,
+          "offers": [],
+          "heading": "Special Offers",
+          "_id": "69a6316304b60164266a495c"
+        }
+      },
+      "_id": "69974dfaf7ca4c147ab48023",
+      "title": "Karim Massaoud Portfolio",
+      "slug": "karim-massaoud-portfolio",
+      "shortDescription": "Modern personal portfolio built with Next.js to showcase academic and professional work. Highlight technical expertise and project case studies.",
+      "thumbnail": {
+        "url": "/assets/image 4.png",
+        "alt": "Karim Massaoud Portfolio",
+        "_id": "69974dfaf7ca4c147ab48024"
+      },
+      "technologies": ["React", "Next.js", "TypeScript", "GSAP"],
+      "status": "published",
+      "featured": true,
+      "order": 1,
+      "sectionOrder": [],
+      "createdAt": "2026-02-19T17:52:58.215Z",
+      "updatedAt": "2026-02-19T17:52:58.215Z",
+      "__v": 0
+    },
+    {
+      "sections": {
+        "hero": {
+          "enabled": true,
+          "title": "Discover Egypt's Wonders",
+          "tagline": "A full-featured travel booking platform that allows users to explore tours, view destinations, and book trips through a modern and intuitive web interface.",
+          "heroImage": {
+            "url": "/assets/special offer.png",
+            "alt": "TAW Travel Platform",
+            "_id": "69974dfaf7ca4c147ab4802a"
+          },
+          "category": "Full Stack Web Application",
+          "_id": "69a6316304b60164266a495d"
+        },
+        "overview": {
+          "enabled": true,
+          "role": "Full-Stack Developer",
+          "type": "Web Application",
+          "highlights": [
+            "Tour exploration and booking",
+            "Destination browsing",
+            "User authentication",
+            "Booking management system"
+          ],
+          "description": "A full-featured travel booking platform that allows users to explore tours, view destinations, and book trips through a modern and intuitive web interface.",
+          "keyFeatures": [],
+          "subsections": [],
+          "_id": "69a6316304b60164266a495e"
+        },
+        "problemStatement": {
+          "enabled": false,
+          "challenges": [],
+          "images": [],
+          "heading": "The Challenge",
+          "_id": "69a6316304b60164266a495f"
+        },
+        "solutions": {
+          "enabled": false,
+          "solutions": [],
+          "images": [],
+          "heading": "The Solutions",
+          "_id": "69a6316304b60164266a4960"
+        },
+        "branding": {
+          "enabled": false,
+          "brandImages": [],
+          "heading": "Branding & Visual Direction",
+          "_id": "69a6316304b60164266a4961"
+        },
+        "wireframes": {
+          "enabled": false,
+          "wireframes": [],
+          "heading": "Wireframes",
+          "_id": "69a6316304b60164266a4962"
+        },
+        "uiuxDesign": {
+          "enabled": false,
+          "designPrinciples": [],
+          "mockups": [],
+          "heading": "UI/UX Design",
+          "_id": "69a6316304b60164266a4963"
+        },
+        "developmentProcess": {
+          "enabled": false,
+          "technicalChallenges": [],
+          "codeSnippets": [],
+          "images": [],
+          "heading": "Development Process",
+          "_id": "69a6316304b60164266a4964"
+        },
+        "websitePreview": {
+          "enabled": false,
+          "screenshots": [],
+          "heading": "Final Website",
+          "_id": "69a6316304b60164266a4965"
+        },
+        "resultsImpact": {
+          "enabled": false,
+          "metrics": [],
+          "testimonials": [],
+          "images": [],
+          "heading": "Results & Impact",
+          "_id": "69a6316304b60164266a4966"
+        },
+        "conclusion": {
+          "enabled": false,
+          "lessonsLearned": [],
+          "futureImprovements": [],
+          "heading": "Conclusion",
+          "_id": "69a6316304b60164266a4967"
+        },
+        "callToAction": {
+          "enabled": false,
+          "heading": "Let's Work Together",
+          "primaryButtonText": "Contact Me",
+          "primaryButtonLink": "/contact",
+          "_id": "69a6316304b60164266a4968"
+        },
+        "hoverExploration": {
+          "enabled": false,
+          "tiles": [],
+          "heading": "Explore by hovering",
+          "_id": "69a6316304b60164266a4969"
+        },
+        "quoteProcess": {
+          "enabled": false,
+          "processCards": [],
+          "images": [],
+          "_id": "69a6316304b60164266a496a"
+        },
+        "themes": {
+          "enabled": false,
+          "themes": [],
+          "heading": "Themes",
+          "_id": "69a6316304b60164266a496b"
+        },
+        "specialOffers": {
+          "enabled": false,
+          "offers": [],
+          "heading": "Special Offers",
+          "_id": "69a6316304b60164266a496c"
+        }
+      },
+      "_id": "69974dfaf7ca4c147ab48028",
+      "title": "TAW Travel - Tour & Travel Booking Platform",
+      "slug": "taw-travel-platform",
+      "shortDescription": "A full-featured travel booking platform that allows users to explore tours, view destinations, and book trips through a modern and intuitive web interface.",
+      "thumbnail": {
+        "url": "/assets/special offer.png",
+        "alt": "TAW Travel Platform",
+        "_id": "69974dfaf7ca4c147ab48029"
+      },
+      "technologies": ["React", "Node.js", "Express.js", "MongoDB", "+4"],
+      "status": "published",
+      "featured": true,
+      "order": 2,
+      "sectionOrder": [],
+      "createdAt": "2026-02-19T17:52:58.253Z",
+      "updatedAt": "2026-02-19T17:52:58.253Z",
+      "__v": 0
+    },
+    {
+      "sections": {
+        "hero": {
+          "enabled": true,
+          "title": "Portfolio",
+          "tagline": "A personal portfolio website showcasing skills as a web developer and designer.",
+          "heroImage": {
+            "url": "/assets/Rectangle 61.png",
+            "alt": "AYMAN Portfolio",
+            "_id": "69974dfaf7ca4c147ab4802f"
+          },
+          "category": "Personal Portfolio Website",
+          "_id": "69a6316304b60164266a496d"
+        },
+        "overview": {
+          "enabled": true,
+          "role": "Web Developer & Designer",
+          "type": "Personal Portfolio",
+          "highlights": [
+            "Modern design",
+            "Responsive layout",
+            "Project showcase",
+            "Skills demonstration"
+          ],
+          "description": "A personal portfolio website showcasing skills as a web developer and designer.",
+          "keyFeatures": [],
+          "subsections": [],
+          "_id": "69a6316304b60164266a496e"
+        },
+        "problemStatement": {
+          "enabled": false,
+          "challenges": [],
+          "images": [],
+          "heading": "The Challenge",
+          "_id": "69a6316304b60164266a496f"
+        },
+        "solutions": {
+          "enabled": false,
+          "solutions": [],
+          "images": [],
+          "heading": "The Solutions",
+          "_id": "69a6316304b60164266a4970"
+        },
+        "branding": {
+          "enabled": false,
+          "brandImages": [],
+          "heading": "Branding & Visual Direction",
+          "_id": "69a6316304b60164266a4971"
+        },
+        "wireframes": {
+          "enabled": false,
+          "wireframes": [],
+          "heading": "Wireframes",
+          "_id": "69a6316304b60164266a4972"
+        },
+        "uiuxDesign": {
+          "enabled": false,
+          "designPrinciples": [],
+          "mockups": [],
+          "heading": "UI/UX Design",
+          "_id": "69a6316304b60164266a4973"
+        },
+        "developmentProcess": {
+          "enabled": false,
+          "technicalChallenges": [],
+          "codeSnippets": [],
+          "images": [],
+          "heading": "Development Process",
+          "_id": "69a6316304b60164266a4974"
+        },
+        "websitePreview": {
+          "enabled": false,
+          "screenshots": [],
+          "heading": "Final Website",
+          "_id": "69a6316304b60164266a4975"
+        },
+        "resultsImpact": {
+          "enabled": false,
+          "metrics": [],
+          "testimonials": [],
+          "images": [],
+          "heading": "Results & Impact",
+          "_id": "69a6316304b60164266a4976"
+        },
+        "conclusion": {
+          "enabled": false,
+          "lessonsLearned": [],
+          "futureImprovements": [],
+          "heading": "Conclusion",
+          "_id": "69a6316304b60164266a4977"
+        },
+        "callToAction": {
+          "enabled": false,
+          "heading": "Let's Work Together",
+          "primaryButtonText": "Contact Me",
+          "primaryButtonLink": "/contact",
+          "_id": "69a6316304b60164266a4978"
+        },
+        "hoverExploration": {
+          "enabled": false,
+          "tiles": [],
+          "heading": "Explore by hovering",
+          "_id": "69a6316304b60164266a4979"
+        },
+        "quoteProcess": {
+          "enabled": false,
+          "processCards": [],
+          "images": [],
+          "_id": "69a6316304b60164266a497a"
+        },
+        "themes": {
+          "enabled": false,
+          "themes": [],
+          "heading": "Themes",
+          "_id": "69a6316304b60164266a497b"
+        },
+        "specialOffers": {
+          "enabled": false,
+          "offers": [],
+          "heading": "Special Offers",
+          "_id": "69a6316304b60164266a497c"
+        }
+      },
+      "_id": "69974dfaf7ca4c147ab4802d",
+      "title": "AYMAN Portfolio",
+      "slug": "ayman-portfolio",
+      "shortDescription": "A personal portfolio website showcasing skills as a web developer and designer.",
+      "thumbnail": {
+        "url": "/assets/Rectangle 61.png",
+        "alt": "AYMAN Portfolio",
+        "_id": "69974dfaf7ca4c147ab4802e"
+      },
+      "technologies": ["HTML", "CSS", "JavaScript", "Netlify"],
+      "status": "published",
+      "featured": true,
+      "order": 3,
+      "sectionOrder": [],
+      "createdAt": "2026-02-19T17:52:58.303Z",
+      "updatedAt": "2026-02-19T17:52:58.303Z",
+      "__v": 0
+    },
+    {
+      "sections": {
+        "hero": {
+          "enabled": true,
+          "title": "Wonder Pearl",
+          "tagline": "A web project designed to showcase unique features and design elements under the name 'Wonder Pearl'.",
+          "heroImage": {
+            "url": "/assets/Rectangle 64.png",
+            "alt": "Wonder Pearl Website",
+            "_id": "69974dfaf7ca4c147ab48034"
+          },
+          "category": "Web Application / Landing Page",
+          "_id": "69a6316304b60164266a497d"
+        },
+        "overview": {
+          "enabled": true,
+          "role": "Frontend Developer",
+          "type": "Landing Page",
+          "highlights": [
+            "GSAP animations",
+            "Modern UI design",
+            "Interactive elements",
+            "Responsive layout"
+          ],
+          "description": "A web project designed to showcase unique features and design elements under the name 'Wonder Pearl'.",
+          "keyFeatures": [],
+          "subsections": [],
+          "_id": "69a6316304b60164266a497e"
+        },
+        "problemStatement": {
+          "enabled": false,
+          "challenges": [],
+          "images": [],
+          "heading": "The Challenge",
+          "_id": "69a6316304b60164266a497f"
+        },
+        "solutions": {
+          "enabled": false,
+          "solutions": [],
+          "images": [],
+          "heading": "The Solutions",
+          "_id": "69a6316304b60164266a4980"
+        },
+        "branding": {
+          "enabled": false,
+          "brandImages": [],
+          "heading": "Branding & Visual Direction",
+          "_id": "69a6316304b60164266a4981"
+        },
+        "wireframes": {
+          "enabled": false,
+          "wireframes": [],
+          "heading": "Wireframes",
+          "_id": "69a6316304b60164266a4982"
+        },
+        "uiuxDesign": {
+          "enabled": false,
+          "designPrinciples": [],
+          "mockups": [],
+          "heading": "UI/UX Design",
+          "_id": "69a6316304b60164266a4983"
+        },
+        "developmentProcess": {
+          "enabled": false,
+          "technicalChallenges": [],
+          "codeSnippets": [],
+          "images": [],
+          "heading": "Development Process",
+          "_id": "69a6316304b60164266a4984"
+        },
+        "websitePreview": {
+          "enabled": false,
+          "screenshots": [],
+          "heading": "Final Website",
+          "_id": "69a6316304b60164266a4985"
+        },
+        "resultsImpact": {
+          "enabled": false,
+          "metrics": [],
+          "testimonials": [],
+          "images": [],
+          "heading": "Results & Impact",
+          "_id": "69a6316304b60164266a4986"
+        },
+        "conclusion": {
+          "enabled": false,
+          "lessonsLearned": [],
+          "futureImprovements": [],
+          "heading": "Conclusion",
+          "_id": "69a6316304b60164266a4987"
+        },
+        "callToAction": {
+          "enabled": false,
+          "heading": "Let's Work Together",
+          "primaryButtonText": "Contact Me",
+          "primaryButtonLink": "/contact",
+          "_id": "69a6316304b60164266a4988"
+        },
+        "hoverExploration": {
+          "enabled": false,
+          "tiles": [],
+          "heading": "Explore by hovering",
+          "_id": "69a6316304b60164266a4989"
+        },
+        "quoteProcess": {
+          "enabled": false,
+          "processCards": [],
+          "images": [],
+          "_id": "69a6316304b60164266a498a"
+        },
+        "themes": {
+          "enabled": false,
+          "themes": [],
+          "heading": "Themes",
+          "_id": "69a6316304b60164266a498b"
+        },
+        "specialOffers": {
+          "enabled": false,
+          "offers": [],
+          "heading": "Special Offers",
+          "_id": "69a6316304b60164266a498c"
+        }
+      },
+      "_id": "69974dfaf7ca4c147ab48032",
+      "title": "Wonder Pearl",
+      "slug": "wonder-pearl",
+      "shortDescription": "A web project designed to showcase unique features and design elements under the name 'Wonder Pearl'.",
+      "thumbnail": {
+        "url": "/assets/Rectangle 64.png",
+        "alt": "Wonder Pearl Website",
+        "_id": "69974dfaf7ca4c147ab48033"
+      },
+      "technologies": ["HTML", "CSS", "JavaScript", "GSAP Animation", "+1"],
+      "status": "published",
+      "featured": true,
+      "order": 4,
+      "sectionOrder": [],
+      "createdAt": "2026-02-19T17:52:58.356Z",
+      "updatedAt": "2026-02-19T17:52:58.356Z",
+      "__v": 0
+    }
+  ]
+}

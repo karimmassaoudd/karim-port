@@ -41,9 +41,6 @@ const Header = () => {
         "user-experience",
         "contact",
         "projects",
-        "project-details",
-        "project-Triple-Wave",
-        "project-Owen-Bryce",
       ];
       let current = "";
       let maxOverlap = 0;
@@ -169,7 +166,7 @@ const Header = () => {
           suppressHydrationWarning
           onClick={handleLogoClick}
           aria-label="Go home or scroll to hero"
-          className="cursor-pointer group relative inline-flex items-center gap-2"
+          className="magnetic-el cursor-pointer group relative inline-flex items-center gap-2"
         >
           <Image src={logoSrc} alt="Logo" width={50} height={50} />
           {/* Hover-reveal full name next to logo */}
@@ -182,29 +179,29 @@ const Header = () => {
       {/* Desktop Navigation */}
       <nav className="hidden md:flex flex-1 justify-center">
         <ul className="flex gap-6 lg:gap-10 font-bold relative text-sm lg:text-base">
-          <li>
+          <li className="reveal-el">
             <Link
               href="/#about"
               onClick={() => setIsMenuOpen(false)}
-              className={`nav-link cursor-pointer transition-colors ${activeSection === "about" ? "text-[var(--accent)] font-bold" : ""}`}
+              className={`magnetic-el nav-link cursor-pointer transition-colors ${activeSection === "about" ? "text-[var(--accent)] font-bold" : ""}`}
             >
               ABOUT
             </Link>
           </li>
-          <li>
+          <li className="reveal-el">
             <Link
               href="/#user-experience"
               onClick={() => setIsMenuOpen(false)}
-              className="nav-link cursor-pointer"
+              className="magnetic-el nav-link cursor-pointer"
             >
               USER EXPERIENCE
             </Link>
           </li>
-          <li>
+          <li className="reveal-el">
             <Link
               href="/#contact"
               onClick={() => setIsMenuOpen(false)}
-              className={`nav-link cursor-pointer transition-colors ${activeSection === "contact" ? "text-[var(--accent)] font-bold" : ""}`}
+              className={`magnetic-el nav-link cursor-pointer transition-colors ${activeSection === "contact" ? "text-[var(--accent)] font-bold" : ""}`}
             >
               CONTACT
             </Link>
@@ -216,7 +213,7 @@ const Header = () => {
               onClick={() => setIsProjectsOpen((s) => !s)}
               aria-haspopup="true"
               title="Open submenu"
-              className={`nav-link cursor-pointer relative group transition-colors ${activeSection === "projects" || activeSection === "project-details" || activeSection === "project-Triple-Wave" || activeSection === "project-Owen-Bryce" ? "text-[var(--accent)] font-bold" : ""}`}
+              className={`nav-link cursor-pointer relative group transition-colors ${activeSection === "projects" || pathname.startsWith("/projects") ? "text-[var(--accent)] font-bold" : ""}`}
             >
               MY PROJECTS
               {/* Hover hint: small text below to indicate submenu */}
@@ -278,10 +275,10 @@ const Header = () => {
               <ul className="py-2 px-2">
                 <li>
                   <Link
-                    href="/project-details"
+                    href="/projects/taw-travel-platform"
                     role="menuitem"
                     tabIndex={isProjectsOpen ? 0 : -1}
-                    className={`block px-3 py-2.5 rounded-lg transition-all ${pathname === "/project-details" ? "bg-[var(--accent)]/15 text-[var(--accent)] font-semibold border border-[var(--accent)]/30" : "text-[var(--text)]/80 hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20"} border`}
+                    className={`block px-3 py-2.5 rounded-lg transition-all ${pathname === "/projects/taw-travel-platform" ? "bg-[var(--accent)]/15 text-[var(--accent)] font-semibold border border-[var(--accent)]/30" : "text-[var(--text)]/80 hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20"} border`}
                     onClick={() => setIsProjectsOpen(false)}
                   >
                     <span className="text-sm font-medium">Travel World</span>
@@ -292,10 +289,10 @@ const Header = () => {
                 </li>
                 <li>
                   <Link
-                    href="/project-Triple-Wave"
+                    href="/projects/triple-wave"
                     role="menuitem"
                     tabIndex={isProjectsOpen ? 0 : -1}
-                    className={`block px-3 py-2.5 rounded-lg transition-all ${pathname === "/project-Triple-Wave" ? "bg-[var(--accent)]/15 text-[var(--accent)] font-semibold border border-[var(--accent)]/30" : "text-[var(--text)]/80 hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20"} border`}
+                    className={`block px-3 py-2.5 rounded-lg transition-all ${pathname === "/projects/triple-wave" ? "bg-[var(--accent)]/15 text-[var(--accent)] font-semibold border border-[var(--accent)]/30" : "text-[var(--text)]/80 hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20"} border`}
                     onClick={() => setIsProjectsOpen(false)}
                   >
                     <span className="text-sm font-medium">Triple WAVE</span>
@@ -306,10 +303,10 @@ const Header = () => {
                 </li>
                 <li>
                   <Link
-                    href="/project-Owen-Bryce"
+                    href="/projects/owen-bryce"
                     role="menuitem"
                     tabIndex={isProjectsOpen ? 0 : -1}
-                    className={`block px-3 py-2.5 rounded-lg transition-all ${pathname === "/project-Owen-Bryce" ? "bg-[var(--accent)]/15 text-[var(--accent)] font-semibold border border-[var(--accent)]/30" : "text-[var(--text)]/80 hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20"} border`}
+                    className={`block px-3 py-2.5 rounded-lg transition-all ${pathname === "/projects/owen-bryce" ? "bg-[var(--accent)]/15 text-[var(--accent)] font-semibold border border-[var(--accent)]/30" : "text-[var(--text)]/80 hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20"} border`}
                     onClick={() => setIsProjectsOpen(false)}
                   >
                     <span className="text-sm font-medium">Owen Bryce</span>
@@ -324,8 +321,33 @@ const Header = () => {
         </ul>
       </nav>
 
-      {/* Right controls: theme toggle + mobile menu */}
+      {/* Right controls: theme toggle + dashboard (dev only) + mobile menu */}
       <div className="flex items-center gap-3 z-20 ml-6">
+        {process.env.NODE_ENV === "development" && (
+          <Link
+            href="/admin"
+            aria-label="Dashboard"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-[var(--Secondary-Background)]/50 backdrop-blur-md shadow-sm transition-all hover:scale-105 hover:bg-[var(--accent)] hover:text-white"
+            title="Dashboard (Local Only)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect width="7" height="9" x="3" y="3" rx="1" />
+              <rect width="7" height="5" x="14" y="3" rx="1" />
+              <rect width="7" height="9" x="14" y="12" rx="1" />
+              <rect width="7" height="5" x="3" y="16" rx="1" />
+            </svg>
+          </Link>
+        )}
         <ThemeToggle />
         <div className="md:hidden">
           <button
@@ -379,7 +401,7 @@ const Header = () => {
                 ref={mobileProjectsBtnRef}
                 onClick={() => setIsMobileProjectsOpen((s) => !s)}
                 aria-haspopup="true"
-                className={`nav-link cursor-pointer transition-colors ${activeSection === "projects" || activeSection === "project-details" || activeSection === "project-Triple-Wave" || activeSection === "project-Owen-Bryce" ? "text-[var(--accent)] font-bold" : ""}`}
+                className={`nav-link cursor-pointer transition-colors ${activeSection === "projects" || pathname.startsWith("/projects") ? "text-[var(--accent)] font-bold" : ""}`}
               >
                 MY PROJECTS
               </button>
@@ -413,7 +435,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
-                      href="/project-details"
+                      href="/projects/taw-travel-platform"
                       className="block px-3 py-2 rounded-md hover:bg-[var(--Secondary-Background)]/60"
                       onClick={() => {
                         setIsMenuOpen(false);
@@ -425,7 +447,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
-                      href="/project-Triple-Wave"
+                      href="/projects/triple-wave"
                       className="block px-3 py-2 rounded-md hover:bg-[var(--Secondary-Background)]/60"
                       onClick={() => {
                         setIsMenuOpen(false);
@@ -437,7 +459,7 @@ const Header = () => {
                   </li>
                   <li>
                     <Link
-                      href="/project-Owen-Bryce"
+                      href="/projects/owen-bryce"
                       className="block px-3 py-2 rounded-md hover:bg-[var(--Secondary-Background)]/60"
                       onClick={() => {
                         setIsMenuOpen(false);

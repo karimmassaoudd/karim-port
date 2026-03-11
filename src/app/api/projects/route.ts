@@ -1,38 +1,58 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
 import dbConnect from "@/lib/mongodb";
 import Project from "@/models/Project";
 
+export const runtime = "nodejs";
+
+async function isAdminRequest() {
+  const session = await getServerSession(authOptions);
+  return isAdminSession(session);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function ensureRecord(
+  parent: Record<string, unknown>,
+  key: string,
+): Record<string, unknown> {
+  const existing = parent[key];
+  if (isRecord(existing)) return existing;
+  const created: Record<string, unknown> = {};
+  parent[key] = created;
+  return created;
+}
+
 // Helper function to clean and migrate project data
 function cleanProjectData(project: Record<string, unknown>) {
-  // Migrate colorPalette from array to object
-  if ((project as any).sections?.branding?.colorPalette) {
-    if (Array.isArray((project as any).sections.branding.colorPalette)) {
-      (project as any).sections.branding.colorPalette = { primary: "", secondary: "" };
-    } else if (typeof (project as any).sections.branding.colorPalette !== "object") {
-      (project as any).sections.branding.colorPalette = { primary: "", secondary: "" };
+  const sections = ensureRecord(project, "sections");
+  const hero = ensureRecord(sections, "hero");
+  const branding = ensureRecord(sections, "branding");
+
+  // Migrate colorPalette from array/unknown to object
+  const colorPalette = branding.colorPalette;
+  if (colorPalette !== undefined) {
+    if (Array.isArray(colorPalette) || !isRecord(colorPalette)) {
+      branding.colorPalette = { primary: "", secondary: "" };
     } else {
-      // Ensure primary and secondary exist
-      if (!(project as any).sections.branding.colorPalette.primary) {
-        (project as any).sections.branding.colorPalette.primary = "";
-      }
-      if (!(project as any).sections.branding.colorPalette.secondary) {
-        (project as any).sections.branding.colorPalette.secondary = "";
-      }
+      if (typeof colorPalette.primary !== "string") colorPalette.primary = "";
+      if (typeof colorPalette.secondary !== "string")
+        colorPalette.secondary = "";
     }
   }
 
   // Ensure heroImage exists
-  if (!(project as any).sections?.hero?.heroImage) {
-    if (!(project as any).sections) (project as any).sections = {};
-    if (!(project as any).sections.hero) (project as any).sections.hero = {};
-    (project as any).sections.hero.heroImage = { url: "", alt: "", caption: "" };
+  if (!hero.heroImage) {
+    hero.heroImage = { url: "", alt: "", caption: "" };
   }
 
   // Ensure logo exists
-  if (!(project as any).sections?.branding?.logo) {
-    if (!(project as any).sections) (project as any).sections = {};
-    if (!(project as any).sections.branding) (project as any).sections.branding = {};
-    (project as any).sections.branding.logo = { url: "", alt: "", caption: "" };
+  if (!branding.logo) {
+    branding.logo = { url: "", alt: "", caption: "" };
   }
 
   return project;
@@ -41,7 +61,8 @@ function cleanProjectData(project: Record<string, unknown>) {
 // GET all projects or single project by ID
 export async function GET(request: NextRequest) {
   try {
-    const strapiBaseUrl = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    const strapiBaseUrl =
+      process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
     if (strapiBaseUrl) {
       const normalizedBaseUrl = strapiBaseUrl.replace(/\/+$/, "");
       const { searchParams } = new URL(request.url);
@@ -64,7 +85,9 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      const response = await fetch(url.toString(), { next: { revalidate: 60 } });
+      const response = await fetch(url.toString(), {
+        next: { revalidate: 60 },
+      });
       if (!response.ok) {
         return NextResponse.json(
           { success: false, error: "Failed to fetch projects" },
@@ -77,7 +100,10 @@ export async function GET(request: NextRequest) {
         item?.attributes ? { id: item.id, ...item.attributes } : item;
 
       if (id) {
-        return NextResponse.json({ success: true, data: toProject(payload?.data) });
+        return NextResponse.json({
+          success: true,
+          data: toProject(payload?.data),
+        });
       }
 
       const list = Array.isArray(payload?.data)
@@ -86,7 +112,7 @@ export async function GET(request: NextRequest) {
           ? [toProject(payload.data)]
           : [];
 
-      const data = slug ? list[0] ?? null : list;
+      const data = slug ? (list[0] ?? null) : list;
       return NextResponse.json({ success: true, data });
     }
 
@@ -103,9 +129,17 @@ export async function GET(request: NextRequest) {
     const id = searchParams.get("id");
     const slug = searchParams.get("slug");
     const status = searchParams.get("status"); // 'draft' | 'published' | 'all'
+    const isAdmin = await isAdminRequest();
 
     // Get single project by ID
     if (id) {
+      if (!isAdmin) {
+        return NextResponse.json(
+          { success: false, error: "Unauthorized" },
+          { status: 401 },
+        );
+      }
+
       const project = await Project.findById(id);
       if (!project) {
         return NextResponse.json(
@@ -114,14 +148,8 @@ export async function GET(request: NextRequest) {
         );
       }
 
-      // Debug: Log raw overview data from DB
-      console.log("Raw DB overview data:", JSON.stringify((project as any).sections?.overview, null, 2));
-
       // Clean and migrate data
       const cleanedProject = cleanProjectData(project.toObject());
-
-      // Debug: Log after cleaning
-      console.log("After cleaning overview data:", JSON.stringify((cleanedProject as any).sections?.overview, null, 2));
 
       return NextResponse.json({ success: true, data: cleanedProject });
     }
@@ -136,6 +164,13 @@ export async function GET(request: NextRequest) {
         );
       }
 
+      if (!isAdmin && project.status !== "published") {
+        return NextResponse.json(
+          { success: false, error: "Project not found" },
+          { status: 404 },
+        );
+      }
+
       // Clean and migrate data
       const cleanedProject = cleanProjectData(project.toObject());
 
@@ -143,9 +178,18 @@ export async function GET(request: NextRequest) {
     }
 
     // Get all projects
+    if (!isAdmin && status && status !== "published") {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const filter: Record<string, unknown> = {};
-    if (status && status !== "all") {
-      filter.status = status;
+    if (status) {
+      if (status !== "all") filter.status = status;
+    } else if (!isAdmin) {
+      filter.status = "published";
     }
 
     const projects = await Project.find(filter).sort({
@@ -165,11 +209,19 @@ export async function GET(request: NextRequest) {
 // POST - Create new project
 export async function POST(request: NextRequest) {
   try {
-    const strapiBaseUrl = process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    const strapiBaseUrl =
+      process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
     if (strapiBaseUrl) {
       return NextResponse.json(
         { success: false, error: "Projects are managed in Strapi" },
         { status: 501 },
+      );
+    }
+
+    if (!(await isAdminRequest())) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
       );
     }
 
@@ -281,6 +333,29 @@ export async function POST(request: NextRequest) {
 // PUT - Update project
 export async function PUT(request: NextRequest) {
   try {
+    const strapiBaseUrl =
+      process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    if (strapiBaseUrl) {
+      return NextResponse.json(
+        { success: false, error: "Projects are managed in Strapi" },
+        { status: 501 },
+      );
+    }
+
+    if (!(await isAdminRequest())) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
+    if (!process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { success: false, error: "Content source is not configured" },
+        { status: 503 },
+      );
+    }
+
     await dbConnect();
 
     const body = await request.json();
@@ -336,9 +411,6 @@ export async function PUT(request: NextRequest) {
       updateData.sections.overview.description = undefined;
     }
 
-    // Debug logging for overview section
-    console.log("Saving overview section:", JSON.stringify(updateData.sections?.overview, null, 2));
-
     const project = await Project.findByIdAndUpdate(
       id,
       { $set: updateData },
@@ -369,6 +441,29 @@ export async function PUT(request: NextRequest) {
 // DELETE - Delete project
 export async function DELETE(request: NextRequest) {
   try {
+    const strapiBaseUrl =
+      process.env.STRAPI_URL || process.env.NEXT_PUBLIC_STRAPI_URL;
+    if (strapiBaseUrl) {
+      return NextResponse.json(
+        { success: false, error: "Projects are managed in Strapi" },
+        { status: 501 },
+      );
+    }
+
+    if (!(await isAdminRequest())) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
+    if (!process.env.MONGODB_URI) {
+      return NextResponse.json(
+        { success: false, error: "Content source is not configured" },
+        { status: 503 },
+      );
+    }
+
     await dbConnect();
 
     const { searchParams } = new URL(request.url);

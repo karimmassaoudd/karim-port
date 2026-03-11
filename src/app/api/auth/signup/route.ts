@@ -1,10 +1,23 @@
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { isAdminSession } from "@/lib/authz";
 import dbConnect from "@/lib/mongodb";
 import User from "@/models/User";
 
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   try {
+    const session = await getServerSession(authOptions);
+    if (!isAdminSession(session)) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
+
     const { name, email, password } = await request.json();
 
     // Validation
@@ -41,7 +54,7 @@ export async function POST(request: Request) {
       name,
       email,
       password: hashedPassword,
-      role: "admin",
+      role: "user",
     });
 
     return NextResponse.json({
