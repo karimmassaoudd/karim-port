@@ -944,7 +944,7 @@ export default function DashboardPage() {
                               }
                             }
                           }}
-                          className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] dark:focus:border-[var(--accent)] focus:outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-secondary file:font-semibold file:bg-[var(--accent)]/10 file:text-[var(--accent)] hover:file:bg-[var(--accent)]/20"
+                          className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-secondary file:font-semibold file:bg-[var(--accent)]/10 file:text-[var(--accent)] hover:file:bg-[var(--accent)]/20"
                         />
                         {formData.about.profileCardAvatarUrl && (
                           <div className="flex items-center gap-2">
@@ -1053,9 +1053,9 @@ export default function DashboardPage() {
                               key={item.id}
                               type="button"
                               onClick={() => setSelectedExperienceIndex(index)}
-                              className={`w-full text-left px-3 py-2 rounded-lg font-secondary text-xs transition-all backdrop-blur-sm ${selectedExperienceIndex === index
-                                ? "bg-[var(--accent)]/30 text-[var(--accent)] border border-[var(--accent)]/40 shadow-md"
-                                : "backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/20 hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]/30"
+                              className={`w-full text-left px-3 py-3 rounded-lg font-secondary text-xs transition-all ${selectedExperienceIndex === index
+                                ? "bg-[var(--accent)] text-white shadow-md border border-[var(--accent)]"
+                                : "bg-white dark:bg-[#1a1a1a] text-gray-900 dark:text-white border border-[var(--border)] hover:border-[var(--accent)] shadow-sm"
                                 }`}
                             >
                               <div className="font-semibold truncate">
@@ -1371,9 +1371,9 @@ export default function DashboardPage() {
                         {formData.header.projectDropdownLinks.map((link, index) => (
                           <div
                             key={`dropdown-${link.id}`}
-                            className={`backdrop-blur-sm bg-white/50 dark:bg-gray-800/30 rounded-lg p-3 border transition-all cursor-pointer ${selectedDropdownLinkIndex === index
-                              ? "border-[var(--accent)]/50 shadow-md"
-                              : "border-white/30 dark:border-white/10 hover:border-[var(--accent)]/30"
+                            className={`bg-white dark:bg-[#1a1a1a] rounded-lg p-4 border transition-all cursor-pointer shadow-sm ${selectedDropdownLinkIndex === index
+                              ? "border-[var(--accent)] ring-1 ring-[var(--accent)]/50 shadow-md"
+                              : "border-[var(--border)] hover:border-[var(--accent)]/50"
                               }`}
                             onClick={() => setSelectedDropdownLinkIndex(index)}
                           >
@@ -1446,7 +1446,7 @@ export default function DashboardPage() {
                                     },
                                   }))
                                 }
-                                className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] focus:outline-none transition-all"
+                                className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
                                 placeholder="e.g., Travel World"
                               />
                             </div>
@@ -1507,7 +1507,7 @@ export default function DashboardPage() {
                                   },
                                 }))
                               }
-                              className="w-full px-4 py-2 rounded-lg font-secondary backdrop-blur-sm bg-white/70 dark:bg-gray-800/50 text-gray-900 dark:text-white border border-white/30 dark:border-white/20 focus:border-[var(--accent)] focus:outline-none transition-all"
+                              className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
                               placeholder="e.g., Travel website"
                             />
                           </div>
