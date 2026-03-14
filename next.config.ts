@@ -2,6 +2,7 @@ import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   // Ensure Turbopack/Next uses this project folder as the workspace root when
   // multiple lockfiles exist on the machine.
   turbopack: {
