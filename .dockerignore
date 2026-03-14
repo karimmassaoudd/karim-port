@@ -1,0 +1,14 @@
+.git
+.gitignore
+.next
+node_modules
+my-portfolio-backend
+build*.log
+dev_error.log
+Dockerfile*
+.dockerignore
+.vscode
+*.md
+*.log
+*.tsbuildinfo
+.env*
