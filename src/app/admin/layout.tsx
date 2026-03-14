@@ -145,37 +145,13 @@ export default function AdminLayout({
     <div
       className="min-h-screen bg-[var(--background)] transition-colors duration-300 relative overflow-hidden"
     >
-      {/* Global Admin Animated Background */}
-      <div className="fixed inset-0 z-0 opacity-100 pointer-events-none">
-
-        {/* Top Aurora */}
-        <div className="absolute top-0 left-0 w-full h-[60vh]">
-          <Aurora
-            colorStops={["#1e3a8a", "#60a5fa", "#6b7280"]}
-            blend={0.5}
-            amplitude={1.2}
-            speed={1}
-          />
-        </div>
-
-        {/* Bottom Aurora (Flipped) */}
-        <div className="absolute bottom-0 left-0 w-full h-[60vh] rotate-180">
-          <Aurora
-            colorStops={["#60a5fa", "#6b7280", "#1e3a8a"]}
-            blend={0.5}
-            amplitude={1.5}
-            speed={1.2}
-          />
-        </div>
-
-        {/* Frost / Blur Overlay overlaying the animations */}
-        <div className="absolute inset-0 bg-white/5 dark:bg-black/10 backdrop-blur-[45px] z-10"></div>
-      </div>
+      {/* Global Admin Background - lightweight gradient instead of animated Aurora */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-br from-blue-950 via-slate-900 to-blue-900" />
 
       {/* Sidebar */}
       <aside
         ref={sidebarRef}
-        className={`fixed top-0 left-0 h-full backdrop-blur-2xl bg-white/90 dark:bg-[var(--card)]/90 shadow-2xl border-r border-white/30 dark:border-white/20 z-50 transition-all duration-300 ease-in-out ${sidebarOpen ? "w-64" : "w-20"
+        className={`fixed top-0 left-0 h-full bg-white/95 dark:bg-slate-900/95 shadow-2xl border-r border-slate-200 dark:border-white/10 z-50 transition-[width] duration-200 ease-in-out ${sidebarOpen ? "w-64" : "w-20"
           }`}
       >
         {/* Logo/Brand */}
@@ -205,7 +181,7 @@ export default function AdminLayout({
               <h4 className="sidebar-text font-secondary font-bold text-xs text-headline">
                 Dashboard
               </h4>
-              <p className="sidebar-text text-[10px] font-secondary text-gray-600 dark:text-gray-300">
+              <p className="sidebar-text text-[10px] font-secondary text-gray-700 dark:text-gray-300">
                 Portfolio Admin
               </p>
             </div>
@@ -224,7 +200,7 @@ export default function AdminLayout({
                 href={item.path}
                 className={`nav-item flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group ${isActive
                   ? "bg-[var(--accent)]/10 backdrop-blur-md text-[var(--accent)] border border-[var(--accent)]/20 shadow-sm"
-                  : "text-headline hover:bg-white/40 dark:hover:bg-white/10 backdrop-blur-sm"
+                  : "text-gray-800 dark:text-white hover:bg-white/40 dark:hover:bg-white/10 backdrop-blur-sm"
                   }`}
               >
                 <Icon
@@ -261,7 +237,7 @@ export default function AdminLayout({
                   <p className="text-xs font-secondary font-semibold text-headline">
                     {footerData.ownerName}
                   </p>
-                  <p className="text-[10px] font-secondary text-gray-500 dark:text-gray-400">
+                  <p className="text-[10px] font-secondary text-gray-600 dark:text-gray-400">
                     {footerData.ownerTitle}
                   </p>
                 </div>
@@ -397,7 +373,7 @@ export default function AdminLayout({
             <Link
               href="/"
               target="_blank"
-              className="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-headline hover:bg-white/40 dark:hover:bg-white/10 backdrop-blur-sm transition-all duration-200"
+              className="nav-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-800 dark:text-white hover:bg-white/40 dark:hover:bg-white/10 backdrop-blur-sm transition-all duration-200"
             >
               <MdHome className="text-xl" />
               {sidebarOpen && (
@@ -429,14 +405,14 @@ export default function AdminLayout({
           }`}
       >
         {/* Top Header */}
-        <header className="h-16 backdrop-blur-2xl bg-white/90 dark:bg-[var(--card)]/90 shadow-sm border-b border-white/30 dark:border-white/20 sticky top-0 z-40">
+        <header className="h-16 bg-white/95 dark:bg-slate-900/95 shadow-sm border-b border-slate-200 dark:border-white/10 sticky top-0 z-40">
           <div className="h-full px-6 flex items-center justify-between">
             <div>
               <h5 className="text-base font-secondary font-bold text-headline">
                 {menuItems.find((item) => item.path === pathname)?.name ||
                   "Dashboard"}
               </h5>
-              <p className="text-xs font-secondary text-gray-600 dark:text-gray-300">
+              <p className="text-xs font-secondary text-gray-700 dark:text-gray-300">
                 Manage your portfolio content
               </p>
             </div>
@@ -448,7 +424,7 @@ export default function AdminLayout({
                   <p className="text-sm font-secondary font-medium text-gray-900 dark:text-white">
                     {session?.user?.name || "Admin"}
                   </p>
-                  <p className="text-xs font-secondary text-gray-600 dark:text-gray-300">
+                  <p className="text-xs font-secondary text-gray-700 dark:text-gray-300">
                     Administrator
                   </p>
                 </div>

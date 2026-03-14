@@ -3,12 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  type ElementType,
   type FC,
   type ReactNode,
   useEffect,
   useState,
 } from "react";
+import type { IconType } from "react-icons";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { HiOutlineMapPin } from "react-icons/hi2";
 import { IoMdMail } from "react-icons/io";
@@ -59,7 +59,7 @@ export const Footer: FC = () => {
   ];
 
   // Map icon names to components
-  const iconMap: Record<string, ElementType> = {
+  const iconMap: Record<string, IconType> = {
     linkedin: FaLinkedin,
     github: FaGithub,
     email: IoMdMail,
@@ -111,7 +111,7 @@ export const Footer: FC = () => {
     label,
   }: {
     href: string;
-    icon: any;
+    icon: IconType;
     label: string;
   }) => (
     <a

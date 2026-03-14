@@ -3,6 +3,7 @@
 import Image from "next/image";
 import type React from "react";
 import { useState } from "react";
+import type { IconType } from "react-icons";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { MdLocalPhone } from "react-icons/md";
@@ -10,7 +11,7 @@ import { MdLocalPhone } from "react-icons/md";
 // --- Type Definitions ---
 interface IconLinkProps {
   href: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
 }
 

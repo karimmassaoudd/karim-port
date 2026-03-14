@@ -520,10 +520,10 @@ export default function DashboardPage() {
               onClick={() => setActiveSection(item.id as any)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${activeSection === item.id
                 ? "bg-[var(--accent)] text-white shadow-md"
-                : "text-[var(--secondary-text)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
+                : "text-gray-800 dark:text-gray-300 hover:bg-white/70 dark:hover:bg-[var(--surface)] hover:text-gray-900 dark:hover:text-white"
                 }`}
             >
-              <item.icon className={`text-lg ${activeSection === item.id ? "text-white" : "text-[var(--secondary-text)]"}`} />
+              <item.icon className={`text-lg ${activeSection === item.id ? "text-white" : "text-gray-800 dark:text-gray-400"}`} />
               {item.label}
             </button>
           ))}
@@ -576,8 +576,7 @@ export default function DashboardPage() {
           >
             <div className="max-w-4xl mx-auto">
               {/* Hero Section */}
-              {activeSection === "hero" && (
-                <div className="space-y-5">
+              <div className={activeSection === "hero" ? "space-y-5" : "hidden"}>
                   <h3 className="text-sm font-bold text-[var(--headline)] mb-6 tracking-wide uppercase">
                     Hero Section
                   </h3>
@@ -595,7 +594,7 @@ export default function DashboardPage() {
                             hero: { ...formData.hero, mainTitle: e.target.value },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -611,7 +610,7 @@ export default function DashboardPage() {
                             hero: { ...formData.hero, subtitle: e.target.value },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -630,7 +629,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -649,7 +648,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -668,7 +667,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -687,16 +686,14 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                   </div>
-                </div>
-              )}
+              </div>
 
               {/* Bio Section */}
-              {activeSection === "bio" && (
-                <div className="space-y-5">
+              <div className={activeSection === "bio" ? "space-y-5" : "hidden"}>
                   <h3 className="text-sm font-bold text-[var(--headline)] mb-6 tracking-wide uppercase">
                     Bio Section
                   </h3>
@@ -713,7 +710,7 @@ export default function DashboardPage() {
                         })
                       }
                       rows={6}
-                      className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                      className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                     />
                   </div>
                   <div>
@@ -732,15 +729,13 @@ export default function DashboardPage() {
                           },
                         })
                       }
-                      className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                      className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                     />
                   </div>
-                </div>
-              )}
+              </div>
 
               {/* About Section */}
-              {activeSection === "about" && (
-                <div className="space-y-5">
+              <div className={activeSection === "about" ? "space-y-5" : "hidden"}>
                   <h3 className="text-sm font-bold text-[var(--headline)] mb-6 tracking-wide uppercase">
                     About Section
                   </h3>
@@ -761,7 +756,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -777,7 +772,7 @@ export default function DashboardPage() {
                             about: { ...formData.about, heading: e.target.value },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -793,7 +788,7 @@ export default function DashboardPage() {
                           })
                         }
                         rows={5}
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -812,7 +807,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -828,7 +823,7 @@ export default function DashboardPage() {
                             about: { ...formData.about, email: e.target.value },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div className="md:col-span-2">
@@ -847,7 +842,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -866,7 +861,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -885,7 +880,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -904,7 +899,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -944,7 +939,7 @@ export default function DashboardPage() {
                               }
                             }
                           }}
-                          className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-secondary file:font-semibold file:bg-[var(--accent)]/10 file:text-[var(--accent)] hover:file:bg-[var(--accent)]/20"
+                          className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-secondary file:font-semibold file:bg-[var(--accent)]/10 file:text-[var(--accent)] hover:file:bg-[var(--accent)]/20"
                         />
                         {formData.about.profileCardAvatarUrl && (
                           <div className="flex items-center gap-2">
@@ -973,12 +968,10 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+              </div>
 
               {/* Experience Section */}
-              {activeSection === "experience" && (
-                <div className="space-y-5">
+              <div className={activeSection === "experience" ? "space-y-5" : "hidden"}>
                   <div className="flex justify-between items-center mb-6">
                     <h3 className="text-xs font-secondary font-bold text-headline">
                       Experience Section
@@ -986,7 +979,7 @@ export default function DashboardPage() {
                     <button
                       type="button"
                       onClick={addExperienceItem}
-                      className="px-4 py-2 rounded-lg font-secondary font-semibold backdrop-blur-md bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all shadow-md"
+                      className="px-4 py-2 rounded-lg font-secondary font-semibold bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all shadow-md"
                     >
                       + Add Experience
                     </button>
@@ -1009,7 +1002,7 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                     <div>
@@ -1028,13 +1021,13 @@ export default function DashboardPage() {
                             },
                           })
                         }
-                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                        className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                       />
                     </div>
                   </div>
 
                   {formData.userExperience.items.length === 0 ? (
-                    <div className="text-center py-12 backdrop-blur-xl bg-white/60 dark:bg-[var(--card)]/60 rounded-xl border border-white/30 dark:border-white/20 shadow-md">
+                    <div className="text-center py-12 bg-white/90 dark:bg-[var(--card)]/60 rounded-xl border border-white/30 dark:border-white/20 shadow-md">
                       <p className="text-xs font-secondary text-gray-600 dark:text-gray-300">
                         No experience items yet. Click "+ Add Experience" to create
                         one.
@@ -1043,7 +1036,7 @@ export default function DashboardPage() {
                   ) : (
                     <div className="flex gap-4">
                       {/* Left Sidebar - Experience List */}
-                      <div className="w-64 backdrop-blur-xl bg-white/60 dark:bg-[var(--card)]/60 rounded-xl border border-white/30 dark:border-white/20 shadow-lg p-4">
+                      <div className="w-64 bg-white/90 dark:bg-[var(--card)]/60 rounded-xl border border-white/30 dark:border-white/20 shadow-lg p-4">
                         <h4 className="text-xs font-secondary font-bold text-headline mb-3">
                           All Experience
                         </h4>
@@ -1069,7 +1062,7 @@ export default function DashboardPage() {
                       {/* Right Side - Experience Details */}
                       {selectedExperienceIndex !== null &&
                         formData.userExperience.items[selectedExperienceIndex] && (
-                          <div className="flex-1 backdrop-blur-xl bg-white/60 dark:bg-[var(--card)]/60 rounded-xl shadow-lg border border-white/30 dark:border-white/20 p-6">
+                          <div className="flex-1 bg-white/90 dark:bg-[var(--card)]/60 rounded-xl shadow-lg border border-white/30 dark:border-white/20 p-6">
                             <div className="flex justify-between items-start mb-4">
                               <h4 className="text-xs font-secondary font-bold text-headline">
                                 {formData.userExperience.items[
@@ -1106,7 +1099,7 @@ export default function DashboardPage() {
                                       e.target.value,
                                     )
                                   }
-                                  className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                                  className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                                 />
                               </div>
                               <div>
@@ -1127,7 +1120,7 @@ export default function DashboardPage() {
                                     )
                                   }
                                   rows={3}
-                                  className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                                  className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                                 />
                               </div>
                               <div>
@@ -1148,7 +1141,7 @@ export default function DashboardPage() {
                                     )
                                   }
                                   rows={4}
-                                  className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                                  className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                                 />
                               </div>
                             </div>
@@ -1156,13 +1149,11 @@ export default function DashboardPage() {
                         )}
                     </div>
                   )}
-                </div>
-              )}
+              </div>
 
               {/* Projects Section */}
-              {activeSection === "projects" && (
-                <div className="space-y-5">
-                  <div className="backdrop-blur-xl bg-white/70 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
+              <div className={activeSection === "projects" ? "space-y-5" : "hidden"}>
+                  <div className="bg-white/90 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
                     <ProjectSelector
                       selectedProjects={formData.featuredProjects}
                       onChange={(projects) =>
@@ -1173,18 +1164,16 @@ export default function DashboardPage() {
                       }
                     />
                   </div>
-                </div>
-              )}
+              </div>
 
               {/* Header Section */}
-              {activeSection === "header" && (
-                <div className="space-y-5">
+              <div className={activeSection === "header" ? "space-y-5" : "hidden"}>
                   <h3 className="text-sm font-bold text-[var(--headline)] mb-6 tracking-wide uppercase">
                     Header Navigation
                   </h3>
 
                   {/* Main Navigation Links */}
-                  <div className="backdrop-blur-xl bg-white/70 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
+                  <div className="bg-white/90 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <h4 className="text-sm font-secondary font-bold text-headline">
@@ -1197,7 +1186,7 @@ export default function DashboardPage() {
                       <button
                         type="button"
                         onClick={addNavLink}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold text-xs backdrop-blur-md bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold text-xs bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all"
                       >
                         <span className="text-lg">+</span>
                         Add Link
@@ -1210,7 +1199,7 @@ export default function DashboardPage() {
                         {formData.header.mainLinks.map((link, index) => (
                           <div
                             key={`nav-${link.id}`}
-                            className={`backdrop-blur-sm bg-white/50 dark:bg-gray-800/30 rounded-lg p-3 border transition-all cursor-pointer ${selectedNavLinkIndex === index
+                            className={`bg-white/80 dark:bg-gray-800/30 rounded-lg p-3 border transition-all cursor-pointer ${selectedNavLinkIndex === index
                               ? "border-[var(--accent)]/50 shadow-md"
                               : "border-white/30 dark:border-white/10 hover:border-[var(--accent)]/30"
                               }`}
@@ -1345,7 +1334,7 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Project Dropdown Links */}
-                  <div className="backdrop-blur-xl bg-white/70 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
+                  <div className="bg-white/90 dark:bg-[var(--card)]/70 rounded-xl shadow-lg border border-white/40 dark:border-white/30 p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <h4 className="text-sm font-secondary font-bold text-headline">
@@ -1358,7 +1347,7 @@ export default function DashboardPage() {
                       <button
                         type="button"
                         onClick={addDropdownLink}
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold text-xs backdrop-blur-md bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all"
+                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold text-xs bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all"
                       >
                         <span className="text-lg">+</span>
                         Add Project Link
@@ -1446,7 +1435,7 @@ export default function DashboardPage() {
                                     },
                                   }))
                                 }
-                                className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                                className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                                 placeholder="e.g., Travel World"
                               />
                             </div>
@@ -1507,7 +1496,7 @@ export default function DashboardPage() {
                                   },
                                 }))
                               }
-                              className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-all outline-none shadow-sm"
+                              className="w-full px-4 py-3 rounded-md font-secondary bg-white dark:bg-[#1a1a1a] text-[var(--text)] border border-[var(--border)] focus:border-[var(--accent)] hover:border-[var(--secondary-text)] transition-colors outline-none shadow-sm"
                               placeholder="e.g., Travel website"
                             />
                           </div>
@@ -1547,12 +1536,10 @@ export default function DashboardPage() {
                         </div>
                       )}
                   </div>
-                </div>
-              )}
+              </div>
 
               {/* Settings Section */}
-              {activeSection === "settings" && (
-                <div className="space-y-5">
+              <div className={activeSection === "settings" ? "space-y-5" : "hidden"}>
                   <h3 className="text-sm font-bold text-[var(--headline)] mb-6 tracking-wide uppercase">
                     Settings
                   </h3>
@@ -1618,7 +1605,7 @@ export default function DashboardPage() {
                         />
                         <label
                           htmlFor="background-upload"
-                          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold backdrop-blur-md bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all cursor-pointer ${uploading ? "opacity-50 cursor-not-allowed" : ""
+                          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-secondary font-semibold bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/30 hover:shadow-lg transition-all cursor-pointer ${uploading ? "opacity-50 cursor-not-allowed" : ""
                             }`}
                         >
                           <MdCloudUpload className="text-xl" />
@@ -1685,8 +1672,7 @@ export default function DashboardPage() {
                       </div>
                     )}
                   </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </form>

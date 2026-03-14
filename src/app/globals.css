@@ -34,7 +34,7 @@ body::-webkit-scrollbar {
   --accent-rgb: 21, 91, 134;
   --accent-soft: #6f8a99;
   /* softer, cleaner divider tint */
-  --secondary-text: #5c5c5c;
+  --secondary-text: #374151;
   --accent-hover: #5c666c;
   /* Card surfaces */
   --card: #ffffff;
@@ -55,6 +55,10 @@ body::-webkit-scrollbar {
   --Secondary-Background: #d2d2d2;
   --footer-secondary: #d7e3ea;
   --hero-about-text: var(--text);
+
+  /* Admin dashboard tokens */
+  --border: rgba(0, 0, 0, 0.12);
+  --surface: rgba(255, 255, 255, 0.6);
 
   /* Studio hero theme tokens (light mode defaults) */
   --studio-bg1: #f3f2f0;
@@ -182,7 +186,7 @@ h4 {
 
 /* Dashboard headline colors */
 .text-headline {
-  color: #8d9399;
+  color: #1e293b;
 }
 
 .dark .text-headline {
