@@ -2,11 +2,12 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "@/components/ProfileCard.css";
 import { Providers } from "./providers";
+import { getSiteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "karim",
   description: "karim's portfolio",
-  metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
+  metadataBase: new URL(getSiteUrl()),
   icons: {
     icon: "/favicon.ico",
   },

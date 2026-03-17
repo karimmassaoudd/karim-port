@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import dbConnect from "@/lib/mongodb";
+import { getSiteUrl } from "@/lib/site-url";
 import EmailConfig from "@/models/EmailConfig";
 import User from "@/models/User";
 
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
     await user.save();
 
     // Create reset URL
-    const resetUrl = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${resetToken}`;
+    const resetUrl = `${getSiteUrl()}/auth/reset-password?token=${resetToken}`;
 
     // Send email using database configuration
     const transporter = nodemailer.createTransport({
