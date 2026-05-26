@@ -80,11 +80,6 @@ const nextConfig: NextConfig = {
         destination: "/project-Owen-Bryce",
         permanent: true,
       },
-      {
-        source: "/projects/travel-world",
-        destination: "/project-details",
-        permanent: true,
-      },
     ];
   },
 };

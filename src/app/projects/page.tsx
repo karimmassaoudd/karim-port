@@ -1,17 +1,258 @@
 "use client";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { MdSearch } from "react-icons/md";
+import { MdOpenInNew, MdSearch } from "react-icons/md";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PageAnimator from "@/components/PageAnimator";
 
 gsap.registerPlugin(ScrollTrigger);
 
+type ProjectImage = {
+  url?: string;
+  alt?: string;
+};
+
+type Project = {
+  _id: string;
+  title: string;
+  slug: string;
+  detailHref?: string;
+  shortDescription?: string;
+  thumbnail?: ProjectImage;
+  technologies?: string[];
+  sections?: {
+    hero?: {
+      category?: string;
+      heroImage?: ProjectImage;
+    };
+    overview?: {
+      tagline?: string;
+      category?: string;
+    };
+    websitePreview?: {
+      liveUrl?: string;
+    };
+  };
+};
+
+type FallbackProjectInput = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  image: string;
+  alt: string;
+  technologies: string[];
+  liveUrl?: string;
+  detailHref?: string;
+};
+
+const createFallbackProject = ({
+  id,
+  title,
+  slug,
+  description,
+  category,
+  image,
+  alt,
+  technologies,
+  liveUrl,
+  detailHref,
+}: FallbackProjectInput): Project => ({
+  _id: id,
+  title,
+  slug,
+  detailHref,
+  shortDescription: description,
+  thumbnail: {
+    url: image,
+    alt,
+  },
+  technologies,
+  sections: {
+    hero: {
+      category,
+      heroImage: {
+        url: image,
+        alt,
+      },
+    },
+    overview: {
+      tagline: description,
+      category,
+    },
+    websitePreview: liveUrl ? { liveUrl } : undefined,
+  },
+});
+
+const fallbackProjects: Project[] = [
+  createFallbackProject({
+    id: "fallback-travel-world",
+    title: "Travel World",
+    slug: "travel-world",
+    detailHref: "/projects/travel-world",
+    description:
+      "A simple, friendly travel website that makes exploring destinations feel fun and effortless.",
+    category: "Travel Website",
+    image: "/assets/project-travel-world-screenshot.png",
+    alt: "Travel World website preview",
+    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    liveUrl: "https://travelworld.karimmassaoud.cv/",
+  }),
+  createFallbackProject({
+    id: "fallback-taw-tours",
+    title: "TAW Tours",
+    slug: "taw-tours",
+    detailHref: "https://taw.tours/en",
+    description:
+      "A travel and tours platform for browsing destinations, packages, and booking journeys online.",
+    category: "Travel Booking Platform",
+    image: "/assets/project-taw-tours-screenshot.png",
+    alt: "TAW Tours travel preview",
+    technologies: ["Travel Platform", "Booking Flow", "Responsive Design"],
+    liveUrl: "https://taw.tours/en",
+  }),
+  createFallbackProject({
+    id: "fallback-same-n-sterk",
+    title: "Same 'n Sterk",
+    slug: "same-n-sterk",
+    detailHref: "https://same-n-sterk.nl/",
+    description:
+      "A community-focused website with clear information structure and accessible page navigation.",
+    category: "Community Website",
+    image: "/assets/project-same-n-sterk-screenshot.png",
+    alt: "Same 'n Sterk website preview",
+    technologies: ["Web Design", "CMS", "Accessibility"],
+    liveUrl: "https://same-n-sterk.nl/",
+  }),
+  createFallbackProject({
+    id: "fallback-os-iconk",
+    title: "OS IconK",
+    slug: "os-iconk",
+    detailHref: "https://os.iconk.site/login",
+    description:
+      "A secure operations login portal designed for focused administrative workflows.",
+    category: "Operations Dashboard",
+    image: "/assets/project-os-iconk-dashboard.png",
+    alt: "OS IconK dashboard preview",
+    technologies: ["Dashboard", "Authentication", "Admin UI"],
+    liveUrl: "https://os.iconk.site/login",
+  }),
+  createFallbackProject({
+    id: "fallback-taidup",
+    title: "Taidup",
+    slug: "taidup",
+    detailHref: "https://taidup.iconk.site/",
+    description:
+      "A web application interface built around clean task flows and practical user interactions.",
+    category: "Web Application",
+    image: "/assets/project-taidup-screenshot.png",
+    alt: "Taidup website preview",
+    technologies: ["Web App", "UX/UI", "Frontend"],
+    liveUrl: "https://taidup.iconk.site/",
+  }),
+  createFallbackProject({
+    id: "fallback-triple-wave",
+    title: "Triple WAVE",
+    slug: "triple-wave",
+    detailHref: "/projects/triple-wave",
+    description:
+      "A friendly guide for international students in Eindhoven to find housing, get around, manage finances, and discover local events.",
+    category: "Student Guide Platform",
+    image: "/assets/project-triple-wave-screenshot.png",
+    alt: "Triple WAVE platform preview",
+    technologies: ["React", "UX Research", "Responsive Design"],
+    liveUrl: "https://triple-wave.netlify.app/",
+  }),
+  createFallbackProject({
+    id: "fallback-owen-bryce",
+    title: "Owen Bryce",
+    slug: "owen-bryce",
+    detailHref: "/projects/owen-bryce",
+    description:
+      "A promotional campaign for an emerging folk/indie artist, creating a cohesive brand identity across multiple platforms.",
+    category: "Artist Branding Campaign",
+    image: "/assets/Owen Bryce Project Background .png",
+    alt: "Owen Bryce branding preview",
+    technologies: ["Branding", "Campaign Design", "Social Media"],
+  }),
+  createFallbackProject({
+    id: "fallback-travel-offers",
+    title: "Travel Offers UI",
+    slug: "travel-offers-ui",
+    detailHref: "/projects/travel-world",
+    description:
+      "A focused offer-card interface for presenting travel deals, discounts, and booking actions.",
+    category: "UI Design",
+    image: "/assets/special offer.png",
+    alt: "Travel offers interface preview",
+    technologies: ["UI Design", "Cards", "Conversion"],
+  }),
+  createFallbackProject({
+    id: "fallback-eindhoven-local-events",
+    title: "Eindhoven Local Events",
+    slug: "eindhoven-local-events",
+    detailHref: "/projects/triple-wave",
+    description:
+      "A local discovery experience helping international students find events and social places.",
+    category: "Student Experience",
+    image: "/assets/Local Event 2.webp",
+    alt: "Eindhoven local events preview",
+    technologies: ["UX Research", "Information Design", "Mobile UX"],
+  }),
+  createFallbackProject({
+    id: "fallback-owen-campaign-assets",
+    title: "Owen Bryce Campaign Assets",
+    slug: "owen-bryce-campaign-assets",
+    detailHref: "/projects/owen-bryce",
+    description:
+      "A set of social media, poster, and identity assets for a cohesive artist promotion campaign.",
+    category: "Brand Assets",
+    image: "/assets/Social Media Owen Bcryce .png",
+    alt: "Owen Bryce campaign asset preview",
+    technologies: ["Branding", "Print Design", "Social Media"],
+  }),
+];
+
+const getProjectCategory = (project: Project) =>
+  project.sections?.hero?.category ||
+  project.sections?.overview?.category ||
+  "Case Study";
+
+const getProjectDescription = (project: Project) =>
+  project.shortDescription ||
+  project.sections?.overview?.tagline ||
+  "No description available";
+
+const getProjectImage = (project: Project) =>
+  project.thumbnail?.url || project.sections?.hero?.heroImage?.url;
+
+const getProjectLiveUrl = (project: Project) =>
+  project.sections?.websitePreview?.liveUrl;
+
+const isExternalHref = (href: string) => /^https?:\/\//.test(href);
+
+const mergeProjectsToTen = (primaryProjects: Project[]) => {
+  const seen = new Set<string>();
+  const merged: Project[] = [];
+
+  [...fallbackProjects, ...primaryProjects].forEach((project) => {
+    const key = project.slug || project._id;
+    if (seen.has(key)) return;
+    seen.add(key);
+    merged.push(project);
+  });
+
+  return merged.slice(0, 10);
+};
+
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -28,21 +269,26 @@ export default function ProjectsPage() {
     try {
       const response = await fetch("/api/projects?status=published");
       const result = await response.json();
-      if (result.success) {
-        setProjects(result.data);
+      const publishedProjects =
+        result.success && Array.isArray(result.data) ? result.data : [];
+      const nextProjects = mergeProjectsToTen(publishedProjects);
 
-        // Extract unique categories from projects
-        const uniqueCategories = new Set<string>(["All"]);
-        result.data.forEach((project: any) => {
-          const category = project.sections?.hero?.category;
-          if (category) {
-            uniqueCategories.add(category);
-          }
-        });
-        setCategories(Array.from(uniqueCategories));
-      }
+      setProjects(nextProjects);
+
+      // Extract unique categories from projects
+      const uniqueCategories = new Set<string>(["All"]);
+      nextProjects.forEach((project: Project) => {
+        const category = getProjectCategory(project);
+        if (category) uniqueCategories.add(category);
+      });
+      setCategories(Array.from(uniqueCategories));
     } catch (error) {
       console.error("Error fetching projects:", error);
+      setProjects(fallbackProjects);
+      setCategories([
+        "All",
+        ...Array.from(new Set(fallbackProjects.map(getProjectCategory))),
+      ]);
     } finally {
       setLoading(false);
     }
@@ -57,21 +303,24 @@ export default function ProjectsPage() {
     return projects.filter((project) => {
       const matchesSearch =
         project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.shortDescription
-          ?.toLowerCase()
+        getProjectDescription(project)
+          .toLowerCase()
           .includes(searchQuery.toLowerCase());
 
       const matchesCategory =
         selectedCategory === "All" ||
-        project.sections?.hero?.category === selectedCategory;
+        getProjectCategory(project) === selectedCategory;
 
       return matchesSearch && matchesCategory;
     });
   }, [projects, searchQuery, selectedCategory]);
 
+  const filteredProjectCount = filteredProjects.length;
+
   // GSAP Animations
   useEffect(() => {
     if (loading) return;
+    if (filteredProjectCount === 0) return;
 
     const ctx = gsap.context(() => {
       // Set initial state
@@ -146,7 +395,7 @@ export default function ProjectsPage() {
     });
 
     return () => ctx.revert();
-  }, [loading, filteredProjects.length]);
+  }, [loading, filteredProjectCount]);
 
   return (
     <>
@@ -203,12 +452,14 @@ export default function ProjectsPage() {
               <div className="flex flex-wrap gap-3" ref={filtersRef}>
                 {categories.map((category) => (
                   <button
+                    type="button"
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${selectedCategory === category
+                    className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                      selectedCategory === category
                         ? "bg-white text-black shadow-md border-transparent"
                         : "bg-transparent text-[var(--secondary-text)] border border-[var(--border)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
-                      }`}
+                    }`}
                     suppressHydrationWarning
                   >
                     {category}
@@ -241,91 +492,116 @@ export default function ProjectsPage() {
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 ref={gridRef}
               >
-                {filteredProjects.map((project) => (
-                  <div
-                    key={project._id}
-                    className="group relative flex flex-col overflow-hidden rounded-xl bg-[var(--card)]/90 backdrop-blur-sm border border-[var(--border)] transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                  >
-                    {/* Thumbnail */}
-                    <div className="relative aspect-[16/9] w-full overflow-hidden">
-                      {/* Category Badge */}
-                      {project.sections?.hero?.category && (
-                        <div className="absolute top-4 left-4 z-10">
-                          <span className="inline-block px-3 py-1 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 text-xs font-medium tracking-wide">
-                            {project.sections.hero.category}
-                          </span>
-                        </div>
-                      )}
+                {filteredProjects.map((project) => {
+                  const detailsHref =
+                    project.detailHref || `/projects/${project.slug}`;
+                  const liveUrl = getProjectLiveUrl(project);
+                  const detailsIsExternal = isExternalHref(detailsHref);
+                  const imageUrl = getProjectImage(project);
+                  const imageAlt =
+                    project.thumbnail?.alt ||
+                    project.sections?.hero?.heroImage?.alt ||
+                    project.title;
 
-                      {project.thumbnail?.url ? (
-                        <img
-                          src={project.thumbnail.url}
-                          alt={project.thumbnail.alt || project.title}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-[var(--Secondary-Background)] text-[var(--secondary-text)]">
-                          <span className="text-4xl text-white/10">📁</span>
-                        </div>
-                      )}
-                      {/* Dark gradient overlay for smooth transition to content */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)]/90 via-transparent to-transparent opacity-60"></div>
-                    </div>
+                  return (
+                    <div
+                      key={project._id}
+                      className="group relative flex flex-col overflow-hidden rounded-xl bg-[var(--card)]/90 backdrop-blur-sm border border-[var(--border)] transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                    >
+                      {/* Thumbnail */}
+                      <div className="relative aspect-[16/9] w-full overflow-hidden">
+                        {/* Category Badge */}
+                        {getProjectCategory(project) && (
+                          <div className="absolute top-4 left-4 z-10">
+                            <span className="inline-block px-3 py-1 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 text-xs font-medium tracking-wide">
+                              {getProjectCategory(project)}
+                            </span>
+                          </div>
+                        )}
 
-                    {/* Content */}
-                    <div className="flex flex-col flex-1 p-6 relative z-10">
-                      <h3 className="text-xl font-bold text-[var(--headline)] mb-3 group-hover:text-[var(--accent)] transition-colors line-clamp-2">
-                        {project.title}
-                      </h3>
+                        {imageUrl ? (
+                          <Image
+                            src={imageUrl}
+                            alt={imageAlt}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-[var(--Secondary-Background)] text-[var(--secondary-text)]">
+                            <span className="text-4xl text-white/10">📁</span>
+                          </div>
+                        )}
+                        {/* Dark gradient overlay for smooth transition to content */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)]/90 via-transparent to-transparent opacity-60"></div>
+                      </div>
 
-                      <p className="text-sm text-[var(--secondary-text)] mb-6 flex-1 line-clamp-3 leading-relaxed">
-                        {project.shortDescription ||
-                          project.sections?.overview?.tagline ||
-                          "No description available"}
-                      </p>
+                      {/* Content */}
+                      <div className="flex flex-col flex-1 p-6 relative z-10">
+                        <h3 className="text-xl font-bold text-[var(--headline)] mb-3 group-hover:text-[var(--accent)] transition-colors line-clamp-2">
+                          {project.title}
+                        </h3>
 
-                      {/* Technologies */}
-                      {project.technologies?.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {project.technologies.slice(0, 4).map((tech: string, i: number) => (
-                            <span
-                              key={i}
-                              className="px-2.5 py-1 text-xs font-medium rounded-md bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)]/50"
+                        <p className="text-sm text-[var(--secondary-text)] mb-6 flex-1 line-clamp-3 leading-relaxed">
+                          {getProjectDescription(project)}
+                        </p>
+
+                        {/* Technologies */}
+                        {project.technologies?.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-6">
+                            {project.technologies
+                              .slice(0, 4)
+                              .map((tech: string) => (
+                                <span
+                                  key={`${project._id}-${tech}`}
+                                  className="px-2.5 py-1 text-xs font-medium rounded-md bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)]/50"
+                                >
+                                  {tech}
+                                </span>
+                              ))}
+                            {project.technologies.length > 4 && (
+                              <span className="px-2.5 py-1 text-xs font-medium rounded-md bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)]/50">
+                                +{project.technologies.length - 4}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {/* View Details Button & Link */}
+                        <div className="mt-auto flex gap-3">
+                          {detailsIsExternal ? (
+                            <a
+                              href={detailsHref}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 inline-flex items-center justify-center py-2.5 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors"
                             >
-                              {tech}
-                            </span>
-                          ))}
-                          {project.technologies.length > 4 && (
-                            <span className="px-2.5 py-1 text-xs font-medium rounded-md bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)]/50">
-                              +{project.technologies.length - 4}
-                            </span>
+                              View Project
+                            </a>
+                          ) : (
+                            <Link
+                              href={detailsHref}
+                              className="flex-1 inline-flex items-center justify-center py-2.5 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                            >
+                              View Details
+                            </Link>
+                          )}
+                          {liveUrl && (
+                            <a
+                              href={liveUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-center w-10.5 px-3 bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)] rounded-lg hover:bg-[var(--border)] transition-colors"
+                              aria-label={`Open ${project.title} live project`}
+                            >
+                              <MdOpenInNew aria-hidden="true" />
+                            </a>
                           )}
                         </div>
-                      )}
-
-                      {/* View Details Button & Link */}
-                      <div className="mt-auto flex gap-3">
-                        <Link
-                          href={`/projects/${project.slug}`}
-                          className="flex-1 inline-flex items-center justify-center py-2.5 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          View Details
-                        </Link>
-                        {project.sections?.websitePreview?.liveUrl && (
-                          <a
-                            href={project.sections.websitePreview.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center w-10.5 px-3 bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)] rounded-lg hover:bg-[var(--border)] transition-colors"
-                            aria-label="View Live Project Location"
-                          >
-                            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path></svg>
-                          </a>
-                        )}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

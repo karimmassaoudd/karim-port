@@ -261,9 +261,9 @@ const Header = () => {
                   className={`block px-3 py-3 rounded-lg transition-all ${pathname === "/projects" ? "bg-[var(--accent)]/20 text-[var(--accent)] font-semibold border border-[var(--accent)]/40 shadow-md shadow-[var(--accent)]/10" : "text-[var(--text)]/90 hover:bg-[var(--accent)]/10 border border-[var(--accent)]/20 hover:border-[var(--accent)]/30"} border`}
                   onClick={() => setIsProjectsOpen(false)}
                 >
-                  <span className="font-semibold text-sm">Case Studies</span>
+                  <span className="font-semibold text-sm">All Projects</span>
                   <p className="text-xs text-[var(--secondary-text)] mt-0.5">
-                    Featured projects & case studies
+                    Featured projects and case studies
                   </p>
                 </Link>
               </div>
@@ -275,10 +275,10 @@ const Header = () => {
               <ul className="py-2 px-2">
                 <li>
                   <Link
-                    href="/projects/taw-travel-platform"
+                    href="/projects/travel-world"
                     role="menuitem"
                     tabIndex={isProjectsOpen ? 0 : -1}
-                    className={`block px-3 py-2.5 rounded-lg transition-all ${pathname === "/projects/taw-travel-platform" ? "bg-[var(--accent)]/15 text-[var(--accent)] font-semibold border border-[var(--accent)]/30" : "text-[var(--text)]/80 hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20"} border`}
+                    className={`block px-3 py-2.5 rounded-lg transition-all ${pathname === "/projects/travel-world" ? "bg-[var(--accent)]/15 text-[var(--accent)] font-semibold border border-[var(--accent)]/30" : "text-[var(--text)]/80 hover:bg-[var(--accent)]/10 border border-transparent hover:border-[var(--accent)]/20"} border`}
                     onClick={() => setIsProjectsOpen(false)}
                   >
                     <span className="text-sm font-medium">Travel World</span>
@@ -430,12 +430,12 @@ const Header = () => {
                         setIsMobileProjectsOpen(false);
                       }}
                     >
-                      Case Studies
+                      All Projects
                     </Link>
                   </li>
                   <li>
                     <Link
-                      href="/projects/taw-travel-platform"
+                      href="/projects/travel-world"
                       className="block px-3 py-2 rounded-md hover:bg-[var(--Secondary-Background)]/60"
                       onClick={() => {
                         setIsMenuOpen(false);
