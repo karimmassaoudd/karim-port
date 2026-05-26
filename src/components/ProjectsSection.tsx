@@ -67,7 +67,7 @@ const fallbackProjects: Project[] = [
     sections: {
       hero: {
         heroImage: {
-          url: "/assets/Triple Wvee.jpg",
+          url: "/assets/project-triple-wave-screenshot.png",
         },
       },
       overview: {
@@ -79,7 +79,12 @@ const fallbackProjects: Project[] = [
         enabled: true,
         heading: "The Challenge",
         description: "International students often struggle to find reliable housing and navigate the local financial system in Eindhoven. Triple WAVE aims to bridge this gap with an all-in-one intuitive platform.",
-        images: [{ url: "/assets/Triple Wvee.jpg", alt: "Triple Wave Challenge" }],
+        images: [
+          {
+            url: "/assets/project-triple-wave-screenshot.png",
+            alt: "Triple Wave Challenge",
+          },
+        ],
       },
     },
     technologies: ["React", "Node.js", "Express.js"],
