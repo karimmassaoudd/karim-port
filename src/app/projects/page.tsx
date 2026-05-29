@@ -555,6 +555,7 @@ export default function ProjectsPage() {
                     project.thumbnail?.alt ||
                     project.sections?.hero?.heroImage?.alt ||
                     project.title;
+                  const technologies = project.technologies ?? [];
 
                   return (
                     <div
@@ -604,21 +605,19 @@ export default function ProjectsPage() {
                           {getProjectDescription(project)}
                         </p>
 
-                        {project.technologies?.length > 0 && (
+                        {technologies.length > 0 && (
                           <div className="mb-6 flex flex-wrap gap-2">
-                            {project.technologies
-                              .slice(0, 4)
-                              .map((tech: string) => (
-                                <span
-                                  key={`${project._id}-${tech}`}
-                                  className="inline-flex min-h-8 items-center rounded-md border border-[var(--border)]/70 bg-[var(--Secondary-Background)]/75 px-3 text-xs font-semibold text-[var(--text)]"
-                                >
-                                  {tech}
-                                </span>
-                              ))}
-                            {project.technologies.length > 4 && (
+                            {technologies.slice(0, 4).map((tech: string) => (
+                              <span
+                                key={`${project._id}-${tech}`}
+                                className="inline-flex min-h-8 items-center rounded-md border border-[var(--border)]/70 bg-[var(--Secondary-Background)]/75 px-3 text-xs font-semibold text-[var(--text)]"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                            {technologies.length > 4 && (
                               <span className="inline-flex min-h-8 items-center rounded-md border border-[var(--border)]/70 bg-[var(--Secondary-Background)]/75 px-3 text-xs font-semibold text-[var(--text)]">
-                                +{project.technologies.length - 4}
+                                +{technologies.length - 4}
                               </span>
                             )}
                           </div>
