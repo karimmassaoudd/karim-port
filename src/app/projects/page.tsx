@@ -1,10 +1,17 @@
 "use client";
+
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { MdOpenInNew, MdSearch } from "react-icons/md";
+import {
+  MdArrowBack,
+  MdArrowForward,
+  MdClose,
+  MdOpenInNew,
+  MdSearch,
+} from "react-icons/md";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PageAnimator from "@/components/PageAnimator";
@@ -181,42 +188,15 @@ const fallbackProjects: Project[] = [
     alt: "Owen Bryce branding preview",
     technologies: ["Branding", "Campaign Design", "Social Media"],
   }),
-  createFallbackProject({
-    id: "fallback-travel-offers",
-    title: "Travel Offers UI",
-    slug: "travel-offers-ui",
-    detailHref: "/projects/travel-world",
-    description:
-      "A focused offer-card interface for presenting travel deals, discounts, and booking actions.",
-    category: "UI Design",
-    image: "/assets/special offer.png",
-    alt: "Travel offers interface preview",
-    technologies: ["UI Design", "Cards", "Conversion"],
-  }),
-  createFallbackProject({
-    id: "fallback-eindhoven-local-events",
-    title: "Eindhoven Local Events",
-    slug: "eindhoven-local-events",
-    detailHref: "/projects/triple-wave",
-    description:
-      "A local discovery experience helping international students find events and social places.",
-    category: "Student Experience",
-    image: "/assets/Local Event 2.webp",
-    alt: "Eindhoven local events preview",
-    technologies: ["UX Research", "Information Design", "Mobile UX"],
-  }),
-  createFallbackProject({
-    id: "fallback-owen-campaign-assets",
-    title: "Owen Bryce Campaign Assets",
-    slug: "owen-bryce-campaign-assets",
-    detailHref: "/projects/owen-bryce",
-    description:
-      "A set of social media, poster, and identity assets for a cohesive artist promotion campaign.",
-    category: "Brand Assets",
-    image: "/assets/Social Media Owen Bcryce .png",
-    alt: "Owen Bryce campaign asset preview",
-    technologies: ["Branding", "Print Design", "Social Media"],
-  }),
+];
+
+const loadingProjectCards = [
+  "travel-preview",
+  "platform-preview",
+  "community-preview",
+  "dashboard-preview",
+  "application-preview",
+  "case-study-preview",
 ];
 
 const getProjectCategory = (project: Project) =>
@@ -258,7 +238,6 @@ export default function ProjectsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categories, setCategories] = useState<string[]>(["All"]);
 
-  // Refs for GSAP animations
   const headerRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -275,7 +254,6 @@ export default function ProjectsPage() {
 
       setProjects(nextProjects);
 
-      // Extract unique categories from projects
       const uniqueCategories = new Set<string>(["All"]);
       nextProjects.forEach((project: Project) => {
         const category = getProjectCategory(project);
@@ -298,14 +276,14 @@ export default function ProjectsPage() {
     fetchProjects();
   }, [fetchProjects]);
 
-  // Filter projects based on search and category
   const filteredProjects = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+
     return projects.filter((project) => {
       const matchesSearch =
-        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        getProjectDescription(project)
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase());
+        !normalizedQuery ||
+        project.title.toLowerCase().includes(normalizedQuery) ||
+        getProjectDescription(project).toLowerCase().includes(normalizedQuery);
 
       const matchesCategory =
         selectedCategory === "All" ||
@@ -316,14 +294,22 @@ export default function ProjectsPage() {
   }, [projects, searchQuery, selectedCategory]);
 
   const filteredProjectCount = filteredProjects.length;
+  const visibleCountLabel = loading
+    ? "Loading projects"
+    : `${filteredProjects.length} of ${projects.length} projects`;
+  const hasActiveFilters =
+    Boolean(searchQuery.trim()) || selectedCategory !== "All";
 
-  // GSAP Animations
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("All");
+  };
+
   useEffect(() => {
     if (loading) return;
     if (filteredProjectCount === 0) return;
 
     const ctx = gsap.context(() => {
-      // Set initial state
       gsap.set(
         [
           badgeRef.current,
@@ -333,56 +319,54 @@ export default function ProjectsPage() {
         ],
         {
           opacity: 0,
+          y: 14,
         },
       );
 
-      // Animate header elements
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       tl.to(badgeRef.current, {
         opacity: 1,
         y: 0,
-        duration: 0.8,
+        duration: 0.6,
       })
         .to(
           headerRef.current,
           {
             opacity: 1,
             y: 0,
-            duration: 1,
+            duration: 0.8,
           },
-          "-=0.5",
+          "-=0.35",
         )
         .to(
           searchRef.current,
           {
             opacity: 1,
             y: 0,
-            duration: 0.8,
+            duration: 0.6,
           },
-          "-=0.5",
+          "-=0.35",
         )
         .to(
           filtersRef.current,
           {
             opacity: 1,
             y: 0,
-            duration: 0.8,
+            duration: 0.6,
           },
-          "-=0.5",
+          "-=0.35",
         );
 
-      // Animate project cards with stagger
       if (gridRef.current) {
         const cards = gridRef.current.querySelectorAll(".project-card");
         if (cards.length > 0) {
-          gsap.set(cards, { opacity: 0 });
+          gsap.set(cards, { opacity: 0, y: 20 });
           gsap.to(cards, {
             opacity: 1,
             y: 0,
-            scale: 1,
-            duration: 1,
-            stagger: 0.15,
+            duration: 0.7,
+            stagger: 0.08,
             ease: "power3.out",
             scrollTrigger: {
               trigger: gridRef.current,
@@ -401,64 +385,115 @@ export default function ProjectsPage() {
     <>
       <Header />
       <PageAnimator>
-        <main className="min-h-screen bg-[var(--background)] pt-24 pb-16">
-          <div className="container mx-auto px-4 max-w-7xl">
-            {/* Back to Home Link */}
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-[var(--secondary-text)] hover:text-[var(--accent)] transition-colors mb-8"
-            >
-              <span>←</span>
-              <span>Back to Home</span>
-            </Link>
-
-            {/* Header */}
-            <div className="mb-12" ref={headerRef}>
-              <div
-                ref={badgeRef}
-                className="inline-block px-4 py-1.5 backdrop-blur-md bg-[var(--accent)]/10 border border-[var(--accent)]/20 text-[var(--accent)] rounded-full text-xs font-semibold mb-5 tracking-wide"
+        <main className="min-h-screen bg-[var(--background)] pt-28 pb-20 text-[var(--text)]">
+          <section className="border-b border-[var(--border)]/70">
+            <div className="container mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+              <Link
+                href="/"
+                className="mb-10 inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--card)]/60 px-4 py-2 text-sm font-semibold text-[var(--secondary-text)] transition-colors hover:border-[var(--accent)]/50 hover:text-[var(--accent)]"
               >
-                PORTFOLIO
+                <MdArrowBack className="h-4 w-4" aria-hidden="true" />
+                Back to Home
+              </Link>
+
+              <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
+                <div ref={headerRef}>
+                  <div
+                    ref={badgeRef}
+                    className="mb-5 inline-flex items-center rounded-full border border-[var(--accent)]/25 bg-[var(--accent)]/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--accent)]"
+                  >
+                    Portfolio
+                  </div>
+                  <h1 className="max-w-4xl text-4xl font-bold leading-[0.95] text-[var(--headline)] sm:text-5xl lg:text-6xl">
+                    All Projects
+                  </h1>
+                  <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--secondary-text)] sm:text-lg">
+                    A focused collection of live builds, product interfaces,
+                    client websites, and case-study ready work.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)]/70 backdrop-blur-md">
+                  <div className="border-r border-[var(--border)] p-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--secondary-text)]">
+                      Showing
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-[var(--headline)]">
+                      {filteredProjects.length}
+                    </p>
+                  </div>
+                  <div className="p-5">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--secondary-text)]">
+                      Categories
+                    </p>
+                    <p className="mt-2 text-2xl font-bold text-[var(--headline)]">
+                      {Math.max(categories.length - 1, 0)}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-2xl md:text-3xl font-semibold mb-4 pop-on-scroll leading-tight">
-                Featured Projects & Case Studies
-              </h3>
-              <p className="text-base text-[var(--secondary-text)] max-w-3xl leading-relaxed">
-                Explore real client work, experiments, and product builds.
-                Filter by category or search by name.
-              </p>
             </div>
+          </section>
 
-            {/* Search and Filter */}
-            <div className="mb-10 space-y-5">
-              {/* Search Bar */}
-              <div
-                className="relative max-w-md"
-                ref={searchRef}
-                suppressHydrationWarning
-              >
-                <MdSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--secondary-text)] text-xl" />
-                <input
-                  type="text"
-                  placeholder="Search projects..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3.5 backdrop-blur-md bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 rounded-lg text-[var(--text)] placeholder:text-[var(--secondary-text)] focus:outline-none focus:border-[var(--accent)] transition-colors text-sm"
+          <div className="container mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+            <section className="relative z-10 mb-10 rounded-xl border border-[var(--border)] bg-[var(--background)]/95 p-3 shadow-[0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div
+                  className="relative w-full lg:max-w-md"
+                  ref={searchRef}
                   suppressHydrationWarning
-                />
+                >
+                  <MdSearch
+                    className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--secondary-text)]"
+                    aria-hidden="true"
+                  />
+                  <input
+                    type="search"
+                    placeholder="Search projects"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-10 w-full rounded-lg border border-[var(--border)] bg-[var(--card)]/90 pl-10 pr-10 text-[0.75rem] font-medium text-[var(--text)] outline-none transition-colors placeholder:text-[var(--secondary-text)] focus:border-[var(--accent)]"
+                    suppressHydrationWarning
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-md text-[var(--secondary-text)] transition-colors hover:bg-[var(--Secondary-Background)] hover:text-[var(--headline)]"
+                      aria-label="Clear search"
+                    >
+                      <MdClose className="h-4 w-4" aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between gap-3 lg:justify-end">
+                  <p className="min-w-fit text-xs font-semibold text-[var(--secondary-text)]">
+                    {visibleCountLabel}
+                  </p>
+                  {hasActiveFilters && (
+                    <button
+                      type="button"
+                      onClick={resetFilters}
+                      className="inline-flex h-8 items-center justify-center rounded-lg border border-[var(--border)] px-3 text-xs font-semibold text-[var(--secondary-text)] transition-colors hover:border-[var(--accent)]/50 hover:text-[var(--accent)]"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
               </div>
 
-              {/* Category Filters */}
-              <div className="flex flex-wrap gap-3" ref={filtersRef}>
+              <div className="mt-3 flex flex-wrap gap-2" ref={filtersRef}>
                 {categories.map((category) => (
                   <button
                     type="button"
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                    aria-pressed={selectedCategory === category}
+                    className={`min-h-8 min-w-fit rounded-lg border px-3 text-[0.72rem] font-bold transition-all ${
                       selectedCategory === category
-                        ? "bg-white text-black shadow-md border-transparent"
-                        : "bg-transparent text-[var(--secondary-text)] border border-[var(--border)] hover:bg-[var(--surface)] hover:text-[var(--text)]"
+                        ? "border-white bg-white text-black shadow-sm"
+                        : "border-[var(--border)] bg-[var(--card)]/50 text-[var(--secondary-text)] hover:border-[var(--accent)]/50 hover:text-[var(--headline)]"
                     }`}
                     suppressHydrationWarning
                   >
@@ -466,30 +501,48 @@ export default function ProjectsPage() {
                   </button>
                 ))}
               </div>
-            </div>
+            </section>
 
-            {/* Loading State */}
             {loading && (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--accent)]"></div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {loadingProjectCards.map((cardId) => (
+                  <div
+                    key={cardId}
+                    className="min-h-[520px] overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)]/70"
+                  >
+                    <div className="aspect-[16/10] animate-pulse bg-[var(--Secondary-Background)]" />
+                    <div className="space-y-4 p-6">
+                      <div className="h-5 w-2/3 animate-pulse rounded bg-[var(--Secondary-Background)]" />
+                      <div className="h-4 w-full animate-pulse rounded bg-[var(--Secondary-Background)]" />
+                      <div className="h-4 w-4/5 animate-pulse rounded bg-[var(--Secondary-Background)]" />
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
 
-            {/* Empty State */}
             {!loading && filteredProjects.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-[var(--secondary-text)] text-lg">
+              <div className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--card)]/60 px-6 py-16 text-center">
+                <p className="text-xl font-bold text-[var(--headline)]">
                   {searchQuery || selectedCategory !== "All"
-                    ? "No projects found matching your criteria."
+                    ? "No projects found"
                     : "No projects published yet. Check back soon!"}
                 </p>
+                {hasActiveFilters && (
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-white px-5 text-sm font-bold text-black transition-colors hover:bg-gray-100"
+                  >
+                    Reset filters
+                  </button>
+                )}
               </div>
             )}
 
-            {/* Projects Grid */}
             {!loading && filteredProjects.length > 0 && (
               <div
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
                 ref={gridRef}
               >
                 {filteredProjects.map((project) => {
@@ -506,15 +559,20 @@ export default function ProjectsPage() {
                   return (
                     <div
                       key={project._id}
-                      className="group relative flex flex-col overflow-hidden rounded-xl bg-[var(--card)]/90 backdrop-blur-sm border border-[var(--border)] transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                      className="project-card group relative flex min-h-[520px] flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)]/90 shadow-[0_18px_55px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent)]/45"
                     >
-                      {/* Thumbnail */}
-                      <div className="relative aspect-[16/9] w-full overflow-hidden">
-                        {/* Category Badge */}
+                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--Secondary-Background)]">
                         {getProjectCategory(project) && (
                           <div className="absolute top-4 left-4 z-10">
-                            <span className="inline-block px-3 py-1 rounded-full bg-black/50 backdrop-blur-md text-white border border-white/20 text-xs font-medium tracking-wide">
+                            <span className="inline-flex min-h-8 items-center rounded-full border border-white/20 bg-black/55 px-3 text-xs font-bold text-white backdrop-blur-md">
                               {getProjectCategory(project)}
+                            </span>
+                          </div>
+                        )}
+                        {liveUrl && (
+                          <div className="absolute right-4 top-4 z-10">
+                            <span className="inline-flex min-h-8 items-center rounded-full border border-emerald-300/30 bg-emerald-500/15 px-3 text-xs font-bold text-emerald-100 backdrop-blur-md">
+                              Live
                             </span>
                           </div>
                         )}
@@ -524,66 +582,72 @@ export default function ProjectsPage() {
                             src={imageUrl}
                             alt={imageAlt}
                             fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                             className="object-cover transition-transform duration-700 group-hover:scale-105"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-[var(--Secondary-Background)] text-[var(--secondary-text)]">
-                            <span className="text-4xl text-white/10">📁</span>
+                          <div className="flex h-full w-full items-center justify-center bg-[var(--Secondary-Background)] text-[var(--secondary-text)]">
+                            <span className="text-sm font-semibold">
+                              Preview unavailable
+                            </span>
                           </div>
                         )}
-                        {/* Dark gradient overlay for smooth transition to content */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)]/90 via-transparent to-transparent opacity-60"></div>
+                        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[var(--card)] via-[var(--card)]/35 to-transparent" />
                       </div>
 
-                      {/* Content */}
-                      <div className="flex flex-col flex-1 p-6 relative z-10">
-                        <h3 className="text-xl font-bold text-[var(--headline)] mb-3 group-hover:text-[var(--accent)] transition-colors line-clamp-2">
+                      <div className="relative z-10 flex flex-1 flex-col p-6">
+                        <h2 className="mb-3 text-[0.95rem] font-bold normal-case leading-snug text-[var(--headline)] transition-colors group-hover:text-[var(--accent)]">
                           {project.title}
-                        </h3>
+                        </h2>
 
-                        <p className="text-sm text-[var(--secondary-text)] mb-6 flex-1 line-clamp-3 leading-relaxed">
+                        <p className="mb-6 line-clamp-3 flex-1 text-sm leading-7 text-[var(--secondary-text)]">
                           {getProjectDescription(project)}
                         </p>
 
-                        {/* Technologies */}
                         {project.technologies?.length > 0 && (
-                          <div className="flex flex-wrap gap-2 mb-6">
+                          <div className="mb-6 flex flex-wrap gap-2">
                             {project.technologies
                               .slice(0, 4)
                               .map((tech: string) => (
                                 <span
                                   key={`${project._id}-${tech}`}
-                                  className="px-2.5 py-1 text-xs font-medium rounded-md bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)]/50"
+                                  className="inline-flex min-h-8 items-center rounded-md border border-[var(--border)]/70 bg-[var(--Secondary-Background)]/75 px-3 text-xs font-semibold text-[var(--text)]"
                                 >
                                   {tech}
                                 </span>
                               ))}
                             {project.technologies.length > 4 && (
-                              <span className="px-2.5 py-1 text-xs font-medium rounded-md bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)]/50">
+                              <span className="inline-flex min-h-8 items-center rounded-md border border-[var(--border)]/70 bg-[var(--Secondary-Background)]/75 px-3 text-xs font-semibold text-[var(--text)]">
                                 +{project.technologies.length - 4}
                               </span>
                             )}
                           </div>
                         )}
 
-                        {/* View Details Button & Link */}
                         <div className="mt-auto flex gap-3">
                           {detailsIsExternal ? (
                             <a
                               href={detailsHref}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex-1 inline-flex items-center justify-center py-2.5 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-white px-4 text-sm font-bold text-black transition-colors hover:bg-gray-100"
                             >
                               View Project
+                              <MdArrowForward
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
                             </a>
                           ) : (
                             <Link
                               href={detailsHref}
-                              className="flex-1 inline-flex items-center justify-center py-2.5 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+                              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-white px-4 text-sm font-bold text-black transition-colors hover:bg-gray-100"
                             >
                               View Details
+                              <MdArrowForward
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
                             </Link>
                           )}
                           {liveUrl && (
@@ -591,10 +655,13 @@ export default function ProjectsPage() {
                               href={liveUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center justify-center w-10.5 px-3 bg-[var(--Secondary-Background)] text-[var(--text)] border border-[var(--border)] rounded-lg hover:bg-[var(--border)] transition-colors"
+                              className="inline-flex h-12 w-12 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--Secondary-Background)] text-[var(--text)] transition-colors hover:border-[var(--accent)]/50 hover:text-[var(--accent)]"
                               aria-label={`Open ${project.title} live project`}
                             >
-                              <MdOpenInNew aria-hidden="true" />
+                              <MdOpenInNew
+                                className="h-5 w-5"
+                                aria-hidden="true"
+                              />
                             </a>
                           )}
                         </div>

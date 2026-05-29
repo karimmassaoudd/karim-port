@@ -4,7 +4,7 @@ import { ArrowRight, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type React from "react";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 // --- Types ---
 type Project = {
@@ -21,7 +21,7 @@ type Project = {
       tagline?: string;
       category?: string;
     };
-    [key: string]: any;
+    [key: string]: unknown;
   };
   technologies?: string[];
   liveUrl?: string;
@@ -53,9 +53,10 @@ const fallbackProjects: Project[] = [
       problemStatement: {
         enabled: true,
         heading: "The Challenge",
-        description: "International travelers often find existing trip planning platforms clunky and overwhelming. Our goal was to build a modern, high-performance travel guide.",
-        images: [{ url: "/assets/Travel World Project Background .png" }]
-      }
+        description:
+          "International travelers often find existing trip planning platforms clunky and overwhelming. Our goal was to build a modern, high-performance travel guide.",
+        images: [{ url: "/assets/Travel World Project Background .png" }],
+      },
     },
     technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS"],
     liveUrl: "#",
@@ -78,7 +79,8 @@ const fallbackProjects: Project[] = [
       problemStatement: {
         enabled: true,
         heading: "The Challenge",
-        description: "International students often struggle to find reliable housing and navigate the local financial system in Eindhoven. Triple WAVE aims to bridge this gap with an all-in-one intuitive platform.",
+        description:
+          "International students often struggle to find reliable housing and navigate the local financial system in Eindhoven. Triple WAVE aims to bridge this gap with an all-in-one intuitive platform.",
         images: [
           {
             url: "/assets/project-triple-wave-screenshot.png",
@@ -108,9 +110,10 @@ const fallbackProjects: Project[] = [
       problemStatement: {
         enabled: true,
         heading: "The Challenge",
-        description: "Owen Bryce needed to establish his brand identity and promote his debut EP in a crowded music market. We focused on creating a distinctive visual voice.",
-        images: [{ url: "/assets/owen bryce4.png" }]
-      }
+        description:
+          "Owen Bryce needed to establish his brand identity and promote his debut EP in a crowded music market. We focused on creating a distinctive visual voice.",
+        images: [{ url: "/assets/owen bryce4.png" }],
+      },
     },
     technologies: ["React", "GSAP", "Tailwind CSS"],
     liveUrl: "#",
@@ -169,9 +172,9 @@ const SpotlightProjectCard: React.FC<{ project: Project }> = ({ project }) => {
         {/* Technologies */}
         {technologies && technologies.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {technologies.map((tech, index) => (
+            {technologies.map((tech) => (
               <span
-                key={index}
+                key={tech}
                 className="text-xs px-3 py-1.5 bg-[var(--Secondary-Background)] text-[var(--text)] rounded-md border border-white/10"
               >
                 {tech}
@@ -218,6 +221,7 @@ const CompactProjectCard: React.FC<{
 
   return (
     <button
+      type="button"
       onClick={onClick}
       className="pop-on-scroll block w-full text-left bg-gradient-to-br from-[var(--card)]/50 via-[var(--card)]/30 to-transparent backdrop-blur-xl rounded-2xl border border-white/10 p-6 hover:border-[var(--accent)]/30 transition-all duration-300 group cursor-pointer"
     >
@@ -242,9 +246,9 @@ const CompactProjectCard: React.FC<{
       {/* Technologies */}
       {technologies && technologies.length > 0 && (
         <div className="flex flex-wrap gap-2 justify-start">
-          {technologies.slice(0, 3).map((tech, idx) => (
+          {technologies.slice(0, 3).map((tech) => (
             <span
-              key={idx}
+              key={tech}
               className="text-xs px-2.5 py-1 bg-[var(--Secondary-Background)] text-[var(--text)] rounded-md"
             >
               {tech}
@@ -283,13 +287,13 @@ export const ProjectsSection = () => {
           if (visibleProjects.length > 0) {
             // Remove duplicates by _id
             const uniqueProjects = visibleProjects.filter(
-              (project: any, index: number, self: any[]) =>
-                index === self.findIndex((p: any) => p._id === project._id),
+              (project: Project, index: number, self: Project[]) =>
+                index === self.findIndex((p) => p._id === project._id),
             );
             setProjects(uniqueProjects);
           }
         }
-      } catch (error) {
+      } catch {
         // Silently handle fetch errors
         // Keep fallback projects on error
       }
@@ -336,7 +340,7 @@ export const ProjectsSection = () => {
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/#projects"
+                href="/projects"
                 className="magnetic-el px-6 py-3 bg-[var(--background)] hover:bg-[var(--Secondary-Background)] text-[var(--headline)] rounded-xl border border-white/10 transition-all duration-300 text-sm font-semibold"
               >
                 View all projects
