@@ -277,9 +277,9 @@ export default function TravelWorldPage() {
           <div className="max-w-7xl mx-auto px-9 sm:px-6 lg:px-8 min-h-[60vh] flex items-center relative z-10">
             <div className="mx-auto grid w-full max-w-6xl grid-cols-1 lg:grid-cols-2 gap-10 items-center justify-items-center">
               <div className="col-span-1 text-center">
-                <h2 className="reveal-el font-primary text-6xl md:text-7xl tracking-wide text-[var(--text)]">
+                <h3 className="reveal-el font-primary text-6xl md:text-7xl tracking-wide text-[var(--text)]">
                   TRAVEL WORLD
-                </h2>
+                </h3>
                 <div className="reveal-el w-28 md:w-95 h-[3px] rounded-full bg-[var(--accent)] mt-2 mb-6 mx-auto" />
                 <p className="reveal-el text-[var(--secondary-text)] text-lg md:text-xl leading-relaxed max-w-md mx-auto text-center">
                   A simple, friendly travel website that makes exploring
@@ -332,9 +332,9 @@ export default function TravelWorldPage() {
                 Section 02
               </p>
               <div className="w-50 h-1 rounded-full bg-[var(--accent)] mt-3 mb-1" />
-              <h2 className="text-[var(--text)] font-primary text-4xl md:text-5xl leading-tight tracking-wide">
+              <h3 className="text-[var(--text)] font-primary text-4xl md:text-5xl leading-tight tracking-wide">
                 OVERVIEW
-              </h2>
+              </h3>
             </div>
             <div className="grid grid-cols-12 gap-8 items-start">
               <div className="col-span-12 lg:col-span-7 space-y-6">
@@ -440,9 +440,9 @@ export default function TravelWorldPage() {
                       <p className="text-[10px] md:text-xs font-semibold tracking-[0.3em] text-[var(--secondary-text)] uppercase mb-3 opacity-60">
                         Project Summary
                       </p>
-                      <h2 className="text-3xl md:text-4xl xl:text-5xl text-white font-primary tracking-wide leading-tight uppercase m-0">
+                      <h3 className="text-3xl md:text-4xl xl:text-5xl text-white font-primary tracking-wide leading-tight uppercase m-0">
                         The Challenge
-                      </h2>
+                      </h3>
                       <div className="w-20 h-[2px] bg-[var(--accent)] mt-4" />
                     </div>
 
@@ -603,9 +603,9 @@ export default function TravelWorldPage() {
               Curated journeys
             </p>
             <div className="reveal-el w-24 h-1 rounded-full bg-[var(--accent)] mt-1 mb-1" />
-            <h2 className="text-[var(--text)] font-primary text-4xl md:text-5xl mb-8 reveal-el">
+            <h3 className="text-[var(--text)] font-primary text-4xl md:text-5xl mb-8 reveal-el">
               TRIP THEMES
-            </h2>
+            </h3>
             <fieldset
               className="relative flex items-center justify-center gap-8"
               onMouseEnter={() => setIsPaused(true)}
@@ -694,9 +694,9 @@ export default function TravelWorldPage() {
               adventure.
             </p>
             <div className="reveal-el w-24 h-1 rounded-full bg-[var(--accent)] mb-6" />
-            <h2 className="reveal-el text-[var(--text)] font-primary text-4xl md:text-5xl mb-8">
+            <h3 className="reveal-el text-[var(--text)] font-primary text-4xl md:text-5xl mb-8">
               SPECIAL OFFERS
-            </h2>
+            </h3>
             <div className="reveal-el rounded-3xl bg-[var(--background)] border border-black/5 dark:border-white/10 shadow-xl p-6 md:p-8">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="pop-on-scroll group rounded-2xl bg-white dark:bg-[var(--Secondary-Background)] text-[var(--foreground)] border border-black/5 dark:border-white/10 shadow-md p-5 relative transition-transform duration-200 hover:-translate-y-1 hover:shadow-lg">
@@ -783,9 +783,9 @@ export default function TravelWorldPage() {
             <p className="text-sm text-[var(--secondary-text)] mb-4">
               Choose a destination below — the live website or the design file
             </p>
-            <h2 className="reveal-el text-[var(--text)] font-primary text-4xl md:text-5xl mb-12">
+            <h3 className="reveal-el text-[var(--text)] font-primary text-4xl md:text-5xl mb-12">
               WHERE DO YOU WANT TO OPEN TRAVEL WORLD?
-            </h2>
+            </h3>
             <div className="max-w-3xl md:max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 items-stretch">
               <a
                 href="https://travel-website-complete-w0th.onrender.com/index.html"

@@ -596,9 +596,9 @@ export default function ProjectsPage() {
                       </div>
 
                       <div className="relative z-10 flex flex-1 flex-col p-6">
-                        <h2 className="mb-3 text-[0.95rem] font-bold normal-case leading-snug text-[var(--headline)] transition-colors group-hover:text-[var(--accent)]">
+                        <h3 className="mb-3 text-[0.95rem] font-bold normal-case leading-snug text-[var(--headline)] transition-colors group-hover:text-[var(--accent)]">
                           {project.title}
-                        </h2>
+                        </h3>
 
                         <p className="mb-6 line-clamp-3 flex-1 text-sm leading-7 text-[var(--secondary-text)]">
                           {getProjectDescription(project)}
